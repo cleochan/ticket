@@ -90,40 +90,65 @@ class RequestsForm extends Zend_Form
 
 		$submit = new Zend_Form_Element_Submit('submitx');
 		$submit -> setDecorators(array(array('ViewHelper'),));
+        
+                //initial additional type start
+                $requests_additional_type_mode = new RequestsAdditionalType();
+                $type_array = $requests_additional_type_mode->DumpAllActive();
+                
+                if(!empty($type_array))
+                {
+                    foreach($type_array as $type_array_val)
+                    {
+                        $param_name = "additional".$type_array_val['requests_additional_type_id'];
+                        
+                        switch($type_array_val['type_id'])
+                        {
+                            case 1: //input box
+                                ${$param_name} = new Zend_Form_Element_Text($param_name);
+                                ${$param_name} -> setDecorators(array(array('ViewHelper'),))
+                                                             -> setAttrib('size',100)
+                                                             -> addFilter('StripTags')
+                                                             -> addFilter('StringTrim');
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True);
+                                }
+                                if($type_array_val['type_values'])
+                                {
+                                    ${$param_name} ->setValue($type_array_val['type_values']);
+                                }
+                        }
+                    }
+                }
+                //initial additional type start
+                
+                $add_elements_result = array(
+                                                                $id,
+                                                                $dead_line,
+                                                                $category,
+                                                                $priority,
+                                                                $title,
+                                                                $contents,
+                                                                $comments,
+                                                                $status,
+                                                                $participants,
+                                                                $submit
+                                                                );
+                
+                for($n=1;$n<21;$n++)
+                {
+                    $add_elements_result[] = ${"attachment".$n};
+                }
+                
+                if(!empty($type_array))
+                {
+                    foreach($type_array as $type_array_val)
+                    {
+                        $add_elements_result[] = ${"additional".$type_array_val['requests_additional_type_id']};
+                    }
+                }
+        
 
-		$this -> addElements(
-								array(
-										$id,
-										$dead_line,
-										$category,
-										$priority,
-										$title,
-										$contents,
-										$comments,
-                                        $status,
-										$attachment1,
-										$attachment2,
-										$attachment3,
-										$attachment4,
-										$attachment5,
-										$attachment6,
-										$attachment7,
-										$attachment8,
-										$attachment9,
-										$attachment10,
-										$attachment11,
-										$attachment12,
-										$attachment13,
-										$attachment14,
-										$attachment15,
-										$attachment16,
-										$attachment17,
-										$attachment18,
-										$attachment19,
-										$attachment20,
-										$participants,
-										$submit
-									)
-							);
+		$this -> addElements($add_elements_result);
 	}
 }
