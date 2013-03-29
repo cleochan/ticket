@@ -4,7 +4,7 @@ class Filemap extends Zend_Db_Table
 {
 	protected $_name = 'filemap';
     
-    var $domain = "http://it-ticket.motionglobal.com/";
+    var $domain = "http://ticket.cztesting.com/";
 	
 	function AddToDb($origine, $indb, $ftype)
 	{

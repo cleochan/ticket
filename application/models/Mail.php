@@ -180,7 +180,8 @@ Trainee(s): ".$this->training_trainee;
     
     function FormatUrl($str)
     {
-        return preg_replace("/\/scripts\/kindeditor\/attached/i", $config['system_path']."scripts/kindeditor/attached", $str);
+        $config = $this -> GetConfig();
+	return preg_replace("/\/scripts\/kindeditor\/attached/i", $config['system_path']."scripts/kindeditor/attached", $str);
     }
     
     function GetConfig()

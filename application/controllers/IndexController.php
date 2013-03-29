@@ -1223,13 +1223,11 @@ class IndexController extends Zend_Controller_Action
     function callFileAction()
     {
     	$params = $this->_request->getParams();
-    	
 		$filemap = new Filemap();
 		$data = $filemap ->fetchRow("indb like '%".$params['val']."%'");
 		
 		if($data['ftype'])
 		{
-			//print_r('/attachment/'.$data['indb']);die;
 			header('Content-type: '.$data['ftype']);
 			header('Content-Disposition: attachment; filename="'.$data['origine'].'"');
 			readfile('../public/attachment/'.$data['indb']);
