@@ -399,15 +399,45 @@ class Category extends Zend_Db_Table
         
         return $data2;
     }
+	
+    function GetVal($id)
+    {
+        $name = $this->fetchRow('id = "'.$id.'"');
+
+        return $name['cname'];
+    }
+    
+    function GetChildren($id) //self included
+    {
+        $loop = TRUE;
+        $result = array($id);
+        $result_pre = array();
+        
+        if($loop)
+        {
+            if(array_diff($result, $result_pre))
+            {
+                $result_pre = $result;
+                
+                $data = $this->select();
+                $data->where("parent_id IN (?)", $result);
+                $rows = $this->fetchAll($data);
+
+                if(!empty($rows))
+                {
+                    foreach($rows as $row)
+                    {
+                        $result[] = $row['id'];
+                    }
+                    $result = array_unique($result);
+                }else{
+                    $loop = FALSE;
+                }
+            }else{
+                $loop = FALSE;
+            }
+        }
+        
+        return $result;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -7,99 +7,111 @@ class Requests extends Zend_Db_Table
 	var $request;
 	var $lm; //limit
 	var $page;
+        var $category;
 	
 	function PushListData()
 	{
-		$find = $this->select();
-        
-		//Step1: just active
-		$find->where("status = ?", 1);
+            $find = $this->select();
 
-        //Step2: order
-		$find->order("status ASC");
-        $find->order("id ASC");
-		
-		//Step3: limit and offset
-		$this->lm = 100;
-		$offset = ($this->page - 1) * $this->lm;
-		
-		$find->limit($this->lm, $offset);
-		
-		
-		//Fetch
-		$result = $this->fetchAll($find);
-        
-        $users = new Users();
-        $requests_category = new RequestsCategory();
-               
-		if(!empty($result))
-		{
-            foreach($result as $key => $val)
-			{
-				$data = array();
-                
-                $data['id'] = $val->id;
-				$data['composer'] = $users->GetRealName($val->composer);
-				$data['title'] = $val->title;
-				$data['priority'] = $this->Priority($val->priority);
-				$data['category'] = $requests_category->GetVal($val->category);
-				$data['status'] = $this->GetStatusStr($val->status);
-				$data['deadline'] = substr($val->dead_line, 0, 10);
-                $data['created_date'] = $val->created_date;
-                $data['closed_date'] = $val->closed_date;
-				
-				$data_group[] = $data;
-			}
-		}
-		
-		return $data_group;
+            //Step1: just active
+            $find->where("status = ?", 1);
+            
+            //Step2: category
+            if($this->category)
+            {
+                $find->where("category = ?", $this->category);
+            }
+
+            //Step3: order
+            $find->order("status ASC");
+            $find->order("id ASC");
+
+            //Step4: limit and offset
+            $this->lm = 100;
+            $offset = ($this->page - 1) * $this->lm;
+
+            $find->limit($this->lm, $offset);
+
+            //Fetch
+            $result = $this->fetchAll($find);
+
+            $users = new Users();
+            $category = new Category();
+
+            if(!empty($result))
+            {
+                foreach($result as $val)
+                {
+                    $data = array();
+
+                    $data['id'] = $val->id;
+                    $data['composer'] = $users->GetRealName($val->composer);
+                    $data['title'] = $val->title;
+                    $data['priority'] = $this->Priority($val->priority);
+                    $data['category'] = $category->GetVal($val->category);
+                    $data['status'] = $this->GetStatusStr($val->status);
+                    $data['deadline'] = substr($val->dead_line, 0, 10);
+                    $data['created_date'] = $val->created_date;
+                    $data['closed_date'] = $val->closed_date;
+
+                    $data_group[] = $data;
+                }
+            }
+
+            return $data_group;
 	}
 	
 	function PushListDataInactive()
 	{
-		$find = $this->select();
-        
-		//Step1: just active
-		$find->where("status in (?)", array(2,3));
+            $find = $this->select();
 
-        //Step2: order
-		$find->order("status ASC");
-        $find->order("id DESC");
-		
-		//Step3: limit and offset
-		$this->lm = 100;
-		$offset = ($this->page - 1) * $this->lm;
-		
-		$find->limit($this->lm, $offset);
-		
-		
-		//Fetch
-		$result = $this->fetchAll($find);
-        
-        $users = new Users();
-        $requests_category = new RequestsCategory();
-               
-		if(!empty($result))
-		{
-            foreach($result as $key => $val)
-			{
-				$data = array();
-                
-                $data['id'] = $val->id;
-				$data['composer'] = $users->GetRealName($val->composer);
-				$data['title'] = $val->title;
-				$data['priority'] = $this->Priority($val->priority);
-				$data['category'] = $requests_category->GetVal($val->category);
-				$data['status'] = $this->GetStatusStr($val->status);
-				$data['deadline'] = substr($val->dead_line, 0, 10);
-                $data['created_date'] = $val->created_date;
-                $data['closed_date'] = $val->closed_date;
-				
-				$data_group[] = $data;
-			}
-		}
-		
-		return $data_group;
+            //Step1: just active
+            $find->where("status in (?)", array(2,3));
+            
+            //Step2: category
+            if($this->category)
+            {
+                $find->where("category = ?", $this->category);
+            }
+
+            //Step3: order
+            $find->order("status ASC");
+            $find->order("id DESC");
+
+            //Step4: limit and offset
+            $this->lm = 100;
+            $offset = ($this->page - 1) * $this->lm;
+
+            $find->limit($this->lm, $offset);
+
+
+            //Fetch
+            $result = $this->fetchAll($find);
+
+            $users = new Users();
+            $category = new Category();
+
+            if(!empty($result))
+            {
+                foreach($result as $val)
+                {
+                    $data = array();
+
+                    $data['id'] = $val->id;
+                    $data['composer'] = $users->GetRealName($val->composer);
+                    $data['title'] = $val->title;
+                    $data['priority'] = $this->Priority($val->priority);
+                    $data['category'] = $category->GetVal($val->category);
+                    $data['status'] = $this->GetStatusStr($val->status);
+                    $data['deadline'] = substr($val->dead_line, 0, 10);
+                    $data['created_date'] = $val->created_date;
+                    $data['closed_date'] = $val->closed_date;
+
+                    $data_group[] = $data;
+                }
+            }
+
+            return $data_group;
 	}
 	
 	function Priority($num)

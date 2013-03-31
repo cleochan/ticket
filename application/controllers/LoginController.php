@@ -77,16 +77,49 @@ class LoginController extends Zend_Controller_Action
 			}
 		}
     }
-	
-	function logoutAction()
-	{
-		$params = $this->_request->getParams();
-		
-        unset($_SESSION['search_ticket_users_current']);
-		Zend_Auth::getInstance()->clearIdentity();
-		$this->_redirect('/login?url='.$params['url']);
-	}	
 
+    function logoutAction()
+    {
+        $params = $this->_request->getParams();
+
+        unset($_SESSION['search_ticket_users_current']);
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->_redirect('/login?url='.$params['url']);
+    }
+    
+    //set cookie and redirect to the target page to make the cookie established instantly
+    function setCookieRedirectAction()
+    {
+        $params = $this->_request->getParams();
+        
+        //get cookie domain
+        $params_model = new Params();
+        $cookie_domain = $params_model->GetVal("cookie_domain");
+        
+        if(NULL !== $params['target'])
+        {
+            switch($params['target'])
+            {
+                case 1: //request index
+                    if($params['cookie_value'])
+                    {
+                        setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()+(3600*24*365), "/", $cookie_domain);
+                        $this->_redirect('/requests/index/category/'.$params['cookie_value']);
+                    }else{
+                        setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()-1, "/", $cookie_domain); //unset
+                        $this->_redirect('/requests/index');
+                    }
+                    break;
+                default :
+                    echo "Invalid Action";
+                    die;
+                    break;
+            }
+        }else{
+            echo "Invalid Action";
+            die;
+        }
+    }
 
 }
 

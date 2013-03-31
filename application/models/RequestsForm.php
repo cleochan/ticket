@@ -77,7 +77,7 @@ class RequestsForm extends Zend_Form
 		
 		for($n=1;$n<21;$n++)
 		{
-			${"attachment".$n} = new Zend_Form_Element_File("attachment".$n);
+                    ${"attachment".$n} = new Zend_Form_Element_File("attachment".$n);
 		    ${"attachment".$n} -> setDecorators(array(array('File'),))
 		    		     	   -> setDestination("../public/attachment/".$folder);
 		}
@@ -106,7 +106,6 @@ class RequestsForm extends Zend_Form
                             case 1: //input box
                                 ${$param_name} = new Zend_Form_Element_Text($param_name);
                                 ${$param_name} -> setDecorators(array(array('ViewHelper'),))
-                                                             -> setAttrib('size',100)
                                                              -> addFilter('StripTags')
                                                              -> addFilter('StringTrim');
                                 if($type_array_val['type_required'])
@@ -117,6 +116,63 @@ class RequestsForm extends Zend_Form
                                 {
                                     ${$param_name} ->setValue($type_array_val['type_values']);
                                 }
+                                break;
+                            case 2: //drop down
+                                ${$param_name} = new Zend_Form_Element_Select($param_name);
+                                ${$param_name}  -> setDecorators(array(array('ViewHelper'),));
+				
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True);
+                                }
+                                
+                                if($type_array_val['type_values'])
+                                {
+                                    $values_array_final = array();
+                                    
+                                    $values_array = explode("|", $type_array_val['type_values']);
+                                    foreach($values_array as $values_array_val)
+                                    {
+                                        $values_array_final[$values_array_val] = $values_array_val;
+                                    }
+                                    
+                                    rsort($values_array_final);
+                                    $values_array_final[] = "";
+                                    sort($values_array_final);
+                                    
+                                    ${$param_name}  -> addMultiOptions($values_array_final);
+                                }
+                                break;
+                            case 3: //radio
+                                ${$param_name} = new Zend_Form_Element_Radio($param_name);
+                                ${$param_name}  -> setDecorators(array(array('ViewHelper'),))
+                                                                -> setSeparator(' ');
+                                
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True)
+                                                                 -> addValidator('NotEmpty');
+                                }
+                                
+                                if($type_array_val['type_values'])
+                                {
+                                    $values_array_final = array();
+                                    
+                                    $values_array = explode("|", $type_array_val['type_values']);
+                                    foreach($values_array as $values_array_val)
+                                    {
+                                        $values_array_final[$values_array_val] = $values_array_val;
+                                    }
+                                    
+                                    rsort($values_array_final);
+                                    $values_array_final[] = "";
+                                    sort($values_array_final);
+                                    
+                                    ${$param_name}  -> addMultiOptions($values_array_final);
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

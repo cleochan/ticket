@@ -70,8 +70,29 @@ class PluginController extends Zend_Controller_Action
         die;
     }
     
-    function batchSalaryNotificationSendingAction()
+    function rsoAction()
     {
+        $a = array("apple", "banana", "pear", "orange");
+        rsort($a);
+        $a[] = "";
+        sort($a);
+        print_r($a);die;
+    }
+    
+    function cookieTestAction()
+    {
+        setcookie("TICKET_INITIAL_CATEGORY_ID", "CCC", time()+(3600*24*365), "/", "demo.local.ticket");
         
+        
+        //echo $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+        
+        die;
+    }
+    
+    function uniAction()
+    {
+        $a = new Category();
+        print_r($a->GetChildren(7));
+        die;
     }
 }

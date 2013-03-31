@@ -44,7 +44,20 @@ class RequestsController extends Zend_Controller_Action
         $menu = new Menu();
         $this->view->menu = $menu ->GetRequestsMenu($params['type']); 
         
+        //build category tree
+        $category_model = new Category();
+        $this->view->category_tree = $category_model->BuildTree();
+        
         $requests = new Requests();
+        
+        //read cookie
+        if($_COOKIE['TICKET_INITIAL_CATEGORY_ID'])
+        {
+            $this->view->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+            $requests->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+        }
+        
+        
         
         if($params['page'])
         {
@@ -64,7 +77,7 @@ class RequestsController extends Zend_Controller_Action
 
         $requests -> page = $this->view->older;
         $list = $requests -> PushListData();
-        //print_r($list);die;
+        
         if(count($list))
         {
                 $this->view->can_older = 1;
@@ -151,6 +164,15 @@ class RequestsController extends Zend_Controller_Action
 		$now = date("Y-m-d H:i:s");
 		$form->submitx->setLabel('Create Request');
 		$this->view->form = $form;
+        
+                if($params['requests_category_id'])
+                {
+                    $requests_additional_type_model = new RequestsAdditionalType();
+                    $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($params['requests_category_id']);
+                }else{
+                    $this->view->get_form_elements = array();
+                }
+
         
 		if($this->_request->isPost()){
 			//rename attachment
