@@ -163,15 +163,20 @@ class RequestsController extends Zend_Controller_Action
 		$form = new RequestsForm();
 		$now = date("Y-m-d H:i:s");
 		$form->submitx->setLabel('Create Request');
-		$this->view->form = $form;
         
-                if($params['requests_category_id'])
+                if($params['category'])
                 {
                     $requests_additional_type_model = new RequestsAdditionalType();
-                    $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($params['requests_category_id']);
+                    $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($params['category']);
+                    $category_model = new Category();
+                    $this->view->category = array($params['category'], $category_model->GetVal($params['category']));
+                    $form->category->setValue($params['category']);
+                
                 }else{
-                    $this->view->get_form_elements = array();
+                    echo "Invalid Action";
+                    die;
                 }
+		$this->view->form = $form;
 
         
 		if($this->_request->isPost()){
@@ -320,7 +325,7 @@ class RequestsController extends Zend_Controller_Action
 					$this->view->notice="Some information are inValid.";
 					$form->populate($formData);
 				}
-
+                                $form->setAction($form->getView()->url(array('controller' => 'requests', 'action' => 'add', 'type' => 'add', 'category'=>1)));
 			}
 		}
     }

@@ -19,7 +19,8 @@ class Requests extends Zend_Db_Table
             //Step2: category
             if($this->category)
             {
-                $find->where("category = ?", $this->category);
+                $category_model = new Category();
+                $find->where("category IN (?)", $category_model->GetChildren($this->category));
             }
 
             //Step3: order

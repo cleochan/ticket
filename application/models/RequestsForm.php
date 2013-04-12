@@ -13,23 +13,9 @@ class RequestsForm extends Zend_Form
 		$dead_line = new Zend_Form_Element_Text('dead_line');
 		$dead_line -> setDecorators(array(array('ViewHelper'),));
 		
-		//create category options
-		$category_model = new RequestsCategory();
-		$category_array = $category_model -> BuildTree();
-        
-		$new_category_array[''] = "Choose";
-		foreach($category_array as $category_val)
-		{
-			foreach($category_val as $category_val_key => $category_val_val)
-            {
-                $new_category_array[$category_val_key] = $category_val_val;
-            }
-		}
-		$category = new Zend_Form_Element_Select('category');
-		$category -> setDecorators(array(array('ViewHelper'),))
-				 -> addMultiOptions($new_category_array)
-				 -> setRequired(True)
-			     -> addValidator('NotEmpty');
+                $category = new Zend_Form_Element_Hidden('category');
+		$category -> setDecorators(array(array('ViewHelper'),));
+		
         // //create 
         // status options
 		$st_array = array(1 => "Pending",
