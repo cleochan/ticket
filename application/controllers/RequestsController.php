@@ -234,7 +234,7 @@ class RequestsController extends Zend_Controller_Action
                 
 				if(!$error)
 				{
-					//insert to db
+                                        //insert to db
 					$tickets = new Requests();
 				
 					$row = $tickets->createRow();
@@ -244,7 +244,7 @@ class RequestsController extends Zend_Controller_Action
 						$row->dead_line = $form->getValue('dead_line')." 23:59:59";
 					}
 					$row->category = $form->getValue('category');
-                    $row->priority = $form->getValue('priority');
+                                        $row->priority = $form->getValue('priority');
 					$row->title = $form->getValue('title');
 					if($form->getValue('contents'))
 					{
@@ -264,9 +264,25 @@ class RequestsController extends Zend_Controller_Action
 					if(!empty($att_pool))
 					{
 						$row->attachment = implode("|", $att_pool);
-                    }
+                                        }
 			       
    				    $pt = $row->save();
+                                    
+                                    //insert into relation_additional_request
+                                    if(!empty($this->view->get_form_elements))
+                                    {
+                                        $relation_table = new RelationAdditionalRequest();
+                                        
+                                        foreach($this->view->get_form_elements as $get_form_elements_key => $get_form_elements_val)
+                                        {
+                                            $relation_table_row = $relation_table->createRow();
+                                            $relation_table_row->request_id = $pt;
+                                            $relation_table_row->requests_additional_type_id = $get_form_elements_key;
+                                            $relation_name = "additional".$get_form_elements_key;
+                                            $relation_table_row->type_value = $form->getValue($relation_name);
+                                            $relation_table_row->save();
+                                        }
+                                    }
                     
                     //send email
                     $mail = new Mail();
@@ -333,7 +349,7 @@ class RequestsController extends Zend_Controller_Action
     function viewAction()
     {
 		$params = $this->_request->getParams();
-        //print_r($params);die;
+
 		$this->view->title = "Request #".$params["id"];
 		$theid = $params["id"];
         

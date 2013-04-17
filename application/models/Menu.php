@@ -106,17 +106,14 @@ class Menu
 			case "add":
 				$str = "<a href='/requests/index/'>Active Requests</a>";
                 $str .= " | <a href='/requests/index-inactive/type/view_inactive'>Inactive Requests</a>";
-				$str .= " | <a href='/requests/add/type/add'><strong>Add Request</strong></a>";
 				break;
 			case "view_inactive":
 				$str = "<a href='/requests/index/'>Active Requests</a>";
                 $str .= " | <a href='/requests/index-inactive/type/view_inactive'><strong>Inactive Requests</strong></a>";
-				$str .= " | <a href='/requests/add/type/add'>Add Request</a>";
 				break;
 			default:
 				$str = "<a href='/requests/index/'><strong>Active Requests</strong></a>";
                 $str .= " | <a href='/requests/index-inactive/type/view_inactive'>Inactive Requests</a>";
-				$str .= " | <a href='/requests/add/type/add'>Add Request</a>";
 				break;
 		}
 		
