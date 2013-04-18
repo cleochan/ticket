@@ -29,7 +29,12 @@
 								<td class="form-title" width="40">ID</td>
 								<td class="form-title">Subject</td>
 								<td class="form-title">Category</td>
-								<td class="form-title" width="80">Status</td>
+								<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="form-title"><?=$addtional_title_val?></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>
+                                                                <td class="form-title" width="80">Status</td>
 								<td class="form-title" width="80">Priority</td>
 								<td class="form-title" width="100">Dead Line</td>
 								<td class="form-title" width="150">Created</td>
@@ -43,7 +48,12 @@
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
 								<td class="left"><span class="small"><a href="/requests/view/type/index/id/<?=$list['id']?>"><?=$list['composer']?>: <?=$list['title']?></a></span></td>
 								<td class="center"><span class="small"><?=$list['category']?></span></td>
-								<td class="center"><span class="small"><?=$list['status']?></span></td>
+								<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>				
+                                                                <td class="center"><span class="small"><?=$list['status']?></span></td>
 								<td class="center"><span class="small"><?=$list['priority']?></span></td>
 								<td class="center"><span class="small"><?=$list['deadline']?></span></td>
 								<td class="center"><span class="small"><?=$list['created_date']?></span></td>

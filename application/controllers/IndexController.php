@@ -490,8 +490,10 @@ class IndexController extends Zend_Controller_Action
                 $form->from_request_att->setValue($get_request['attachment']);
                 
                 //attachments for subject
-				$att_string = new Filemap();
-				$this->view->original_attachments = $att_string -> MakeDownloadLink($get_request['attachment']);
+                $att_string = new Filemap();
+                $this->view->original_attachments = $att_string -> MakeDownloadLink($get_request['attachment']);
+                
+                $category_id = $get_request['category'];
             }
         }elseif($params['from_ticket']) //duplicated ticket
         {
@@ -513,11 +515,26 @@ class IndexController extends Zend_Controller_Action
                 $form->from_ticket_att->setValue($get_ticket['attachment']);
                 
                 //attachments for subject
-				$att_string = new Filemap();
-				$this->view->original_attachments = $att_string -> MakeDownloadLink($get_ticket['attachment']);
+                $att_string = new Filemap();
+                $this->view->original_attachments = $att_string -> MakeDownloadLink($get_ticket['attachment']);
+                
+                $category_id = $get_ticket['category'];
             }
+        }else{ // notmal ticket
+            $category_id = $params['category'];
         }
         
+        if($category_id)
+        {
+            $requests_additional_type_model = new RequestsAdditionalType();
+            $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($category_id);
+            $category_model = new Category();
+            $this->view->category = array($category_id, $category_model->GetVal($category_id));
+            $form->category->setValue($category_id);
+        }else{
+            echo "Invalid Action.";
+            die;
+        }
         
         $this->view->form = $form;
               

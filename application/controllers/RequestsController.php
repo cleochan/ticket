@@ -55,9 +55,23 @@ class RequestsController extends Zend_Controller_Action
         {
             $this->view->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
             $requests->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+
+            //additional_data_title
+            $requests_additional_type = new RequestsAdditionalType();
+            $requests_additional_type_array = $requests_additional_type->GetFormElements($_COOKIE['TICKET_INITIAL_CATEGORY_ID']);
+            
+            if(!empty($requests_additional_type_array))
+            {
+                $addtional_title = array();
+                
+                foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                {
+                    $addtional_title["additional".$requests_additional_type_array_key] = $requests_additional_type_array_val[1];
+                }
+                
+                $this->view->addtional_title = $addtional_title;
+            }
         }
-        
-        
         
         if($params['page'])
         {
@@ -95,7 +109,6 @@ class RequestsController extends Zend_Controller_Action
 
         $this->view->p_type = $params['type'];
         $this->view->p_page = $params['page'];
-
     }
 	
     function indexInactiveAction()
@@ -107,7 +120,34 @@ class RequestsController extends Zend_Controller_Action
         $menu = new Menu();
         $this->view->menu = $menu ->GetRequestsMenu($params['type']); 
         
+        //build category tree
+        $category_model = new Category();
+        $this->view->category_tree = $category_model->BuildTree();
+        
         $requests = new Requests();
+        
+        //read cookie
+        if($_COOKIE['TICKET_INITIAL_CATEGORY_ID'])
+        {
+            $this->view->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+            $requests->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+
+            //additional_data_title
+            $requests_additional_type = new RequestsAdditionalType();
+            $requests_additional_type_array = $requests_additional_type->GetFormElements($_COOKIE['TICKET_INITIAL_CATEGORY_ID']);
+            
+            if(!empty($requests_additional_type_array))
+            {
+                $addtional_title = array();
+                
+                foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                {
+                    $addtional_title["additional".$requests_additional_type_array_key] = $requests_additional_type_array_val[1];
+                }
+                
+                $this->view->addtional_title = $addtional_title;
+            }
+        }
         
         if($params['page'])
         {
@@ -127,7 +167,7 @@ class RequestsController extends Zend_Controller_Action
 
         $requests -> page = $this->view->older;
         $list = $requests -> PushListDataInactive();
-        //print_r($list);die;
+        
         if(count($list))
         {
                 $this->view->can_older = 1;

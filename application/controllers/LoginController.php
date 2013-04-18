@@ -110,6 +110,16 @@ class LoginController extends Zend_Controller_Action
                         $this->_redirect('/requests/index');
                     }
                     break;
+                case 2: //request inactive index
+                    if($params['cookie_value'])
+                    {
+                        setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()+(3600*24*365), "/", $cookie_domain);
+                        $this->_redirect('/requests/index-inactive/category/'.$params['cookie_value']);
+                    }else{
+                        setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()-1, "/", $cookie_domain); //unset
+                        $this->_redirect('/requests/index-inactive');
+                    }
+                    break;
                 default :
                     echo "Invalid Action";
                     die;

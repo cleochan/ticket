@@ -105,7 +105,7 @@ class TicketForm extends Zend_Form
 		
 		for($n=1;$n<21;$n++)
 		{
-			${"attachment".$n} = new Zend_Form_Element_File("attachment".$n);
+                    ${"attachment".$n} = new Zend_Form_Element_File("attachment".$n);
 		    ${"attachment".$n} -> setDecorators(array(array('File'),))
 		    		     	   -> setDestination("../public/attachment/".$folder);
 		}
@@ -132,48 +132,128 @@ class TicketForm extends Zend_Form
 
 		$submit = new Zend_Form_Element_Submit('submitx');
 		$submit -> setDecorators(array(array('ViewHelper'),));
+        
+                //initial additional type start
+                $requests_additional_type_mode = new RequestsAdditionalType();
+                $type_array = $requests_additional_type_mode->DumpAllActive();
+                
+                if(!empty($type_array))
+                {
+                    foreach($type_array as $type_array_val)
+                    {
+                        $param_name = "additional".$type_array_val['requests_additional_type_id'];
+                        
+                        switch($type_array_val['type_id'])
+                        {
+                            case 1: //input box
+                                ${$param_name} = new Zend_Form_Element_Text($param_name);
+                                ${$param_name} -> setDecorators(array(array('ViewHelper'),))
+                                                             -> addFilter('StripTags')
+                                                             -> addFilter('StringTrim');
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True);
+                                }
+                                if($type_array_val['type_values'])
+                                {
+                                    ${$param_name} ->setValue($type_array_val['type_values']);
+                                }
+                                break;
+                            case 2: //drop down
+                                ${$param_name} = new Zend_Form_Element_Select($param_name);
+                                ${$param_name}  -> setDecorators(array(array('ViewHelper'),));
+				
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True);
+                                }
+                                
+                                if($type_array_val['type_values'])
+                                {
+                                    $values_array_final = array();
+                                    
+                                    $values_array = explode("|", $type_array_val['type_values']);
+                                    foreach($values_array as $values_array_val)
+                                    {
+                                        $values_array_final[$values_array_val] = $values_array_val;
+                                    }
+                                    
+                                    arsort($values_array_final);
+                                    $values_array_final[] = "";
+                                    asort($values_array_final);
+                                    
+                                    ${$param_name}  -> addMultiOptions($values_array_final);
+                                }
+                                break;
+                            case 3: //radio
+                                ${$param_name} = new Zend_Form_Element_Radio($param_name);
+                                ${$param_name}  -> setDecorators(array(array('ViewHelper'),))
+                                                                -> setSeparator(' ');
+                                
+                                if($type_array_val['type_required'])
+                                {
+                                    ${$param_name} -> setRequired(True)
+                                                                 -> addValidator('NotEmpty');
+                                }
+                                
+                                if($type_array_val['type_values'])
+                                {
+                                    $values_array_final = array();
+                                    
+                                    $values_array = explode("|", $type_array_val['type_values']);
+                                    foreach($values_array as $values_array_val)
+                                    {
+                                        $values_array_final[$values_array_val] = $values_array_val;
+                                    }
+                                    
+                                    arsort($values_array_final);
+                                    $values_array_final[] = "";
+                                    asort($values_array_final);
+                                    
+                                    ${$param_name}  -> addMultiOptions($values_array_final);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                //initial additional type finished
 
-		$this -> addElements(
-								array(
-										$id,
-                                        $from_request,
-                                        $from_request_att,
-                                        $from_ticket,
-                                        $from_ticket_att,
-										$dead_line,
-										$category,
-										$project,
-										$priority,
-										$title,
-                                        $trackRadio,
-		                                $trackList,
-										$contents,
-										$comments,
-										$attachment1,
-										$attachment2,
-										$attachment3,
-										$attachment4,
-										$attachment5,
-										$attachment6,
-										$attachment7,
-										$attachment8,
-										$attachment9,
-										$attachment10,
-										$attachment11,
-										$attachment12,
-										$attachment13,
-										$attachment14,
-										$attachment15,
-										$attachment16,
-										$attachment17,
-										$attachment18,
-										$attachment19,
-										$attachment20,
-										$status,
-										$participants,
-                                        $division,
-										$submit
-									)
+		$add_elements_result = array(
+                                                                    $id,
+                                                                    $from_request,
+                                                                    $from_request_att,
+                                                                    $from_ticket,
+                                                                    $from_ticket_att,
+                                                                    $dead_line,
+                                                                    $category,
+                                                                    $project,
+                                                                    $priority,
+                                                                    $title,
+                                                                    $trackRadio,
+                                                                    $trackList,
+                                                                    $contents,
+                                                                    $comments,
+                                                                    $status,
+                                                                    $participants,
+                                                                    $division,
+                                                                    $submit
 							);
+                 for($n=1;$n<21;$n++)
+                {
+                    $add_elements_result[] = ${"attachment".$n};
+                }
+                
+                if(!empty($type_array))
+                {
+                    foreach($type_array as $type_array_val)
+                    {
+                        $add_elements_result[] = ${"additional".$type_array_val['requests_additional_type_id']};
+                    }
+                }
+                
+		$this -> addElements($add_elements_result);
+        
 	}
 }

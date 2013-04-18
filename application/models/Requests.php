@@ -41,6 +41,10 @@ class Requests extends Zend_Db_Table
 
             if(!empty($result))
             {
+                $requests_additional_type = new RequestsAdditionalType();
+                $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+                $relation_additional_request = new RelationAdditionalRequest();
+                
                 foreach($result as $val)
                 {
                     $data = array();
@@ -54,6 +58,17 @@ class Requests extends Zend_Db_Table
                     $data['deadline'] = substr($val->dead_line, 0, 10);
                     $data['created_date'] = $val->created_date;
                     $data['closed_date'] = $val->closed_date;
+                    
+                    if(!empty($requests_additional_type_array))
+                    {
+                        $relation_additional_request_result = $relation_additional_request->DumpData($val->id);
+                        
+                        foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                        {
+                            $additional_title = "additional".$requests_additional_type_array_key;
+                            $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                        }
+                    }
 
                     $data_group[] = $data;
                 }
@@ -94,6 +109,10 @@ class Requests extends Zend_Db_Table
 
             if(!empty($result))
             {
+                $requests_additional_type = new RequestsAdditionalType();
+                $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+                $relation_additional_request = new RelationAdditionalRequest();
+                
                 foreach($result as $val)
                 {
                     $data = array();
@@ -108,6 +127,17 @@ class Requests extends Zend_Db_Table
                     $data['created_date'] = $val->created_date;
                     $data['closed_date'] = $val->closed_date;
 
+                     if(!empty($requests_additional_type_array))
+                    {
+                        $relation_additional_request_result = $relation_additional_request->DumpData($val->id);
+                        
+                        foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                        {
+                            $additional_title = "additional".$requests_additional_type_array_key;
+                            $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                        }
+                    }
+                    
                     $data_group[] = $data;
                 }
             }

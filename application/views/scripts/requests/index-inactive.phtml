@@ -1,4 +1,20 @@
+<br />
 &nbsp;
+    <select name="category" onchange="window.location.href=this.value">
+        <option value="/login/set-cookie-redirect/target/2">Category</option>
+    <?php foreach($this->category_tree as $category_tree): ?>
+        <?php foreach($category_tree as $category_tree_key=>$category_tree_val): ?>
+            <option value="/login/set-cookie-redirect/target/2/cookie_value/<?=$category_tree_key?>" <?php if($this->category == $category_tree_key){echo "selected='selected'";}?>><?=$category_tree_val?></option>
+        <?php endforeach;?>
+    <?php endforeach;?>
+    </select>
+&nbsp;
+<?php if($this->category): ?>
+<a href="/requests/add/type/add/category/<?=$this->category?>">
+<?php else: ?>
+<a href="#" onclick="alert('Please select category first.');">
+<?php endif; ?>
+<img src="/images/add.png" border="0" title="Add" alt="Add" /></a>
 <div align="center">
 <form name="form1" id="form1" method="post" />
 	<input type="hidden" name="p_type" value="<?=$this->p_type?>" />
@@ -13,6 +29,11 @@
 								<td class="form-title" width="40">ID</td>
 								<td class="form-title">Subject</td>
 								<td class="form-title">Category</td>
+								<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="form-title"><?=$addtional_title_val?></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>
 								<td class="form-title" width="80">Status</td>
 								<td class="form-title" width="80">Priority</td>
 								<td class="form-title" width="100">Dead Line</td>
@@ -27,6 +48,11 @@
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
 								<td class="left"><span class="small"><a href="/requests/view/type/index-inactive/id/<?=$list['id']?>"><?=$list['composer']?>: <?=$list['title']?></a></span></td>
 								<td class="center"><span class="small"><?=$list['category']?></span></td>
+								<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>				
 								<td class="center"><span class="small"><?=$list['status']?></span></td>
 								<td class="center"><span class="small"><?=$list['priority']?></span></td>
 								<td class="center"><span class="small"><?=$list['deadline']?></span></td>
