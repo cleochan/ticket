@@ -358,11 +358,26 @@ class RequestsController extends Zend_Controller_Action
 		$this->view->type = $params['type'];
 		
 		$now = date("Y-m-d H:i:s");
-		
-		$form = new RequestsForm();
+        		
+                $form = new RequestsForm();
 		$form->submitx->setLabel('Submit');
 		$this->view->form = $form;
-          
+        
+                $request_model = new Requests();
+                $category_id = $request_model->GetCategory($theid);
+        
+                if($category_id)
+                {
+                    $requests_additional_type_model = new RequestsAdditionalType();
+                    $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($category_id);
+                    $category_model = new Category();
+                    $this->view->category = array($category_id, $category_model->GetVal($category_id));
+                    $form->category->setValue($category_id);
+                }else{
+                    echo "Invalid Action";
+                    die;
+                }
+		
 		if($this->_request->isPost()){
 
             if(!$_SESSION['request_contents'][$theid]['ticket_auth'])
@@ -476,6 +491,20 @@ class RequestsController extends Zend_Controller_Action
                         }
 
                         $row->save();
+                        
+                        //Step3: update additional data
+                        if(!empty($this->view->get_form_elements))
+                        {
+                            $relation_table = new RelationAdditionalRequest();
+
+                            foreach($this->view->get_form_elements as $get_form_elements_key => $get_form_elements_val)
+                            {
+                                $relation_table_row = $relation_table->fetchRow("request_id='".$form->getValue('id')."' and requests_additional_type_id='".$get_form_elements_key."'");
+                                $relation_name = "additional".$get_form_elements_key;
+                                $relation_table_row->type_value = $form->getValue($relation_name);
+                                $relation_table_row->save();
+                            }
+                        }
                     }
                     //sending email
                     if($check_user_result3) //participants
@@ -583,73 +612,87 @@ class RequestsController extends Zend_Controller_Action
 			}
 		}else
 		{
-            $tickets = new Requests();
-            
-            if($params['id'])
-			{
-                $requests_tickets = new RequestsTickets();
-                $this->view->related_tickets = $requests_tickets ->RelatedTickets($params['id']);
+                    $tickets = new Requests();
+
+                    if($params['id'])
+                    {
+                        $requests_tickets = new RequestsTickets();
+                        $this->view->related_tickets = $requests_tickets ->RelatedTickets($params['id']);
+
+                        if($this->view->related_tickets)
+                        {
+                            $this->view->create_ticket_button_value = "Create another ticket";
+                        }else
+                        {
+                            $this->view->create_ticket_button_value = "Close this request and create ticket";
+                        }
                 
-                if($this->view->related_tickets)
-                {
-                    $this->view->create_ticket_button_value = "Create another ticket";
-                }else
-                {
-                    $this->view->create_ticket_button_value = "Close this request and create ticket";
-                }
-                
-                $ticket = $tickets->fetchRow('id="'.$params['id'].'"');
-				//update contents
-				$ticket->dead_line = substr($ticket->dead_line,0,10);
-				$users = new Users();
-				$ticket->participants = $users -> GetNameString($ticket->participants);				
-				$this->view->id = $params['id'];
-				$form->populate($ticket->toArray());
-				
-				//push static data for read only
-                $ticket = $ticket->toArray();
-				$ticket['status'] = $tickets -> GetStatusStr($ticket['status']);
-				$ticket['priority'] = $tickets -> Priority($ticket['priority']);
-				$ticket['skype'] = $users ->GetSkype($ticket['composer']);
-				$ticket['composer'] = $users -> GetRealName($ticket['composer']);
-				$ticket['closed_by'] = $users -> GetRealName($ticket['closed_by']);
-				
-				$this->view->ticket = $ticket;
-				$theid = $params['id'];
-				$_SESSION['request_contents'][$theid]['contents'] = $ticket;
-				
-				//attachments for subject
-				$att_string = new Filemap();
-				$this->view->attachments = $att_string -> MakeDownloadLink($ticket['attachment']);
-				$_SESSION['request_contents'][$theid]['attachments'] = $this->view->attachments;
-				
-				//push comments
-				$comments = new RequestsComments();
-				$comments_data = $comments -> fetchAll('request_id = "'.$params['id'].'"');
-                                $comments_array=array ();
-				foreach($comments_data as $data_val)
-				{
-					//make object to array
-					$data['request_id'] = $data_val->request_id;
-					$data['contents'] = $data_val->contents;
-					$data['attachment'] = $att_string -> MakeDownloadLink($data_val->attachment);
-					$data['skype'] = $users ->GetSkype($data_val->composer);
-					$data['composer'] = $users -> GetRealName($data_val->composer);
-					$data['created_date'] = $data_val->created_date;					
-					$comments_array[] = $data;
-				}
-				$this->view->comments_data = $comments_array;
-				$_SESSION['request_contents'][$theid]['comments_data'] = $comments_array;
-				
-				//create user list
-				$this->view->users_array = $users -> GetRealNameString();
-				$_SESSION['request_contents'][$theid]['users_array'] = $this->view->users_array;
-				
-				//get ticket auth
-				$this->view->ticket_auth = $users ->GetRequestAuth($params['id']);
-                
-				$_SESSION['request_contents'][$theid]['ticket_auth'] = $this->view->ticket_auth;
-			}
+                        $ticket = $tickets->fetchRow('id="'.$params['id'].'"');
+                        //update contents
+                        $ticket->dead_line = substr($ticket->dead_line,0,10);
+                        $users = new Users();
+                        $ticket->participants = $users -> GetNameString($ticket->participants);				
+                        $this->view->id = $params['id'];
+                        
+                        $ticket_array_standby = $ticket->toArray();
+                        
+                        //get additional type
+                        $relation_additional_request_model = new RelationAdditionalRequest();
+                        $additional_data = $relation_additional_request_model->DumpData($params['id']);
+                        if(!empty($additional_data))
+                        {
+                            foreach($additional_data as $additional_data_key => $additional_data_val)
+                            {
+                                $key_name = "additional".$additional_data_key;
+                                $ticket_array_standby[$key_name] = $additional_data_val;
+                            }
+                        }
+                        
+                        $form->populate($ticket_array_standby);
+
+                        //push static data for read only
+                        $ticket_array_standby['status'] = $tickets -> GetStatusStr($ticket_array_standby['status']);
+                        $ticket_array_standby['priority'] = $tickets -> Priority($ticket_array_standby['priority']);
+                        $ticket_array_standby['skype'] = $users ->GetSkype($ticket_array_standby['composer']);
+                        $ticket_array_standby['composer'] = $users -> GetRealName($ticket_array_standby['composer']);
+                        $ticket_array_standby['closed_by'] = $users -> GetRealName($ticket_array_standby['closed_by']);
+
+                        $this->view->ticket = $ticket_array_standby;
+                        $theid = $params['id'];
+                        $_SESSION['request_contents'][$theid]['contents'] = $ticket_array_standby;
+
+                        //attachments for subject
+                        $att_string = new Filemap();
+                        $this->view->attachments = $att_string -> MakeDownloadLink($ticket_array_standby['attachment']);
+                        $_SESSION['request_contents'][$theid]['attachments'] = $this->view->attachments;
+
+                        //push comments
+                        $comments = new RequestsComments();
+                        $comments_data = $comments -> fetchAll('request_id = "'.$params['id'].'"');
+                                        $comments_array=array ();
+                        foreach($comments_data as $data_val)
+                        {
+                            //make object to array
+                            $data['request_id'] = $data_val->request_id;
+                            $data['contents'] = $data_val->contents;
+                            $data['attachment'] = $att_string -> MakeDownloadLink($data_val->attachment);
+                            $data['skype'] = $users ->GetSkype($data_val->composer);
+                            $data['composer'] = $users -> GetRealName($data_val->composer);
+                            $data['created_date'] = $data_val->created_date;					
+                            $comments_array[] = $data;
+                        }
+                        $this->view->comments_data = $comments_array;
+                        $_SESSION['request_contents'][$theid]['comments_data'] = $comments_array;
+
+                        //create user list
+                        $this->view->users_array = $users -> GetRealNameString();
+                        $_SESSION['request_contents'][$theid]['users_array'] = $this->view->users_array;
+
+                        //get ticket auth
+                        $this->view->ticket_auth = $users ->GetRequestAuth($params['id']);
+
+                        $_SESSION['request_contents'][$theid]['ticket_auth'] = $this->view->ticket_auth;
+                    }
         }
     }
     

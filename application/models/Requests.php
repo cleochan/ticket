@@ -160,6 +160,12 @@ class Requests extends Zend_Db_Table
 		return $status;
 	}
 	
+        function GetCategory($id)
+        {
+            $row = $this->fetchRow("id = '".$id."'");
+            
+            return $row['category'];
+        }
 }
 
 

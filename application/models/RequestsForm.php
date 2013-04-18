@@ -122,9 +122,9 @@ class RequestsForm extends Zend_Form
                                         $values_array_final[$values_array_val] = $values_array_val;
                                     }
                                     
-                                    rsort($values_array_final);
+                                    arsort($values_array_final);
                                     $values_array_final[] = "";
-                                    sort($values_array_final);
+                                    asort($values_array_final);
                                     
                                     ${$param_name}  -> addMultiOptions($values_array_final);
                                 }
@@ -150,9 +150,9 @@ class RequestsForm extends Zend_Form
                                         $values_array_final[$values_array_val] = $values_array_val;
                                     }
                                     
-                                    rsort($values_array_final);
+                                    arsort($values_array_final);
                                     $values_array_final[] = "";
-                                    sort($values_array_final);
+                                    asort($values_array_final);
                                     
                                     ${$param_name}  -> addMultiOptions($values_array_final);
                                 }
@@ -162,7 +162,7 @@ class RequestsForm extends Zend_Form
                         }
                     }
                 }
-                //initial additional type start
+                //initial additional type finished
                 
                 $add_elements_result = array(
                                                                 $id,

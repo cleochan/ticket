@@ -202,27 +202,22 @@ function dump_ticket(rid)
 <?php if($this->notice):?>
 <font color="#ff0000"><strong>* <?php echo $this->notice;?></strong></font><br /><br />
 <?php endif;?>
+<?php $n = 1;?>
 <form id='ticketForm' name='ticketForm' action="/requests/view" method="post" enctype="multipart/form-data">
 	<table class="width100" cellspacing="1">
 		<tbody>
 			<tr>
 				<td class="form-title" colspan="4">#<?=$this->id?><?php echo $this->form->id;?> <font color="#ff0000"><?php echo $this->ticket['composer'].$this->ticket['skype'];?></font>: <?php echo $this->ticket['title'];?></td>
 			</tr>
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Category *</td>
-				<td>
-					<?php if($this->ticket_auth):?>	
-						<?php echo $this->form->category;?>
-					<?php else:?>
-						<?php echo $this->ticket['category'];?>
-					<?php endif;?>
-				</td>
+				<td>&nbsp;<?=$this->category[1]?><?php echo $this->form->category;?></td>
 				<td class="category" width="130">Created Date</td>
 				<td>
 						<?php echo $this->ticket['created_date'];?>
 				</td>
 			</tr>		
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Status</td>
 				<td>
 					<?php if($this->ticket_auth):?>	
@@ -236,7 +231,7 @@ function dump_ticket(rid)
 						<?php if($this->ticket['closed_date']):?><?php echo $this->ticket['closed_date'];?> (<?php echo $this->ticket['closed_by'];?>)<?php endif;?>
 				</td>
 			</tr>				
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Priority</td>
 				<td colspan="3">
 					<?php if($this->ticket_auth):?>	
@@ -246,7 +241,7 @@ function dump_ticket(rid)
 					<?php endif;?>
                 </td>
 			</tr>	
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Dead Line</td>
 				<td colspan="3">
 					<?php if($this->ticket_auth):?>	
@@ -256,7 +251,7 @@ function dump_ticket(rid)
 					<?php endif;?>
 				</td>
 			</tr>		
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Participants</td>
 				<td colspan="3">
 					<?php if($this->ticket_auth):?>	
@@ -265,8 +260,16 @@ function dump_ticket(rid)
 						<?php echo $this->ticket['participants'];?>
 					<?php endif;?>
 				</td>
-			</tr>		
-			<tr class="row-2">
+			</tr>
+                        <?php if(!empty($this->get_form_elements)):?>
+                            <?php foreach($this->get_form_elements as $get_form_elements_key => $get_form_elements_val):?>
+                                <tr class="row-<?php echo (2-$n%2); $n++;?>">
+                                    <td class="category"><?=$get_form_elements_val[1]?> <?php if($get_form_elements_val[0]){echo "*";} ?></td>
+                                    <td colspan="3"><?php $tag_name = "additional".$get_form_elements_key; echo $this->form->$tag_name;?></td>
+                                </tr>
+                            <?php endforeach;?>
+                        <?php endif;?>
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Title *</td>
 				<td colspan="3">
 					<?php if($this->ticket_auth):?>	
@@ -276,15 +279,15 @@ function dump_ticket(rid)
 					<?php endif;?>
 				</td>
 			</tr>
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Contents</td>
 				<td colspan="3"><?php echo $this->ticket['contents'];?></td>
 			</tr>		
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Attachment</td>
 				<td colspan="3"><?php echo $this->attachments;?></td>
 			</tr>			
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Related Tickets</td>
 				<td colspan="3"><?=$this->related_tickets?>
                     <?php if(in_array($_SESSION["Zend_Auth"]["storage"]->level_mgt, array(2,3))):?>
@@ -292,7 +295,7 @@ function dump_ticket(rid)
                     <?php endif;?>
                 </td>
 			</tr>	
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td colspan="4"><?php echo $this->form->submitx;?></td>
 			</tr>
 			<tr>
@@ -310,11 +313,11 @@ function dump_ticket(rid)
 			<tr class="spacer">
 				<td></td>
 			</tr>	
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Add Comments</td>
 				<td colspan="3"><?php echo $this->form->comments;?></td>
 			</tr>		
-			<tr class="row-1">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Add Attachment</td>
 				<td colspan="3">
 					<div id="atmt1"><?php echo $this->form->attachment1;?></div>
@@ -341,7 +344,7 @@ function dump_ticket(rid)
 					<input type="hidden" name="atmt_record" id="atmt_record" value="1" />
 				</td>
 			</tr>
-			<tr class="row-2">
+			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td colspan="4"><?php echo $this->form->submitx;?></td>
 			</tr>	
 		</tbody>
