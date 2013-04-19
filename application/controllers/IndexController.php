@@ -494,6 +494,18 @@ class IndexController extends Zend_Controller_Action
                 $this->view->original_attachments = $att_string -> MakeDownloadLink($get_request['attachment']);
                 
                 $category_id = $get_request['category'];
+                
+                //get additional type
+                $relation_additional_request_model = new RelationAdditionalRequest();
+                $additional_data = $relation_additional_request_model->DumpData($params['from_request']);
+                if(!empty($additional_data))
+                {
+                    foreach($additional_data as $additional_data_key => $additional_data_val)
+                    {
+                        $key_name = "additional".$additional_data_key;
+                        $form->$key_name->setValue($additional_data_val);
+                    }
+                }
             }
         }elseif($params['from_ticket']) //duplicated ticket
         {
@@ -519,6 +531,18 @@ class IndexController extends Zend_Controller_Action
                 $this->view->original_attachments = $att_string -> MakeDownloadLink($get_ticket['attachment']);
                 
                 $category_id = $get_ticket['category'];
+                
+                //get additional type
+                $relation_additional_ticket_model = new RelationAdditionalTicket();
+                $additional_data = $relation_additional_ticket_model->DumpData($params['from_ticket']);
+                if(!empty($additional_data))
+                {
+                    foreach($additional_data as $additional_data_key => $additional_data_val)
+                    {
+                        $key_name = "additional".$additional_data_key;
+                        $form->$key_name->setValue($additional_data_val);
+                    }
+                }
             }
         }else{ // notmal ticket
             $category_id = $params['category'];
@@ -614,10 +638,10 @@ class IndexController extends Zend_Controller_Action
 						$row->dead_line = $form->getValue('dead_line')." 23:59:59";
 					}
 					$row->category = $form->getValue('category');
-                    if($form->getValue('project'))
+                                        if($form->getValue('project'))
 					{
-                        $row->project = $form->getValue('project');
-                    }
+                                            $row->project = $form->getValue('project');
+                                        }
 					$row->priority = $form->getValue('priority');
 					$row->title = $form->getValue('title');
 					if($form->getValue('contents'))
@@ -708,6 +732,22 @@ class IndexController extends Zend_Controller_Action
 
                         //send
                         $mail->Send();
+                    }
+                    
+                    //update additional data
+                    if(!empty($this->view->get_form_elements))
+                    {
+                        $relation_table = new RelationAdditionalTicket();
+
+                        foreach($this->view->get_form_elements as $get_form_elements_key => $get_form_elements_val)
+                        {
+                            $relation_table_row = $relation_table->createRow();
+                            $relation_name = "additional".$get_form_elements_key;
+                            $relation_table_row->ticket_id = $pt;
+                            $relation_table_row->requests_additional_type_id = $get_form_elements_key;
+                            $relation_table_row->type_value = $form->getValue($relation_name);
+                            $relation_table_row->save();
+                        }
                     }
                     
                     //send email
@@ -839,6 +879,21 @@ class IndexController extends Zend_Controller_Action
 		$form = new TicketForm();
 		$form->submitx->setLabel('Submit');
 		$this->view->form = $form;
+        
+                $request_model = new Requests();
+                $category_id = $request_model->GetCategory($theid);
+        
+                if($category_id)
+                {
+                    $requests_additional_type_model = new RequestsAdditionalType();
+                    $this->view->get_form_elements = $requests_additional_type_model->GetFormElements($category_id);
+                    $category_model = new Category();
+                    $this->view->category = array($category_id, $category_model->GetVal($category_id));
+                    $form->category->setValue($category_id);
+                }else{
+                    echo "Invalid Action";
+                    die;
+                }
 
                 $select = $this->db->select();
                 $select->from('track');
@@ -983,7 +1038,7 @@ class IndexController extends Zend_Controller_Action
 								
 				if(!$error)
 				{
-                    //Step1: insert comments if exists
+                                        //Step1: insert comments if exists
 					if($form->getValue('comments') || !empty($att_pool))
 					{
 						$comments = new Comments();
@@ -1031,6 +1086,20 @@ class IndexController extends Zend_Controller_Action
 					$row->update_when = $now;
 				
 					$row->save();
+                    
+                                        //Step3: update additional data
+                                        if(!empty($this->view->get_form_elements))
+                                        {
+                                            $relation_table = new RelationAdditionalTicket();
+
+                                            foreach($this->view->get_form_elements as $get_form_elements_key => $get_form_elements_val)
+                                            {
+                                                $relation_table_row = $relation_table->fetchRow("ticket_id='".$form->getValue('id')."' and requests_additional_type_id='".$get_form_elements_key."'");
+                                                $relation_name = "additional".$get_form_elements_key;
+                                                $relation_table_row->type_value = $form->getValue($relation_name);
+                                                $relation_table_row->save();
+                                            }
+                                        }
                     
                     //check efficiency if it's closed
                     if(3 == $form->getValue('status'))
@@ -1181,31 +1250,45 @@ class IndexController extends Zend_Controller_Action
 		{
             if($params['id'])
 			{
-                $ticket = $tickets->fetchRow('id="'.$params['id'].'"');
+                                $ticket = $tickets->fetchRow('id="'.$params['id'].'"');
 				//update contents
 				$ticket->dead_line = substr($ticket->dead_line,0,10);
 				$users = new Users();
 				$ticket->participants = $users -> GetNameString($ticket->participants);				
 				$this->view->id = $params['id'];
-				$form->populate($ticket->toArray());
+                
+                                $ticket_array_standby = $ticket->toArray();
+                                
+                                //get additional type
+                               $relation_additional_ticket_model = new RelationAdditionalTicket();
+                               $additional_data = $relation_additional_ticket_model->DumpData($params['id']);
+                               if(!empty($additional_data))
+                               {
+                                   foreach($additional_data as $additional_data_key => $additional_data_val)
+                                   {
+                                       $key_name = "additional".$additional_data_key;
+                                       $ticket_array_standby[$key_name] = $additional_data_val;
+                                   }
+                               }
+                                
+				$form->populate($ticket_array_standby);
 				
 				//push static data for read only
-                $ticket = $ticket->toArray();
 				$project_class = new Projects();
-				$get_project_name = $project_class -> fetchRow('id = "'.$ticket['project'].'"');
-				$ticket['project'] = $get_project_name -> project_name;
-				$ticket['status'] = $tickets -> GetStatusStr($ticket['status']);
-				$ticket['priority'] = $tickets -> Priority($ticket['priority']);
-				$ticket['skype'] = $users ->GetSkype($ticket['composer']);
-				$ticket['composer'] = $users -> GetRealName($ticket['composer']);
-				$ticket['make_read'] = $users -> GetNameString($ticket['make_read'], TRUE);
-				$this->view->ticket = $ticket;
+				$get_project_name = $project_class -> fetchRow('id = "'.$ticket_array_standby['project'].'"');
+				$ticket_array_standby['project'] = $get_project_name -> project_name;
+				$ticket_array_standby['status'] = $tickets -> GetStatusStr($ticket_array_standby['status']);
+				$ticket_array_standby['priority'] = $tickets -> Priority($ticket_array_standby['priority']);
+				$ticket_array_standby['skype'] = $users ->GetSkype($ticket_array_standby['composer']);
+				$ticket_array_standby['composer'] = $users -> GetRealName($ticket_array_standby['composer']);
+				$ticket_array_standby['make_read'] = $users -> GetNameString($ticket_array_standby['make_read'], TRUE);
+				$this->view->ticket = $ticket_array_standby;
 				$theid = $params['id'];
-				$_SESSION['ticket_contents'][$theid]['contents'] = $ticket;
+				$_SESSION['ticket_contents'][$theid]['contents'] = $ticket_array_standby;
 				
 				//attachments for subject
 				$att_string = new Filemap();
-				$this->view->attachments = $att_string -> MakeDownloadLink($ticket['attachment']);
+				$this->view->attachments = $att_string -> MakeDownloadLink($ticket_array_standby['attachment']);
 				$_SESSION['ticket_contents'][$theid]['attachments'] = $this->view->attachments;
 				
 				//push comments
@@ -1220,7 +1303,7 @@ class IndexController extends Zend_Controller_Action
 					$data['attachment'] = $att_string -> MakeDownloadLink($data_val->attachment);
 					$data['composer'] = $users -> GetRealName($data_val->composer);
 					$data['created_date'] = $data_val->created_date;
-                    $data['skype'] = $users ->GetSkype($data_val->composer);
+                                        $data['skype'] = $users ->GetSkype($data_val->composer);
 					$comments_array[] = $data;
 				}
 				$this->view->comments_data = $comments_array;
