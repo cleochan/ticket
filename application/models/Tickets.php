@@ -9,6 +9,7 @@ class Tickets extends Zend_Db_Table
 	var $lm; //limit
 	var $page;
 	var $st; //sort
+        var $category;
 	
 	function PushListData()
 	{
@@ -72,12 +73,19 @@ class Tickets extends Zend_Db_Table
 			default://all
 				break;
 		}
+
+                //Step4: category
+                if($this->category)
+                {
+                    $category_model = new Category();
+                    $find->where("category IN (?)", $category_model->GetChildren($this->category));
+                }
 		
-		//Step4: order
+		//Step5: order
 		$find->order("update_when DESC");
 		
 		
-		//Step5: limit and offset
+		//Step6: limit and offset
 		$this->lm = 20;
 		$offset = ($this->page - 1) * $this->lm;
 		
@@ -89,27 +97,42 @@ class Tickets extends Zend_Db_Table
                
 		//Create More Info
 		$users = new Users();
+                $category = new Category();
+                
 		$idstr = $_SESSION["Zend_Auth"]["storage"]->id."@".$_SESSION["Zend_Auth"]["storage"]->username;
 
 		if(!empty($result))
 		{
-            foreach($result as $key => $val)
+                    $requests_additional_type = new RequestsAdditionalType();
+                    $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+                    $relation_additional_ticket = new RelationAdditionalTicket();
+                    
+                    foreach($result as $key => $val)
 			{
 				$data['id'] = $val->id;
 				$data['title'] = $val->title;
 				$data['update_when'] = $val->update_when;
+                                $data['category'] = $category->GetVal($val->category);
 				$data['dead_line'] = $val->dead_line;
 				$data['pri_str'] = $this->Priority($val->priority);
 				$data['status_str'] = $this->GetStatusStr($val->status);
 				$data['update_who_realname'] = $users -> GetRealName($val->update_who);
 				$data['composer'] = $users -> GetRealName($val->composer);
-                $data['act'] = $users -> MyRole($idstr, $val->participants, $val->user_related);
+                                $data['act'] = $users -> MyRole($idstr, $val->participants, $val->user_related);
 
-				// will be redo
-                //$data['act'] = $act_str;
-				
+                                if(!empty($requests_additional_type_array))
+                                {
+                                    $relation_additional_request_result = $relation_additional_ticket->DumpData($val->id);
+
+                                    foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                                    {
+                                        $additional_title = "additional".$requests_additional_type_array_key;
+                                        $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                                    }
+                                }
+                                
 				//is_read
-                if(strpos($val->make_read, $idstr) || "0" == strval(strpos($val->make_read, $idstr)))
+                                if(strpos($val->make_read, $idstr) || "0" == strval(strpos($val->make_read, $idstr)))
 				{
 					$data['is_read'] = 1;
 				}else 

@@ -1,6 +1,6 @@
-<br />
+<div align="left">
 &nbsp;
-    <select name="category" onchange="window.location.href=this.value">
+    <select name="category" onchange="window.location.href=this.value" class="small">
         <option value="/login/set-cookie-redirect/target/2">Category</option>
     <?php foreach($this->category_tree as $category_tree): ?>
         <?php foreach($category_tree as $category_tree_key=>$category_tree_val): ?>
@@ -14,7 +14,8 @@
 <?php else: ?>
 <a href="#" onclick="alert('Please select category first.');">
 <?php endif; ?>
-<img src="/images/add.png" border="0" title="Add" alt="Add" /></a>
+<img src="/images/add.png" border="0" title="Add" alt="Add" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+</div>
 <div align="center">
 <form name="form1" id="form1" method="post" />
 	<input type="hidden" name="p_type" value="<?=$this->p_type?>" />

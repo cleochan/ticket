@@ -6,6 +6,7 @@ class Tasks
 	var $keyword;
 	var $lm; //limit
 	var $page;
+        var $category;
     
     function __construct(){
         $this->db = Zend_Registry::get("db");
@@ -71,11 +72,18 @@ class Tasks
 				break;
 		}
         
-        //Step4: order
-		$select->order("u.sequence ASC");
+         //Step4: category
+        if($this->category)
+        {
+            $category_model = new Category();
+            $select->where("t.category IN (?)", $category_model->GetChildren($this->category));
+        }
+        
+        //Step5: order
+	$select->order("u.sequence ASC");
         $select->order("u.id ASC");
         
-        //Step5: limit and offset
+        //Step6: limit and offset
 		$this->lm = 20;
 		$offset = ($this->page - 1) * $this->lm;
 		
@@ -92,24 +100,42 @@ class Tasks
         $user_model = new Users();
         $kpi_model = new Kpi();
         
-        foreach($data as $d_key => $d_val)
+        if(!empty($data))
         {
-            $temp = array();
+            $requests_additional_type = new RequestsAdditionalType();
+            $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+            $relation_additional_ticket = new RelationAdditionalTicket();
             
-            $temp['table_id'] = $d_val['uid'];
-            $temp['staff'] = $user_model->GetRealName($d_val['urid']);
-            $temp['status'] = $this->StatusLight($d_val['ustatus']);
-            $temp['status_id'] = $d_val['ustatus'];
-            $temp['ticket_id'] = $d_val['utid'];
-            $temp['ticket_title'] = "<a href='/index/view/id/".$d_val['utid']."/type/".$this->request."'>".$d_val['ttitle'];
-            $temp['notes'] = $d_val['unotes'];
-            $temp['priority'] = $tickets_model->Priority($d_val['tpriority']);
-            $temp['project'] = $project_model->GetVal($d_val['tproject']);
-            $temp['deadline'] = substr($d_val['tdeadline'], 0, 10);
-            $temp['ref_hour'] = $d_val['khour'];
-            $temp['actual_hour'] = $d_val['kused'];
-            
-            $result[] = $temp;
+             foreach($data as $d_key => $d_val)
+            {
+                $temp = array();
+
+                $temp['table_id'] = $d_val['uid'];
+                $temp['staff'] = $user_model->GetRealName($d_val['urid']);
+                $temp['status'] = $this->StatusLight($d_val['ustatus']);
+                $temp['status_id'] = $d_val['ustatus'];
+                $temp['ticket_id'] = $d_val['utid'];
+                $temp['ticket_title'] = "<a href='/index/view/id/".$d_val['utid']."/type/".$this->request."'>".$d_val['ttitle'];
+                $temp['notes'] = $d_val['unotes'];
+                $temp['priority'] = $tickets_model->Priority($d_val['tpriority']);
+                $temp['project'] = $project_model->GetVal($d_val['tproject']);
+                $temp['deadline'] = substr($d_val['tdeadline'], 0, 10);
+                $temp['ref_hour'] = $d_val['khour'];
+                $temp['actual_hour'] = $d_val['kused'];
+                
+                 if(!empty($requests_additional_type_array))
+                {
+                    $relation_additional_request_result = $relation_additional_ticket->DumpData($d_val['utid']);
+
+                    foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                    {
+                        $additional_title = "additional".$requests_additional_type_array_key;
+                        $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                    }
+                }
+
+                $result[] = $temp;
+            }
         }
         
         return $result;

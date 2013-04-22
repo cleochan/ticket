@@ -135,6 +135,7 @@
             }
 		}
 	</script>
+<div align="left">
 &nbsp;
 <form method="GET" name="vform" id="vform" onsubmit="viewpick();return false;">
 	<input type="button" value="Switch to task mode" class="mode_trigger_switch" onclick="switch_mode();" />
@@ -160,6 +161,23 @@
 		<?php endif;?>
 	</select>
 </form>
+&nbsp;
+    <select name="category" onchange="window.location.href=this.value" class="small" >
+        <option value="/login/set-cookie-redirect/target/3">Category</option>
+    <?php foreach($this->category_tree as $category_tree): ?>
+        <?php foreach($category_tree as $category_tree_key=>$category_tree_val): ?>
+            <option value="/login/set-cookie-redirect/target/3/cookie_value/<?=$category_tree_key?>" <?php if($this->category == $category_tree_key){echo "selected='selected'";}?>><?=$category_tree_val?></option>
+        <?php endforeach;?>
+    <?php endforeach;?>
+    </select>
+&nbsp;
+<?php if($this->category): ?>
+<a href="/index/add/type/add/category/<?=$this->category?>">
+<?php else: ?>
+<a href="#" onclick="alert('Please select category first.');">
+<?php endif; ?>
+<img src="/images/add.png" border="0" title="Add" alt="Add" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+</div>
 <div align="center">
 <form name="form1" id="form1" method="post" />
 	<input type="hidden" name="p_type" value="<?=$this->p_type?>" />
@@ -180,6 +198,11 @@
 										<?php endforeach;?>
 									</select>-->
 								</td>
+                                				<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="form-title"><?=$addtional_title_val?></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>
 								<td class="form-title" width="100">Last Update</td>
 								<td class="form-title" width="150">Update Time</td>
 								<td class="form-title" width="90">Dead Line</td>
@@ -193,6 +216,11 @@
 							<tr class="row-<?php if(1==$n){echo $n;$n+=1;}else{echo $n;$n-=1;}?>">
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
 								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" />&nbsp;<a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>"><?php if($list['is_focus']):?>	<img src='/images/star/star.png' border='0' /><?php else:?><img src='/images/star/star_empty.png' border='0' /><?php endif;?></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></span></td>
+                                				<?php if($this->addtional_title):?>
+                                                                    <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
+                                                                        <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>	
 								<td class="center"><span class="small"><?=$list['update_who_realname']?></span></td>
 								<td class="center"><span class="small"><?=$list['update_when']?></span></td>
 								<td class="center"><span class="small"><?=$list['dead_line']?></span></td>

@@ -54,6 +54,35 @@ class IndexController extends Zend_Controller_Action
         $this->view->menu = $menu -> GetTicketMenu($params['type']); 
         //create user list
 
+        //build category tree
+        $category_model = new Category();
+        $this->view->category_tree = $category_model->BuildTree();
+        
+        $tickets = new Tickets();
+        
+        //read cookie
+        if($_COOKIE['TICKET_INITIAL_CATEGORY_ID'])
+        {
+            $this->view->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+            $tickets->category = $_COOKIE['TICKET_INITIAL_CATEGORY_ID'];
+
+            //additional_data_title
+            $requests_additional_type = new RequestsAdditionalType();
+            $requests_additional_type_array = $requests_additional_type->GetFormElements($_COOKIE['TICKET_INITIAL_CATEGORY_ID']);
+            
+            if(!empty($requests_additional_type_array))
+            {
+                $addtional_title = array();
+                
+                foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+                {
+                    $addtional_title["additional".$requests_additional_type_array_key] = $requests_additional_type_array_val[1];
+                }
+                
+                $this->view->addtional_title = $addtional_title;
+            }
+        }
+        
         $users = new Users();
         $this->view->get_user_list = $users -> MakeListForDropDown();
 
@@ -66,8 +95,7 @@ class IndexController extends Zend_Controller_Action
         {
                 $_SESSION['search_ticket_users_current'] = $_SESSION["Zend_Auth"]["storage"]->id;
         }
-
-        $tickets = new Tickets();
+        
         $this->view->p_status = $tickets -> StatusArray();
         $tickets -> request = $params['type'];
 
