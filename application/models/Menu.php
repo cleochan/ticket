@@ -19,7 +19,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			case "2": //processing
@@ -31,7 +31,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			case "3": //closed
@@ -43,7 +43,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			case "4": //canceled
@@ -55,7 +55,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			case "search": //search
@@ -67,7 +67,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'><strong>Searched</strong></a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			case "add": //add
@@ -79,7 +79,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'><strong>Add Ticket</strong></a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 			default://all
@@ -91,7 +91,7 @@ class Menu
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
 				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
                 {
-                    $str .= " | <a href='/index/add/type/add'>Add Ticket</a> (<a href='/index/fast-ticket/type/add'>Fast</a>)";
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
                 }
 				break;
 		}
