@@ -26,7 +26,7 @@ class Mail
 	{
 		$config = $this -> GetConfig();
         
-        $mailconfig = array('auth' => 'login', 'username' => $config['smtp_account'], 'password' => $config['smtp_pw'], 'port' => '25');
+        $mailconfig = array('auth' => 'login', 'username' => $config['smtp_account'], 'password' => $config['smtp_pw'], 'port' => '465', 'ssl' => 'ssl');
 		$transport = new Zend_Mail_Transport_Smtp($config['smtp_server'], $mailconfig);
 		$mail = new Zend_Mail('utf-8');
 		$mail->setSubject($this->mail_subject);

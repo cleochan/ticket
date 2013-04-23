@@ -583,6 +583,16 @@ class IndexController extends Zend_Controller_Action
             $category_model = new Category();
             $this->view->category = array($category_id, $category_model->GetVal($category_id));
             $form->category->setValue($category_id);
+            
+            //ignore uncessary elements
+            $get_unnecessary_elements = $requests_additional_type_model->GetUnnecessaryElements($params['category'], 1);
+            if(!empty($get_unnecessary_elements))
+            {
+                foreach($get_unnecessary_elements as $unnecesary_element)
+                {
+                    $form->$unnecesary_element->setRequired(False);
+                }
+            }
         }else{
             echo "Invalid Action.";
             die;
@@ -918,6 +928,16 @@ class IndexController extends Zend_Controller_Action
                     $category_model = new Category();
                     $this->view->category = array($category_id, $category_model->GetVal($category_id));
                     $form->category->setValue($category_id);
+                    
+                    //ignore uncessary elements
+                    $get_unnecessary_elements = $requests_additional_type_model->GetUnnecessaryElements($params['category'], 1);
+                    if(!empty($get_unnecessary_elements))
+                    {
+                        foreach($get_unnecessary_elements as $unnecesary_element)
+                        {
+                            $form->$unnecesary_element->setRequired(False);
+                        }
+                    }
                 }else{
                     echo "Invalid Action";
                     die;

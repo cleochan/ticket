@@ -24,6 +24,27 @@ class RequestsAdditionalType extends Zend_Db_Table
             
             return $result;
         }
+        
+        function GetUnnecessaryElements($requests_category_id, $decolation=NULL)
+        {
+            $rows = $this->fetchAll("type_status=1 and requests_category_id!='".$requests_category_id."'");
+            
+            $result = array();
+            
+            foreach($rows as $row)
+            {
+                $element = $row['requests_additional_type_id'];
+                
+                if($decolation)
+                {
+                    $element = "additional".$element;
+                }
+                
+                $result[] = $element;
+            }
+            
+            return $result;
+        }
 }
 
 

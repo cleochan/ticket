@@ -130,7 +130,7 @@ class Tasks
                     foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
                     {
                         $additional_title = "additional".$requests_additional_type_array_key;
-                        $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                        $temp[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
                     }
                 }
 

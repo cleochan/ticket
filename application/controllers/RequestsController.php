@@ -211,12 +211,22 @@ class RequestsController extends Zend_Controller_Action
                     $category_model = new Category();
                     $this->view->category = array($params['category'], $category_model->GetVal($params['category']));
                     $form->category->setValue($params['category']);
-                
+                    
+                    //ignore uncessary elements
+                    $get_unnecessary_elements = $requests_additional_type_model->GetUnnecessaryElements($params['category'], 1);
+                    if(!empty($get_unnecessary_elements))
+                    {
+                        foreach($get_unnecessary_elements as $unnecesary_element)
+                        {
+                            $form->$unnecesary_element->setRequired(False);
+                        }
+                    }
                 }else{
                     echo "Invalid Action";
                     die;
                 }
-		$this->view->form = $form;
+                
+                $this->view->form = $form;
 
         
 		if($this->_request->isPost()){
@@ -378,7 +388,7 @@ class RequestsController extends Zend_Controller_Action
 				
 				if(!$error)
 				{
-					$this->view->notice="Some information are inValid.";
+					$this->view->notice="Some information are inValid #1.";
 					$form->populate($formData);
 				}
                                 $form->setAction($form->getView()->url(array('controller' => 'requests', 'action' => 'add', 'type' => 'add', 'category'=>1)));
@@ -413,6 +423,16 @@ class RequestsController extends Zend_Controller_Action
                     $category_model = new Category();
                     $this->view->category = array($category_id, $category_model->GetVal($category_id));
                     $form->category->setValue($category_id);
+                    
+                     //ignore uncessary elements
+                    $get_unnecessary_elements = $requests_additional_type_model->GetUnnecessaryElements($params['category'], 1);
+                    if(!empty($get_unnecessary_elements))
+                    {
+                        foreach($get_unnecessary_elements as $unnecesary_element)
+                        {
+                            $form->$unnecesary_element->setRequired(False);
+                        }
+                    }
                 }else{
                     echo "Invalid Action";
                     die;
