@@ -39,6 +39,7 @@ class RelationAdditionalTicket extends Zend_Db_Table
         $select = $this->select();
         $select->where("requests_additional_type_id in (?)", $requests_additional_type_id_array_result);
         $select->where("type_value like ?", "%".$keyword."%");
+        $select->where("type_id = ?", 1); // only search the input box
         
         $rows = $this->fetchAll($select);
         
