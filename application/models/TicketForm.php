@@ -192,7 +192,6 @@ class TicketForm extends Zend_Form
                                     }
                                     
                                     arsort($values_array_final);
-                                    $values_array_final[] = "";
                                     asort($values_array_final);
                                     
                                     ${$param_name}  -> addMultiOptions($values_array_final);
