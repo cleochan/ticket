@@ -63,7 +63,15 @@ class Tickets extends Zend_Db_Table
 						$find->where("id = ?", trim(substr($this->keyword,3)));
 					}else
 					{
-						$find->where("title like '%".trim($this->keyword)."%' ");
+                                                $find->where("title like ?", "%".trim($this->keyword)."%");
+						$find->orWhere("contents like ?", "%".trim($this->keyword)."%");
+                        
+						$relation_additional_ticket_model = new RelationAdditionalTicket();
+                                                $get_related_id_array = $relation_additional_ticket_model->GetRelatedTicketId($this->keyword, $this->category);
+                                                if(!empty($get_related_id_array))
+                                                {
+                                                    $find->orWhere("id in (?)", $get_related_id_array);
+                                                }
 					}
 				}else
 				{
