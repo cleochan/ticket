@@ -918,8 +918,7 @@ class IndexController extends Zend_Controller_Action
 		$form->submitx->setLabel('Submit');
 		$this->view->form = $form;
         
-                $request_model = new Requests();
-                $category_id = $request_model->GetCategory($theid);
+                $category_id = $tickets->GetCategory($theid);
         
                 if($category_id)
                 {

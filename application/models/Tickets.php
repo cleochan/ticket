@@ -591,6 +591,13 @@ class Tickets extends Zend_Db_Table
 		return $result["title"];
 	}
 	
+        function GetCategory($id)
+        {
+            $row = $this->fetchRow("id = '".$id."'");
+            
+            return $row['category'];
+        }
+	
 }
 
 
