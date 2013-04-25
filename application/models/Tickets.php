@@ -598,6 +598,21 @@ class Tickets extends Zend_Db_Table
             return $row['category'];
         }
 	
+        function GetComposer($id, $just_id)
+        {
+            $row = $this->fetchRow("id = '".$id."'");
+            
+            if($just_id)
+            {
+                $users = new Users();
+                $result = $users->GetUserIdArray($row['composer']); //array
+            }else{
+                $result = $row['composer']; //string
+            }
+            
+            return $result;
+        }
+	
 }
 
 

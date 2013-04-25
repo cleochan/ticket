@@ -95,4 +95,14 @@ class PluginController extends Zend_Controller_Action
         print_r($a->GetChildren(7));
         die;
     }
+    
+    function mergeTestAction()
+    {
+        $a = array(1,2,3);
+        $b = array(2,3);
+        
+        $c = array_merge($a, $b);
+        
+        print_r($c);die;
+    }
 }

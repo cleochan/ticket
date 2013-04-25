@@ -30,11 +30,6 @@ class IndexController extends Zend_Controller_Action
             //make top menu
             $menu = new Menu();
             $this->view->top_menu = $menu -> GetTopMenu($this->getRequest()->getControllerName());
-
-            //echo "<pre>";
-            //print_r($_SESSION);
-            //echo "<pre>";
-            //die;
     }
 	
     function indexAction()
@@ -760,7 +755,7 @@ class IndexController extends Zend_Controller_Action
                         $mail->mail_subject = "Request Closed: ".$get_request['title'];
                         
 
-                        if($user_list_for_send)
+                        if($get_request['participants'])
                         {
                             $mail->to = $check_user_string -> MakeMailUserList($check_user_string->GetUserIdArray($get_request['participants']));
                         }
@@ -1180,10 +1175,23 @@ class IndexController extends Zend_Controller_Action
                     {
                         $user_string = $check_user_result3;
                     }
+                    
                     //get staffs
                     $tickets_users = new TicketsUsers();
                     $staff_array = $tickets_users->GetUserArray($form->getValue('id'));
-                    $user_list_for_send = $check_user_string -> GetUserIdArray($user_string);
+                    
+                    //initial participants
+                    if($user_string)
+                    {
+                        $user_list_for_send = $check_user_string -> GetUserIdArray($user_string);
+                    }else{
+                        $user_list_for_send = array();
+                    }
+                    
+                    //plus composer
+                    $user_list_for_send[] = $tickets->GetComposer($form->getValue('id'), TRUE);
+                    
+                    //plus staff
                     $user_list_for_send = array_unique(array_merge($user_list_for_send, $staff_array));
                     
                     if(in_array($form->getValue('status'), array(3,4))) //closed/canceled

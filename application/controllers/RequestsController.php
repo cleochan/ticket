@@ -570,6 +570,8 @@ class RequestsController extends Zend_Controller_Action
                     if($check_user_result3) //participants
                     {
                         $user_string = $composer."|".$check_user_result3;
+                    }else{
+                        $user_string = $composer;
                     }
                     
                     $user_list_for_send = $check_user_string -> GetUserIdArray($user_string);
