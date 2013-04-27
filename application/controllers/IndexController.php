@@ -468,15 +468,15 @@ class IndexController extends Zend_Controller_Action
             case 1:
             case 2:
             case 3:
-                $this->view->deadline_max = 2;
+                $this->view->deadline_max = 17;
                 break;
             case 4:
             case 5:
             case 6:
-                $this->view->deadline_max = 4;
+                $this->view->deadline_max = 19;
                 break;
             case 7:
-                $this->view->deadline_max = 3;
+                $this->view->deadline_max = 18;
                 break;
         }
 		
@@ -629,15 +629,15 @@ class IndexController extends Zend_Controller_Action
 				$check_user_string = new Users;
 								
                 //4, check dead line value
-                if($form->getValue('dead_line'))
-                {
-                    if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
-                    {
-                        $this->view->notice="You set a wrong deadline.";
-						$form->populate($formData);
-                        $error = 1;
-                    }
-                }
+//                if($form->getValue('dead_line'))
+//                {
+//                    if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
+//                    {
+//                        $this->view->notice="You set a wrong deadline.";
+//						$form->populate($formData);
+//                        $error = 1;
+//                    }
+//                }
 
                 //5, participants if exist
 				if(trim($form->getValue('participants')))
@@ -833,15 +833,15 @@ class IndexController extends Zend_Controller_Action
 				}
                 
                 //3, dead line
-                if($form->getValue('dead_line'))
-                {
-                    if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
-                    {
-                        $this->view->notice="You set a wrong deadline.";
-						$form->populate($formData);
-                        $error = 1;
-                    }
-                }
+//                if($form->getValue('dead_line'))
+//                {
+//                    if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
+//                    {
+//                        $this->view->notice="You set a wrong deadline.";
+//						$form->populate($formData);
+//                        $error = 1;
+//                    }
+//                }
 				
 				//check valid end
 				///////////////////////////////////////////////////////////
@@ -868,15 +868,15 @@ class IndexController extends Zend_Controller_Action
             case 1:
             case 2:
             case 3:
-                $this->view->deadline_max = 2;
+                $this->view->deadline_max = 17;
                 break;
             case 4:
             case 5:
             case 6:
-                $this->view->deadline_max = 4;
+                $this->view->deadline_max = 19;
                 break;
             case 7:
-                $this->view->deadline_max = 3;
+                $this->view->deadline_max = 18;
                 break;
         }
         
@@ -1023,15 +1023,15 @@ class IndexController extends Zend_Controller_Action
 					$check_user_string = new Users;
 								
 					//4, check dead line value
-                    if($form->getValue('dead_line'))
-                    {
-                        if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
-                        {
-                            $this->view->notice="You set a wrong deadline.";
-                            $form->populate($formData);
-                            $error = 1;
-                        }
-                    }
+//                    if($form->getValue('dead_line'))
+//                    {
+//                        if(strtotime($form->getValue('dead_line')) - time() > ($this->view->deadline_max + 1) * 24 * 3600)
+//                        {
+//                            $this->view->notice="You set a wrong deadline.";
+//                            $form->populate($formData);
+//                            $error = 1;
+//                        }
+//                    }
 
                     //5, participant if exist
 					if(trim($form->getValue('participants')))

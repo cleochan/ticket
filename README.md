@@ -1,6 +1,11 @@
 Ticket System
 ======
 
+2.3 - 2013.04.27
+
+    * Extend deadline period from 3 days to 14 days in the ticket
+    * Define the initial member(s) who is (are) responsible for each category, the memeber(s) will get the request notification by mail automatically.
+
 2.2 - 2013.04.26
 
     * Fix the bug in sending mail, the composer / all the participants and staffs can get mail updates at the same time.
