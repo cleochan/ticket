@@ -163,10 +163,10 @@
 </form>
 &nbsp;
     <select name="category" onchange="window.location.href=this.value" class="small" >
-        <option value="/login/set-cookie-redirect/target/3">Category</option>
+        <option value="/login/set-cookie-redirect/target/3/type/<?=$this->type?>">Category</option>
     <?php foreach($this->category_tree as $category_tree): ?>
         <?php foreach($category_tree as $category_tree_key=>$category_tree_val): ?>
-            <option value="/login/set-cookie-redirect/target/3/cookie_value/<?=$category_tree_key?>" <?php if($this->category == $category_tree_key){echo "selected='selected'";}?>><?=$category_tree_val?></option>
+            <option value="/login/set-cookie-redirect/target/3/type/<?=$this->type;?>/cookie_value/<?=$category_tree_key?>" <?php if($this->category == $category_tree_key){echo "selected='selected'";}?>><?=$category_tree_val?></option>
         <?php endforeach;?>
     <?php endforeach;?>
     </select>

@@ -124,20 +124,20 @@ class LoginController extends Zend_Controller_Action
                     if($params['cookie_value'])
                     {
                         setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()+(3600*24*365), "/", $cookie_domain);
-                        $this->_redirect('/index/index/category/'.$params['cookie_value']);
+                        $this->_redirect('/index/index/type/'.$params['type'].'/category/'.$params['cookie_value']);
                     }else{
                         setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()-1, "/", $cookie_domain); //unset
-                        $this->_redirect('/index/index');
+                        $this->_redirect('/index/index/type/'.$params['type']);
                     }
                     break;
                 case 4: //task index
                     if($params['cookie_value'])
                     {
                         setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()+(3600*24*365), "/", $cookie_domain);
-                        $this->_redirect('/tasks/index/category/'.$params['cookie_value']);
+                        $this->_redirect('/tasks/index/type/'.$params['type'].'/category/'.$params['cookie_value']);
                     }else{
                         setcookie("TICKET_INITIAL_CATEGORY_ID", $params['cookie_value'], time()-1, "/", $cookie_domain); //unset
-                        $this->_redirect('/tasks/index');
+                        $this->_redirect('/tasks/index/type/'.$params['type']);
                     }
                     break;
                 default :
