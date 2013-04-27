@@ -539,13 +539,14 @@ class Users extends Zend_Db_Table
                             1 => "Designer",
                             2 => "Programmer",
                             3 => "Tester",
-                            4 => "DBA",
-                            5 => "System Administrator",
+//                            4 => "DBA",
+//                            5 => "System Administrator",
                             6 => "Webmaster",
-                            7 => "Assistant",
-                            8 => "Other",
+//                            7 => "Assistant",
+                            8 => "Staff",
                             9 => "Leader",
-                           10 => "PM"
+//                           10 => "PM"
+                            11 => "Listing Officer"
                             );
         
         if($id)
