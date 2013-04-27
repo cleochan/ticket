@@ -211,6 +211,7 @@ class RequestsController extends Zend_Controller_Action
                     $category_model = new Category();
                     $this->view->category = array($params['category'], $category_model->GetVal($params['category']));
                     $form->category->setValue($params['category']);
+                    $form->participants->setValue($users->GetNameString($category_model->GetVal($params['category'], 1)));
                     
                     //ignore uncessary elements
                     $get_unnecessary_elements = $requests_additional_type_model->GetUnnecessaryElements($params['category'], 1);

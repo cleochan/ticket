@@ -400,11 +400,19 @@ class Category extends Zend_Db_Table
         return $data2;
     }
 	
-    function GetVal($id)
+    function GetVal($id, $other_info=NULL)
     {
-        $name = $this->fetchRow('id = "'.$id.'"');
+        $row = $this->fetchRow('id = "'.$id.'"');
+        
+        if(1 == $other_info) // receiver
+        {
+            $result = $row['receiver'];
+        }else{ // category name
+            $result = $row['cname'];
+        }
+        
 
-        return $name['cname'];
+        return $result;
     }
     
     function GetChildren($id) //self included
