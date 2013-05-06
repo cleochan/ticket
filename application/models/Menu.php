@@ -14,6 +14,7 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'><strong>Pending".$status_count['pending']."</strong></a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
@@ -26,6 +27,20 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'><strong>Processing".$status_count['processing']."</strong></a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
+				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
+				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
+				$str .= " | <a href='/index/index/type/search'>Searched</a>";
+				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
+                {
+                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
+                }
+				break;
+			case "5": //testing
+				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
+				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
+				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'><strong>Testing".$status_count['testing']."</strong></a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
@@ -38,6 +53,7 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'><strong>Closed".$status_count['closed']."</strong></a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
@@ -50,6 +66,7 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'><strong>Canceled".$status_count['canceled']."</strong></a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
@@ -62,6 +79,7 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'><strong>Searched</strong></a>";
@@ -74,6 +92,7 @@ class Menu
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
@@ -86,6 +105,7 @@ class Menu
 				$str = "<a href='/index/index/'><strong>All Tickets".$status_count['all']."</strong></a>";
 				$str .= " | <a href='/index/index/type/1'>Pending".$status_count['created']."</a>";
 				$str .= " | <a href='/index/index/type/2'>Processing".$status_count['processing']."</a>";
+				$str .= " | <a href='/index/index/type/5'>Testing".$status_count['testing']."</a>";
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";

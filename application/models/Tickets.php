@@ -52,6 +52,9 @@ class Tickets extends Zend_Db_Table
 			case 4: //canceled
 				$find->where("status = ?", 4);
 				break;
+			case 5: //testing
+				$find->where("status = ?", 5);
+				break;
 			case "search": //search
 				if($this->keyword)
 				{
@@ -228,6 +231,9 @@ class Tickets extends Zend_Db_Table
 			case 2:
 				$str = "Processing";
 				break;
+			case 5:
+				$str = "Testing";
+				break;
 			case 3:
 				$str = "Closed";
 				break;
@@ -246,6 +252,7 @@ class Tickets extends Zend_Db_Table
 	{
 		$status[1] = "Pending";
 		$status[2] = "Processing";
+		$status[5] = "Testing";
 		$status[3] = "Closed";
 		$status[4] = "Canceled";
 		
@@ -392,6 +399,9 @@ class Tickets extends Zend_Db_Table
 			case 4:
 				$result[0] = "canceled_date";
 				break;
+			case 5:
+				$result[0] = "testing_date";
+				break;
 			default:
 				$result[0] = "";
 				break;
@@ -415,6 +425,9 @@ class Tickets extends Zend_Db_Table
 					$result[1] = $now;
 					break;
 				case 4:
+					$result[1] = $now;
+					break;
+				case 5:
 					$result[1] = $now;
 					break;
 				default:
@@ -480,6 +493,7 @@ class Tickets extends Zend_Db_Table
 		//Make array
 		$status['pending'] = 0;
 		$status['processing'] = 0;
+		$status['testing'] = 0;
 		$status['closed'] = 0;
 		$status['canceled'] = 0;
 		$status['all'] = 0;
@@ -493,6 +507,10 @@ class Tickets extends Zend_Db_Table
 			}elseif(2 == $result_val['status'])
 			{
 				$status['processing'] += $result_val['CT'];
+				$status['all'] += $result_val['CT'];
+			}elseif(5 == $result_val['status'])
+			{
+				$status['testing'] += $result_val['CT'];
 				$status['all'] += $result_val['CT'];
 			}elseif(3 == $result_val['status'])
 			{
@@ -519,6 +537,14 @@ class Tickets extends Zend_Db_Table
 		}else
 		{
 			$status['processing'] = "";
+		}
+		
+		if($status['testing'])
+		{
+			$status['testing'] = "<font color='#2A62FF'>(".$status['testing'].")</font>";
+		}else
+		{
+			$status['testing'] = "";
 		}
         
 		if($status['closed'])
