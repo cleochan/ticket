@@ -105,4 +105,9 @@ class PluginController extends Zend_Controller_Action
         
         print_r($c);die;
     }
+    
+    function t3Action()
+    {
+    	echo "t3";die;
+    }
 }
