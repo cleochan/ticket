@@ -70,7 +70,7 @@
 
   <port name='S1Port' binding='S1Binding'>
 
-    <soap:address location='http://demo.local.b2b/plugin/test-wsdl-server'/>
+    <soap:address location='http://ticket.ciaomark.com/plugin/test-wsdl-server'/>
 
   </port>
 

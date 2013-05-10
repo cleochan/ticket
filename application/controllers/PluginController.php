@@ -115,7 +115,7 @@ class PluginController extends Zend_Controller_Action
     {
     	ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
     	
-    	$client = new SoapClient("http://t1.ciaomark.com/wsdl/ticket.wsdl");
+    	$client = new SoapClient("http://ticket.ciaomark.com/wsdl/ticket.wsdl");
     
     	print_r($client->S1(2));
     
@@ -139,7 +139,7 @@ class PluginController extends Zend_Controller_Action
     
     	ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
     
-    	$server = new SoapServer("http://t1.ciaomark.com/wsdl/ticket.wsdl");
+    	$server = new SoapServer("http://ticket.ciaomark.com/wsdl/ticket.wsdl");
     
     	$server->addFunction("S1");
     
@@ -148,3 +148,4 @@ class PluginController extends Zend_Controller_Action
     	die;
     
     }
+}
