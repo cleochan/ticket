@@ -110,4 +110,39 @@ class PluginController extends Zend_Controller_Action
     {
     	echo "t3";die;
     }
-}
+    
+    function testWsdlClientAction()
+    {
+    	$client = new SoapClient("http://t1.ciaomark.com/wsdl/ticket.wsdl");
+    
+    	Algorithms_Extensions_Plugin::FormatArray($client->S1(2));
+    
+    	die;
+    }
+    
+    function testWsdlServerAction()
+    {
+    	function S1($num)
+    	{
+    		if(1==$num)
+    		{
+    			$result = array("a","b","c");
+    		}elseif(2==$num)
+    		{
+    			$result = array("d","e","f");
+    		}
+    
+    		return $result;
+    	}
+    
+    	ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
+    
+    	$server = new SoapServer("http://t1.ciaomark.com/wsdl/ticket.wsdl");
+    
+    	$server->addFunction("S1");
+    
+    	$server->handle();
+    
+    	die;
+    
+    }
