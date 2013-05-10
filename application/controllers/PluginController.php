@@ -115,7 +115,7 @@ class PluginController extends Zend_Controller_Action
     {
     	$client = new SoapClient("http://t1.ciaomark.com/wsdl/ticket.wsdl");
     
-    	Algorithms_Extensions_Plugin::FormatArray($client->S1(2));
+    	print_r($client->S1(2));
     
     	die;
     }
