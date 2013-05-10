@@ -113,6 +113,8 @@ class PluginController extends Zend_Controller_Action
     
     function testWsdlClientAction()
     {
+    	ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
+    	
     	$client = new SoapClient("http://t1.ciaomark.com/wsdl/ticket.wsdl");
     
     	print_r($client->S1(2));
