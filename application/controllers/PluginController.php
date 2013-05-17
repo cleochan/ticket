@@ -149,10 +149,20 @@ class PluginController extends Zend_Controller_Action
     
     }
     
-    function testIdAction()
+    function testId2Action()
     {
-    	$users = new Users();
-    	echo $users->DetectIdentity("aaa", "bbb");
+    	$wsdl = new Wsdl();
+    	
+    	$post_array = array(
+    		"request_type" => "DetectIdentity",
+    		"params" => array(
+    			"username" => "aa",
+    			"password" => md5("bb")
+    			)
+    	);
+    	
+    	echo $wsdl->ServiceGate($post_array);
+    	
     	die;
     }
 }
