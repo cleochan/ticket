@@ -690,7 +690,7 @@ class Users extends Zend_Db_Table
     	{
     		$result = $row['id'];
     	}else{
-    		$result = NULL;
+    		$result = "No User";
     	}
     	
     	return $result;
