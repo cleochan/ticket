@@ -3,6 +3,20 @@ class Wsdl
 {
 	function WsdlServer()
 	{
+	
+		function ServiceGate($data_array)
+		{
+			switch ($data_array['request_type'])
+			{
+				case "DetectIdentity":
+					$users_model = new Users();
+					$result = $users_model->DetectIdentity($data_array['params']['username'], $data_array['params']['password']);
+					break;
+			}
+			
+			return $result;
+		}
+		
 		/*
 		 * $data_array(
 		 * 				"request_type" =>
@@ -11,8 +25,8 @@ class Wsdl
 		*/
 		function S1($data_array)
 		{
-			$data_result = $this->ServiceGate($data_array);
-	
+			$data_result = ServiceGate($data_array);
+			
 			return $data_result;
 		}
 		
@@ -31,19 +45,6 @@ class Wsdl
 	
 		die;
 	
-	}
-	
-	function ServiceGate($data_array)
-	{
-		switch ($data_array['request_type'])
-		{
-			case "DetectIdentity":
-				$users_model = new Users();
-				$result = $users_model->DetectIdentity($data_array['params']['username'], $data_array['params']['password']);
-				break;
-		}
-		
-		return $result;
 	}
 }
 
