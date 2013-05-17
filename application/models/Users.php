@@ -681,4 +681,19 @@ class Users extends Zend_Db_Table
         
         return $result;
     }
+    
+    function DetectIdentity($username, $password)
+    {
+    	$row = $this->fetchRow("username like '".$username."' and passwd='".$password."'");
+    	
+    	if($row['id'])
+    	{
+    		$result = $row['id'];
+    	}else{
+    		$result = NULL;
+    	}
+    	
+    	return $result;
+    }
 }
+
