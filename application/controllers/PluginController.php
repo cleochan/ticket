@@ -148,4 +148,11 @@ class PluginController extends Zend_Controller_Action
     	die;
     
     }
+    
+    function testIdAction()
+    {
+    	$users = new Users();
+    	echo $users->DetectIdentity("aaa", "bbb");
+    	die;
+    }
 }
