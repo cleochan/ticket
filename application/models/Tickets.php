@@ -13,6 +13,8 @@ class Tickets extends Zend_Db_Table
 	
 	function PushListData()
 	{
+		$params_model = new Params();
+		
 		$find = $this->select();
 		
 		//Step1: limit the project
@@ -138,7 +140,7 @@ class Tickets extends Zend_Db_Table
                                     foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
                                     {
                                         $additional_title = "additional".$requests_additional_type_array_key;
-                                        $data[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                                        $data[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
                                     }
                                 }
                                 

@@ -23,4 +23,13 @@ class Params extends Zend_Db_Table
 		return $a['cval'];
 	}
 	
+	function StringFormat($string, $length=50)
+	{
+		if(strlen($string) > $length)
+		{
+			$string = substr($string, 0, $length)."...";
+		}
+		
+		return $string;
+	}
 }

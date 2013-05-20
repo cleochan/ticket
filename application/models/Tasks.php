@@ -14,7 +14,9 @@ class Tasks
     
 	function PushListData()
     {
-        $select = $this->db->select();
+        $params_model = new Params();
+    	
+    	$select = $this->db->select();
         $select->from("tickets_users as u", array("u.id as uid", "u.ticket_id as utid","u.user_id as urid","u.user_type as utype","u.notes as unotes","u.status as ustatus","u.creator as ucreator","u.workbook as uworkbook","u.sequence as usequence", "u.make_focus as umakefocus"));
         $select->joinLeft("tickets as t", "u.ticket_id=t.id", array("t.project as tproject", "t.priority as tpriority", "t.title as ttitle", "t.status as tstatus", "t.update_who as tupdate_who", "t.update_when as tupdate_when", "t.dead_line as tdeadline"));
         $select->joinLeft("kpi_tickets as k", "k.tickets_users_id = u.id", array("suggestion_hour as khour", "used_time as kused"));
@@ -149,7 +151,7 @@ class Tasks
                     foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
                     {
                         $additional_title = "additional".$requests_additional_type_array_key;
-                        $temp[$additional_title] = $relation_additional_request_result[$requests_additional_type_array_key];
+                        $temp[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
                     }
                 }
 
