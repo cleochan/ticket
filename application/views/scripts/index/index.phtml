@@ -7,6 +7,7 @@
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
 }
+input,label { vertical-align:middle;}
 </style>
 <script>
 		function Foo(tid)
@@ -22,10 +23,10 @@
 				}else{
 					if(data == 1)
 					{
-						dojo.byId('focus_' + tid).innerHTML = "<img src='/images/star/star.png' border='0' />";
+						dojo.byId('focus_' + tid).outerHTML = "<em id='focus_" + tid +"' class='withSTAR'></em>";
 					}else
 					{
-						dojo.byId('focus_' + tid).innerHTML = "<img src='/images/star/star_empty.png' border='0' />";
+						dojo.byId('focus_' + tid).outerHTML = "<em id='focus_" + tid +"' class='withoutSTAR'></em>";
 					}
 				}
 			}
@@ -226,7 +227,7 @@
 							?>
 							<tr class="row-<?php if(1==$n){echo $n;$n+=1;}else{echo $n;$n-=1;}?>">
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
-								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" /><a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>"><?php if($list['is_focus']):?><img src='/images/star/star.png' border='0' /><?php else:?><img src='/images/star/star_empty.png' border='0' /><?php endif;?></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></span></td>
+								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" /><label><a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>" <?php if($list['is_focus']):?>class="withSTAR"<?php else:?>class="withoutSTAR"<?php endif;?>></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></label></span></td>
                                 				<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>

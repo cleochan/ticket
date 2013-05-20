@@ -115,10 +115,10 @@
 				}else{
 					if(data == 1)
 					{
-						dojo.byId('focus_' + tid).innerHTML = "<img src='/images/star/star.png' border='0' />";
+						dojo.byId('focus_' + tid).outerHTML = "<em id='focus_" + tid +"' class='withSTAR'></em>";
 					}else
 					{
-						dojo.byId('focus_' + tid).innerHTML = "<img src='/images/star/star_empty.png' border='0' />";
+						dojo.byId('focus_' + tid).outerHTML = "<em id='focus_" + tid +"' class='withoutSTAR'></em>";
 					}
 				}
 			}
@@ -209,7 +209,7 @@
 								<td class="center"><span class="small"><?=$list['status']?></span></td>
 								<td class="center"><span class="small"><?=$list['staff']?></span></td>
 								<td class="center"><span class="small"><?=$list['priority']?></span></td>
-								<td class="left"><span class="small">&nbsp;<a onclick="javascript:Foo(<?=$list['table_id']?>);return false;"><em id="focus_<?=$list['table_id']?>"><?php if($list['is_focus']):?><img src='/images/star/star.png' border='0' /><?php else:?><img src='/images/star/star_empty.png' border='0' /><?php endif;?></em></a>&nbsp;[<?=$list['ticket_id']?>] <?=$list['ticket_title']?></span></td>
+								<td class="left"><span class="small"><a onclick="javascript:Foo(<?=$list['table_id']?>);return false;"><em id="focus_<?=$list['table_id']?>"  <?php if($list['is_focus']):?>class="withSTAR"<?php else:?>class="withoutSTAR"<?php endif;?>></em></a>&nbsp;[<?=$list['ticket_id']?>] <?=$list['ticket_title']?></span></td>
 								<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>

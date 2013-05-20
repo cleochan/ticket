@@ -5,6 +5,8 @@ Ticket System
 
     * Fix the bugs in search function
     * Add starred icon in task list
+    * Optimize the star style
+    * Optimize the ajax effect of the star
     * Move the "create fast ticket" link to an icon
 
 2.3 - 2013.04.27

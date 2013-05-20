@@ -165,4 +165,9 @@ class PluginController extends Zend_Controller_Action
     	
     	die;
     }
+    
+    function bkAction()
+    {
+    	
+    }
 }
