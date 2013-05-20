@@ -39,7 +39,14 @@
         
         function switch_mode()
         {
-            window.location.href = "/tasks/switch-mode/type/<?=$this->type?>/mode/1";
+			<?php if($this->keyword)
+			{
+				$keyword_string = "/keyword/".$this->keyword;
+			}else{
+				$keyword_string = "";
+			}
+			?>
+            window.location.href = "/tasks/switch-mode/type/<?=$this->type?>/mode/1<?=$keyword_string?>";
         }
 	</script>
 	
@@ -170,6 +177,7 @@
         <?php endforeach;?>
     <?php endforeach;?>
     </select>
+<?php if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt):?>
 &nbsp;
 <?php if($this->category): ?>
 <a href="/index/add/type/add/category/<?=$this->category?>">
@@ -177,6 +185,9 @@
 <a href="#" onclick="alert('Please select category first.');">
 <?php endif; ?>
 <img src="/images/add.png" border="0" title="Add" alt="Add" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+&nbsp;
+<a href='/index/fast-ticket/type/add'><img src="/images/fast.png" border="0" title="Create Fast Ticket" alt="Create Fast Ticket" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+<?php endif;?>
 </div>
 <div align="center">
 <form name="form1" id="form1" method="post" />
@@ -215,7 +226,7 @@
 							?>
 							<tr class="row-<?php if(1==$n){echo $n;$n+=1;}else{echo $n;$n-=1;}?>">
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
-								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" />&nbsp;<a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>"><?php if($list['is_focus']):?>	<img src='/images/star/star.png' border='0' /><?php else:?><img src='/images/star/star_empty.png' border='0' /><?php endif;?></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></span></td>
+								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" /><a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>"><?php if($list['is_focus']):?><img src='/images/star/star.png' border='0' /><?php else:?><img src='/images/star/star_empty.png' border='0' /><?php endif;?></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></span></td>
                                 				<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>

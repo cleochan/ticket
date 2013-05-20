@@ -82,7 +82,14 @@
         
         function switch_mode()
         {
-            window.location.href = "/tasks/switch-mode/type/<?=$this->type?>/mode/0";
+			<?php if($this->keyword)
+			{
+				$keyword_string = "/keyword/".$this->keyword;
+			}else{
+				$keyword_string = "";
+			}
+			?>
+            window.location.href = "/tasks/switch-mode/type/<?=$this->type?>/mode/0<?=$keyword_string?>";
         }
         
         function move_up(id)
@@ -153,6 +160,7 @@
         <?php endforeach;?>
     <?php endforeach;?>
     </select>
+<?php if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt):?>
 &nbsp;
 <?php if($this->category): ?>
 <a href="/index/add/type/add/category/<?=$this->category?>">
@@ -160,6 +168,9 @@
 <a href="#" onclick="alert('Please select category first.');">
 <?php endif; ?>
 <img src="/images/add.png" border="0" title="Add" alt="Add" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+&nbsp;
+<a href='/index/fast-ticket/type/add'><img src="/images/fast.png" border="0" title="Create Fast Ticket" alt="Create Fast Ticket" style="vertical-align:middle;" mce_style="vertical-align:middle;"  /></a>
+<?php endif;?>
 </div>
 <div align="center">
 <form name="form1" id="form1" method="post" />

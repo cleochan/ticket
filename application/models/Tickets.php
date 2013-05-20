@@ -71,6 +71,7 @@ class Tickets extends Zend_Db_Table
                         
 						$relation_additional_ticket_model = new RelationAdditionalTicket();
                         $get_related_id_array = $relation_additional_ticket_model->GetRelatedTicketId($this->keyword, $this->category);
+                        
                         if(!empty($get_related_id_array))
                         {
                             $find->orWhere("id in (?)", $get_related_id_array);

@@ -6,7 +6,7 @@ class Tasks
 	var $keyword;
 	var $lm; //limit
 	var $page;
-        var $category;
+    var $category;
     
     function __construct(){
         $this->db = Zend_Registry::get("db");
@@ -61,7 +61,15 @@ class Tasks
 						$select->where("t.id = ?", trim(substr($this->keyword,3)));
 					}else
 					{
-						$select->where("t.title like '%".trim($this->keyword)."%' ");
+						$select->where("t.title like ?", "%".trim($this->keyword)."%");
+						$select->orWhere("t.contents like ?", "%".trim($this->keyword)."%");
+                        
+						$relation_additional_ticket_model = new RelationAdditionalTicket();
+                        $get_related_id_array = $relation_additional_ticket_model->GetRelatedTicketId($this->keyword, $this->category);
+                        if(!empty($get_related_id_array))
+                        {
+                            $select->orWhere("t.id in (?)", $get_related_id_array);
+                        }
 					}
 				}else
 				{

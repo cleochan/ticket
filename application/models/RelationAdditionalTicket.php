@@ -23,7 +23,7 @@ class RelationAdditionalTicket extends Zend_Db_Table
     
     function GetRelatedTicketId($keyword, $category_id=0)
     {
-        $requests_additional_type_model = new RequestsAdditionalType();
+    	$requests_additional_type_model = new RequestsAdditionalType();
         $requests_additional_type_id_array = $requests_additional_type_model->GetFormElements($category_id, 1);
         
         $requests_additional_type_id_array_result = array();

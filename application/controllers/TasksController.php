@@ -38,7 +38,19 @@ class TasksController extends Zend_Controller_Action
         //check list mode start
         if(!$_SESSION["Zend_Auth"]["storage"]->default_list)
         {
-            $this->_redirect('index/index/type/'.$params['type']);
+            $i_url = "index/index";
+        	
+        	if($params['type'])
+            {
+            	$i_url .= "/type/".$params['type'];
+            }
+            
+            if($params['keyword'])
+            {
+            	$i_url .= "/keyword/".$params['keyword'];
+            }
+            
+        	$this->_redirect($i_url);
         }
         //check list mode finished
         
@@ -65,6 +77,12 @@ class TasksController extends Zend_Controller_Action
 
         $tickets = new Tasks();
         $tickets -> request = $params['type'];
+        if($params['keyword'])
+        {
+        	$tickets->keyword = $params['keyword'];
+        }else{
+        	$tickets->keyword = NULL;
+        }
         
         //read cookie
         if($_COOKIE['TICKET_INITIAL_CATEGORY_ID'])
@@ -125,7 +143,11 @@ class TasksController extends Zend_Controller_Action
 
         $this->view->p_type = $params['type'];
         $this->view->p_page = $params['page'];
-
+		
+        if($params['keyword'])
+        {
+        	$this->view->keyword = $params['keyword'];
+        }
     }
     
     function switchModeAction()
@@ -135,7 +157,19 @@ class TasksController extends Zend_Controller_Action
         $users = new Users();
         $users->SwitchMode($params['mode']);
         
-        $this->_redirect('index/index/type/'.$params['type']);
+        $i_url = "index/index";
+         
+        if($params['type'])
+        {
+        	$i_url .= "/type/".$params['type'];
+        }
+        
+        if($params['keyword'])
+        {
+        	$i_url .= "/keyword/".$params['keyword'];
+        }
+        
+        $this->_redirect($i_url);
     }
     
     function moveUpAction()

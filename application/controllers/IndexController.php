@@ -40,7 +40,19 @@ class IndexController extends Zend_Controller_Action
         //check list mode start
         if($_SESSION["Zend_Auth"]["storage"]->default_list)
         {
-            $this->_redirect('tasks/index/type/'.$params['type']);
+            $i_url = "tasks/index";
+        	
+        	if($params['type'])
+            {
+            	$i_url .= "/type/".$params['type'];
+            }
+            
+            if($params['keyword'])
+            {
+            	$i_url .= "/keyword/".$params['keyword'];
+            }
+            
+        	$this->_redirect($i_url);
         }
         //check list mode finished
         
@@ -141,6 +153,10 @@ class IndexController extends Zend_Controller_Action
         $this->view->p_type = $params['type'];
         $this->view->p_page = $params['page'];
 
+        if($params['keyword'])
+        {
+        	$this->view->keyword = $params['keyword'];
+        }
     }
 	
     function indexTasksAction()

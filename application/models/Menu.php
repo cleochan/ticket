@@ -18,10 +18,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "2": //processing
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -31,10 +27,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "5": //testing
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -44,10 +36,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "3": //closed
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -57,10 +45,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'><strong>Closed".$status_count['closed']."</strong></a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "4": //canceled
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -70,10 +54,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'><strong>Canceled".$status_count['canceled']."</strong></a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "search": //search
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -83,10 +63,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'><strong>Searched</strong></a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			case "add": //add
 				$str = "<a href='/index/index/'>All Tickets".$status_count['all']."</a>";
@@ -96,10 +72,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 			default://all
 				$str = "<a href='/index/index/'><strong>All Tickets".$status_count['all']."</strong></a>";
@@ -109,10 +81,6 @@ class Menu
 				$str .= " | <a href='/index/index/type/3'>Closed".$status_count['closed']."</a>";
 				$str .= " | <a href='/index/index/type/4'>Canceled".$status_count['canceled']."</a>";
 				$str .= " | <a href='/index/index/type/search'>Searched</a>";
-				if(1 != $_SESSION["Zend_Auth"]["storage"]->level_mgt)
-                {
-                    $str .= " | <a href='/index/fast-ticket/type/add'>Quick Input</a>";
-                }
 				break;
 		}
 		

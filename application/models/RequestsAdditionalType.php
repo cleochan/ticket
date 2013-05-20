@@ -15,10 +15,19 @@ class RequestsAdditionalType extends Zend_Db_Table
         {
             if($just_input_box)
             {
-            	$rows = $this->fetchAll("type_status=1 and type_id=1 and requests_category_id='".$requests_category_id."'");
+            	$cond_type = " and type_id=1";
             }else{
-            	$rows = $this->fetchAll("type_status=1 and requests_category_id='".$requests_category_id."'");
+            	$cond_type = "";
             }
+            
+            if($requests_category_id)
+            {
+            	$cond_category = " and requests_category_id='".$requests_category_id."'";
+            }else{
+            	$cond_category = "";
+            }
+            
+            $rows = $this->fetchAll("type_status=1".$cond_type.$cond_category);
             
             $result = array();
             

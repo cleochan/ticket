@@ -1,6 +1,12 @@
 Ticket System
 ======
 
+2.4 - 2013.05.21
+
+    * Fix the bugs in search function
+    * Add starred icon in task list
+    * Move the "create fast ticket" link to an icon
+
 2.3 - 2013.04.27
 
     * Extend deadline period from 3 days to 14 days in the ticket
