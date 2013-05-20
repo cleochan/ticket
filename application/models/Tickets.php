@@ -66,15 +66,15 @@ class Tickets extends Zend_Db_Table
 						$find->where("id = ?", trim(substr($this->keyword,3)));
 					}else
 					{
-                                                $find->where("title like ?", "%".trim($this->keyword)."%");
+                        $find->where("title like ?", "%".trim($this->keyword)."%");
 						$find->orWhere("contents like ?", "%".trim($this->keyword)."%");
                         
 						$relation_additional_ticket_model = new RelationAdditionalTicket();
-                                                $get_related_id_array = $relation_additional_ticket_model->GetRelatedTicketId($this->keyword, $this->category);
-                                                if(!empty($get_related_id_array))
-                                                {
-                                                    $find->orWhere("id in (?)", $get_related_id_array);
-                                                }
+                        $get_related_id_array = $relation_additional_ticket_model->GetRelatedTicketId($this->keyword, $this->category);
+                        if(!empty($get_related_id_array))
+                        {
+                            $find->orWhere("id in (?)", $get_related_id_array);
+                        }
 					}
 				}else
 				{
@@ -84,7 +84,7 @@ class Tickets extends Zend_Db_Table
 			default://all
 				break;
 		}
-
+		
                 //Step4: category
                 if($this->category)
                 {
@@ -102,10 +102,9 @@ class Tickets extends Zend_Db_Table
 		
 		$find->limit($this->lm, $offset);
 		
-		
 		//Fetch
 		$result = $this->fetchAll($find);
-               
+        
 		//Create More Info
 		$users = new Users();
                 $category = new Category();
@@ -123,7 +122,7 @@ class Tickets extends Zend_Db_Table
 				$data['id'] = $val->id;
 				$data['title'] = $val->title;
 				$data['update_when'] = $val->update_when;
-                                $data['category'] = $category->GetVal($val->category);
+                $data['category'] = $category->GetVal($val->category);
 				$data['dead_line'] = $val->dead_line;
 				$data['pri_str'] = $this->Priority($val->priority);
 				$data['status_str'] = $this->GetStatusStr($val->status);
@@ -143,7 +142,7 @@ class Tickets extends Zend_Db_Table
                                 }
                                 
 				//is_read
-                                if(strpos($val->make_read, $idstr) || "0" == strval(strpos($val->make_read, $idstr)))
+                if(strpos($val->make_read, $idstr) || "0" == strval(strpos($val->make_read, $idstr)))
 				{
 					$data['is_read'] = 1;
 				}else 

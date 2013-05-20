@@ -24,7 +24,7 @@ class RelationAdditionalTicket extends Zend_Db_Table
     function GetRelatedTicketId($keyword, $category_id=0)
     {
         $requests_additional_type_model = new RequestsAdditionalType();
-        $requests_additional_type_id_array = $requests_additional_type_model->GetFormElements($category_id);
+        $requests_additional_type_id_array = $requests_additional_type_model->GetFormElements($category_id, 1);
         
         $requests_additional_type_id_array_result = array();
         
@@ -34,14 +34,15 @@ class RelationAdditionalTicket extends Zend_Db_Table
             {
                 $requests_additional_type_id_array_result[] = $requests_additional_type_id_array_key;
             }
+            
+            $select = $this->select();
+            $select->where("requests_additional_type_id in (?)", $requests_additional_type_id_array_result);
+            $select->where("type_value like ?", "%".$keyword."%");
+            
+            $rows = $this->fetchAll($select);
+        }else{
+        	$rows = array();
         }
-        
-        $select = $this->select();
-        $select->where("requests_additional_type_id in (?)", $requests_additional_type_id_array_result);
-        $select->where("type_value like ?", "%".$keyword."%");
-        $select->where("type_id = ?", 1); // only search the input box
-        
-        $rows = $this->fetchAll($select);
         
         $result = array();
         

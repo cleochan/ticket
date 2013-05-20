@@ -59,7 +59,7 @@ class TasksController extends Zend_Controller_Action
                 $_SESSION['search_ticket_users_current'] = $_SESSION["Zend_Auth"]["storage"]->id;
         }
         
-         //build category tree
+        //build category tree
         $category_model = new Category();
         $this->view->category_tree = $category_model->BuildTree();
 
@@ -158,6 +158,21 @@ class TasksController extends Zend_Controller_Action
         
         $this->_redirect($params['url']);
         die;
+    }
+    
+    function changeFocusAction()
+    {
+    	$params = $this->_request->getParams();
+
+    	if($params['tid'])
+    	{
+			$tasks = new TicketsUsers();
+			$task = $tasks -> MakeFocus($params['tid']);
+			
+			//for dojo response
+			print_r($task);
+    	}
+    	die;
     }
 }
 

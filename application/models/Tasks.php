@@ -15,7 +15,7 @@ class Tasks
 	function PushListData()
     {
         $select = $this->db->select();
-        $select->from("tickets_users as u", array("u.id as uid", "u.ticket_id as utid","u.user_id as urid","u.user_type as utype","u.notes as unotes","u.status as ustatus","u.creator as ucreator","u.workbook as uworkbook","u.sequence as usequence",));
+        $select->from("tickets_users as u", array("u.id as uid", "u.ticket_id as utid","u.user_id as urid","u.user_type as utype","u.notes as unotes","u.status as ustatus","u.creator as ucreator","u.workbook as uworkbook","u.sequence as usequence", "u.make_focus as umakefocus"));
         $select->joinLeft("tickets as t", "u.ticket_id=t.id", array("t.project as tproject", "t.priority as tpriority", "t.title as ttitle", "t.status as tstatus", "t.update_who as tupdate_who", "t.update_when as tupdate_when", "t.dead_line as tdeadline"));
         $select->joinLeft("kpi_tickets as k", "k.tickets_users_id = u.id", array("suggestion_hour as khour", "used_time as kused"));
         $select->where("u.del is null or u.del='' or u.del='0'");
@@ -93,6 +93,8 @@ class Tasks
 		//Fetch
         $data = $this->db->fetchAll($select);
         
+        $idstr = $_SESSION["Zend_Auth"]["storage"]->id."@".$_SESSION["Zend_Auth"]["storage"]->username;
+        
         $result = array();
         
         $tickets_model = new Tickets();
@@ -122,6 +124,15 @@ class Tasks
                 $temp['deadline'] = substr($d_val['tdeadline'], 0, 10);
                 $temp['ref_hour'] = $d_val['khour'];
                 $temp['actual_hour'] = $d_val['kused'];
+                
+                //is_focus
+                if(strpos($d_val['umakefocus'], $idstr) || "0" == strval(strpos($d_val['umakefocus'], $idstr)))
+                {
+                	$temp['is_focus'] = 1;
+                }else
+                {
+                	$temp['is_focus'] = 0;
+                }
                 
                  if(!empty($requests_additional_type_array))
                 {

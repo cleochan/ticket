@@ -11,9 +11,14 @@ class RequestsAdditionalType extends Zend_Db_Table
             return $rows->toArray();
         }
 	
-        function GetFormElements($requests_category_id)
+        function GetFormElements($requests_category_id, $just_input_box=NULL)
         {
-            $rows = $this->fetchAll("type_status=1 and requests_category_id='".$requests_category_id."'");
+            if($just_input_box)
+            {
+            	$rows = $this->fetchAll("type_status=1 and type_id=1 and requests_category_id='".$requests_category_id."'");
+            }else{
+            	$rows = $this->fetchAll("type_status=1 and requests_category_id='".$requests_category_id."'");
+            }
             
             $result = array();
             

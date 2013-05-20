@@ -110,6 +110,46 @@ class TicketsUsers extends Zend_Db_Table
         
         return $result;
     }
+	
+	function MakeFocus($task_id)
+	{
+		$current_id = $_SESSION["Zend_Auth"]["storage"]->id."@".$_SESSION["Zend_Auth"]["storage"]->username;
+		
+		$ticket = $this -> fetchRow('id = "'.$task_id.'"');
+		
+		if(strpos($ticket->make_focus, $current_id) || "0" == strval(strpos($ticket->make_focus, $current_id))) //remove
+		{
+			$result = 0;
+			$focus = explode("|", $ticket->make_focus);
+			foreach($focus as $key => $val)
+			{
+				if($val == $current_id)
+				{
+					unset($focus[$key]);
+				}
+			}
+			$focus_str = implode("|", $focus);
+		}else //insert
+		{
+			$result = 1;
+			if($ticket->make_focus)
+			{
+				$str = explode("|", $ticket->make_focus);
+				{
+					$str[] = $current_id;
+					$focus_str = implode("|", $str);
+				}
+			}else
+			{
+				$focus_str = $current_id;
+			}
+		}
+		
+		$ticket -> make_focus = $focus_str;
+		$ticket -> save();
+				
+		return $result;
+	}
 }
 
 
