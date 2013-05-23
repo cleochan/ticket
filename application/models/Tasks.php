@@ -52,6 +52,9 @@ class Tasks
 			case 4: //canceled
 				$select->where("t.status = ?", 4);
 				break;
+			case 5: //testing
+				$select->where("t.status = ?", 5);
+				break;
 			case "search": //search
 				if($this->keyword)
 				{
