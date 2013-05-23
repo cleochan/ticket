@@ -137,6 +137,7 @@ class Tasks
                 $temp['deadline'] = substr($d_val['tdeadline'], 0, 10);
                 $temp['ref_hour'] = $d_val['khour'];
                 $temp['actual_hour'] = $d_val['kused'];
+                $temp['request_by'] = $this->GetRequestBy(array($d_val['utid']), 1);
                 
                 //is_focus
                 if(strpos($d_val['umakefocus'], $idstr) || "0" == strval(strpos($d_val['umakefocus'], $idstr)))
@@ -176,6 +177,43 @@ class Tasks
         }
         
         return $result;
+    }
+    
+    function GetRequestBy($ticket_id_array, $get_the_first_one)
+    {
+    	$result = array();
+    	$users = new Users();
+    	
+    	if(!empty($ticket_id_array))
+    	{
+    		$ticket_id_array = array_unique($ticket_id_array);
+    		
+    		$rows = $this->db->select();
+    		$rows->from("requests_tickets as rt", array("ticket_id"));
+    		$rows->joinLeft("requests as r", "r.id=rt.request_id", array("composer"));
+    		$rows->where("rt.ticket_id IN (?)", $ticket_id_array);
+    		$data = $this->db->fetchAll($rows);
+    		
+    		if(!empty($data))
+    		{
+    			foreach($data as $d)
+    			{
+    				$result[$d['ticket_id']] = $users->GetRealName($d['composer']);
+    			}
+    		}
+    	}
+    	
+    	if($get_the_first_one) //just return the first value
+    	{
+    		foreach($result as $r)
+    		{
+    			$result_first = $r;
+    		}
+    		
+    		$result = $result_first;
+    	}
+    	
+    	return $result;
     }
 }
 

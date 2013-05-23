@@ -114,11 +114,13 @@ class Tickets extends Zend_Db_Table
                 
 		$idstr = $_SESSION["Zend_Auth"]["storage"]->id."@".$_SESSION["Zend_Auth"]["storage"]->username;
 
+		$tasks_model = new Tasks();
+		
 		if(!empty($result))
 		{
-                    $requests_additional_type = new RequestsAdditionalType();
-                    $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
-                    $relation_additional_ticket = new RelationAdditionalTicket();
+//                     $requests_additional_type = new RequestsAdditionalType();
+//                     $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+//                     $relation_additional_ticket = new RelationAdditionalTicket();
                     
                     foreach($result as $key => $val)
 			{
@@ -131,18 +133,19 @@ class Tickets extends Zend_Db_Table
 				$data['status_str'] = $this->GetStatusStr($val->status);
 				$data['update_who_realname'] = $users -> GetRealName($val->update_who);
 				$data['composer'] = $users -> GetRealName($val->composer);
-                                $data['act'] = $users -> MyRole($idstr, $val->participants, $val->user_related);
+                $data['act'] = $users -> MyRole($idstr, $val->participants, $val->user_related);
+                $data['request_by'] = $tasks_model->GetRequestBy(array($val->id), 1);
+                
+//                                 if(!empty($requests_additional_type_array))
+//                                 {
+//                                     $relation_additional_request_result = $relation_additional_ticket->DumpData($val->id);
 
-                                if(!empty($requests_additional_type_array))
-                                {
-                                    $relation_additional_request_result = $relation_additional_ticket->DumpData($val->id);
-
-                                    foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
-                                    {
-                                        $additional_title = "additional".$requests_additional_type_array_key;
-                                        $data[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
-                                    }
-                                }
+//                                     foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+//                                     {
+//                                         $additional_title = "additional".$requests_additional_type_array_key;
+//                                         $data[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
+//                                     }
+//                                 }
                                 
 				//is_read
                 if(strpos($val->make_read, $idstr) || "0" == strval(strpos($val->make_read, $idstr)))

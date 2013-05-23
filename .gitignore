@@ -4,3 +4,7 @@
 /public/ckeditor/
 /public/filemanager/
 /application/configs/
+/.buildpath
+/.project
+/.settings
+/library/
