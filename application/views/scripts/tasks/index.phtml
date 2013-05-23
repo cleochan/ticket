@@ -187,11 +187,11 @@
                                 <td class="form-title" width="80">Staff</td>
                                 <td class="form-title" width="80">Priority</td>
                                 <td class="form-title">Ticket</td>
-                                <?php if($this->addtional_title):?>
+                                <!--<?php if($this->addtional_title):?>
                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                         <td class="form-title"><?=$addtional_title_val?></td>
                                     <?php endforeach;?>
-                                <?php endif;?>
+                                <?php endif;?>-->
                                 <td class="form-title">Notes</td>
                                 <td class="form-title">Project</td>
                                 <td class="form-title" width="80">Est. Hour</td>
@@ -210,12 +210,12 @@
 								<td class="center"><span class="small"><?=$list['staff']?></span></td>
 								<td class="center"><span class="small"><?=$list['priority']?></span></td>
 								<td class="left"><span class="small"><a onclick="javascript:Foo(<?=$list['table_id']?>);return false;"><em id="focus_<?=$list['table_id']?>"  <?php if($list['is_focus']):?>class="withSTAR"<?php else:?>class="withoutSTAR"<?php endif;?>></em></a>&nbsp;[<?=$list['ticket_id']?>] <?=$list['ticket_title']?></span></td>
-								<?php if($this->addtional_title):?>
+								<!--<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>
                                                                     <?php endforeach;?>
-                                                                <?php endif;?>	
-                                                                <td class="left"><span class="small"><?=$list['notes']?></span></td>
+                                                                <?php endif;?>	-->
+                                <td class="left"><span class="small"><?=$list['notes']?></span></td>
 								<td class="center"><span class="small"><?=$list['project']?></span></td>
 								<td class="center"><span class="small"><?=$list['ref_hour']?></span></td>
 								<td class="center">

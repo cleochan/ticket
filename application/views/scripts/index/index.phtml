@@ -210,11 +210,11 @@ input,label { vertical-align:middle;}
 										<?php endforeach;?>
 									</select>-->
 								</td>
-                                				<?php if($this->addtional_title):?>
+                                <!--				<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="form-title"><?=$addtional_title_val?></td>
                                                                     <?php endforeach;?>
-                                                                <?php endif;?>
+                                                                <?php endif;?> -->
 								<td class="form-title" width="100">Last Update</td>
 								<td class="form-title" width="150">Update Time</td>
 								<td class="form-title" width="90">Dead Line</td>
@@ -228,11 +228,11 @@ input,label { vertical-align:middle;}
 							<tr class="row-<?php if(1==$n){echo $n;$n+=1;}else{echo $n;$n-=1;}?>">
 								<td class="center"><span class="small"><?=$list['id']?></span></td>
 								<td class="left"><span class="small"><input type="checkbox" id="tick" name="tick[]" value="<?=$list['id']?>" /><label><a onclick="javascript:Foo(<?=$list['id']?>);return false;"><em id="focus_<?=$list['id']?>" <?php if($list['is_focus']):?>class="withSTAR"<?php else:?>class="withoutSTAR"<?php endif;?>></em></a>&nbsp;[<?=$list['pri_str']?>]&nbsp;<a href="/index/view/type/<?=$this->type;?>/id/<?=$list['id']?>"><?php if(!$list['is_read']){echo "<strong>";} ?><?=$list['composer']?>: <?=$list['title']?><?php echo "</strong>"; ?></a></label></span></td>
-                                				<?php if($this->addtional_title):?>
+                                <!--				<?php if($this->addtional_title):?>
                                                                     <?php foreach($this->addtional_title as $addtional_title_key => $addtional_title_val):?>
                                                                         <td class="center"><span class="small"><?=$list[$addtional_title_key]?></span></td>
                                                                     <?php endforeach;?>
-                                                                <?php endif;?>	
+                                                                <?php endif;?>	-->
 								<td class="center"><span class="small"><?=$list['update_who_realname']?></span></td>
 								<td class="center"><span class="small"><?=$list['update_when']?></span></td>
 								<td class="center"><span class="small"><?=$list['dead_line']?></span></td>

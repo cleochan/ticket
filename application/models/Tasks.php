@@ -117,9 +117,9 @@ class Tasks
         
         if(!empty($data))
         {
-            $requests_additional_type = new RequestsAdditionalType();
-            $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
-            $relation_additional_ticket = new RelationAdditionalTicket();
+//             $requests_additional_type = new RequestsAdditionalType();
+//             $requests_additional_type_array = $requests_additional_type->GetFormElements($this->category);
+//             $relation_additional_ticket = new RelationAdditionalTicket();
             
              foreach($data as $d_key => $d_val)
             {
@@ -147,16 +147,16 @@ class Tasks
                 	$temp['is_focus'] = 0;
                 }
                 
-                 if(!empty($requests_additional_type_array))
-                {
-                    $relation_additional_request_result = $relation_additional_ticket->DumpData($d_val['utid']);
+//                  if(!empty($requests_additional_type_array))
+//                 {
+//                     $relation_additional_request_result = $relation_additional_ticket->DumpData($d_val['utid']);
 
-                    foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
-                    {
-                        $additional_title = "additional".$requests_additional_type_array_key;
-                        $temp[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
-                    }
-                }
+//                     foreach($requests_additional_type_array as $requests_additional_type_array_key => $requests_additional_type_array_val)
+//                     {
+//                         $additional_title = "additional".$requests_additional_type_array_key;
+//                         $temp[$additional_title] = $params_model->StringFormat($relation_additional_request_result[$requests_additional_type_array_key]);
+//                     }
+//                 }
 
                 $result[] = $temp;
             }
