@@ -294,6 +294,8 @@ class Menu {
         $str12_on = "<a href='/kpi/review-search'><strong>KPI</strong></a>";
         $str13 = "<a href='/training/index'>Training</a>";
         $str13_on = "<a href='/training/index'><strong>Training</strong></a>";
+        $str14 = "<a href='/wiki/index'>Wiki</a>";
+        $str14_on = "<a href='/wiki/index'><strong>Wiki</strong></a>";
 
         $menu = array();
 
@@ -304,21 +306,31 @@ class Menu {
                     $menu[] = $str1_on;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('requests' == $ctl) {
                     $menu[] = $str11_on;
                     $menu[] = $str1;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('training' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
                     $menu[] = $str13_on;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('profile' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
                     $menu[] = $str13;
                     $menu[] = $str7_on;
+                    $menu[] = $str14;
+                }elseif('wiki'== $ctl){
+                    $menu[] = $str11;
+                    $menu[] = $str1;
+                    $menu[] = $str13;
+                    $menu[] = $str7;
+                    $menu[] = $str14_on;
                 }
                 break;
             case 2: //requests/tickets/projects/workbook/kpi/users  -- for leaders
@@ -331,6 +343,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('requests' == $ctl) {
                     $menu[] = $str11_on;
                     $menu[] = $str1;
@@ -340,6 +353,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('projects' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -349,6 +363,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('workbook' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -358,6 +373,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('kpi' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -367,6 +383,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('users' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -376,6 +393,7 @@ class Menu {
                     $menu[] = $str5_on;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('training' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -385,6 +403,7 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13_on;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('profile' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -394,6 +413,17 @@ class Menu {
                     $menu[] = $str5;
                     $menu[] = $str13;
                     $menu[] = $str7_on;
+                    $menu[] = $str14;
+                }elseif ('wiki' == $ctl) {
+                    $menu[] = $str11;
+                    $menu[] = $str1;
+                    $menu[] = $str3;
+                    $menu[] = $str9;
+                    $menu[] = $str12;
+                    $menu[] = $str5;
+                    $menu[] = $str13;
+                    $menu[] = $str7;
+                    $menu[] = $str14_on;
                 }
                 break;
             case 3: //all --for admin
@@ -409,6 +439,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('projects' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -421,6 +452,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('departments' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -433,6 +465,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('users' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -445,6 +478,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('workbook' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -457,6 +491,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('category' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -469,6 +504,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('config' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -481,6 +517,7 @@ class Menu {
                     $menu[] = $str6_on;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('profile' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -493,6 +530,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7_on;
+                    $menu[] = $str14;
                 } elseif ('requests' == $ctl) {
                     $menu[] = $str11_on;
                     $menu[] = $str1;
@@ -505,6 +543,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('kpi' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -517,6 +556,7 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('training' == $ctl) {
                     $menu[] = $str11;
                     $menu[] = $str1;
@@ -529,6 +569,20 @@ class Menu {
                     $menu[] = $str6;
                     $menu[] = $str13_on;
                     $menu[] = $str7;
+                    $menu[] = $str14;
+                }elseif ('wiki' == $ctl) {
+                    $menu[] = $str11;
+                    $menu[] = $str1;
+                    $menu[] = $str10;
+                    $menu[] = $str3;
+                    $menu[] = $str4;
+                    $menu[] = $str5;
+                    $menu[] = $str9;
+                    $menu[] = $str12;
+                    $menu[] = $str6;
+                    $menu[] = $str13;
+                    $menu[] = $str7;
+                    $menu[] = $str14_on;
                 }
                 break;
             default: //tickets/kpi -- for IT staffs
@@ -537,21 +591,37 @@ class Menu {
                     $menu[] = $str13;
                     $menu[] = $str12;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('training' == $ctl) {
                     $menu[] = $str1;
                     $menu[] = $str13_on;
                     $menu[] = $str12;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('kpi' == $ctl) {
                     $menu[] = $str1;
                     $menu[] = $str13;
                     $menu[] = $str12_on;
                     $menu[] = $str7;
+                    $menu[] = $str14;
                 } elseif ('profile' == $ctl) {
                     $menu[] = $str1;
                     $menu[] = $str13;
                     $menu[] = $str12;
                     $menu[] = $str7_on;
+                    $menu[] = $str14;
+                }elseif ('profile' == $ctl) {
+                    $menu[] = $str1;
+                    $menu[] = $str13;
+                    $menu[] = $str12;
+                    $menu[] = $str7;
+                    $menu[] = $str14;
+                }elseif ('wiki' == $ctl) {
+                    $menu[] = $str1;
+                    $menu[] = $str13;
+                    $menu[] = $str12;
+                    $menu[] = $str7;
+                    $menu[] = $str14_on;
                 }
                 break;
         }
@@ -568,48 +638,42 @@ class Menu {
     public function GetWikiMenu($param) {
         switch ($param) {
             case "recent-updates":
-                $str = "<a href='/wiki/index/'>Wiki</a>";
-                $str .= " | <a href='/wiki/recent-updates/'><strong>Recent Updates</strong></a>";
+                $str .= " <a href='/wiki/recent-updates/'><strong>Recent Updates</strong></a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
                 break;
             case "category":
-                $str = "<a href='/wiki/index/'>Wiki</a>";
-                $str .= " | <a href='/wiki/recent-updates/'>Recent Updates</a>";
+                $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'><strong>Category</strong></a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
                 break;
             case "contributor":
-                $str = "<a href='/wiki/index/'>Wiki</a>";
-                $str .= " | <a href='/wiki/recent-updates/'>Recent Updates</a>";
+                $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'><strong>Contributor</strong></a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
                 break;
             case "searched":
-                $str = "<a href='/wiki/index/'>Wiki</a>";
-                $str .= " | <a href='/wiki/recent-updates/'>Recent Updates</a>";
+                $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'><strong>Searched</strong></a>";
                 $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
                 break;
             case "create-topic":
-                $str = "<a href='/wiki/index/'>Wiki</a>";
-                $str .= " | <a href='/wiki/recent-updates/'>Recent Updates</a>";
+                $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/create-topic/'><strong>Create Topic</strong></a>";
                 break;
             default:
-                $str = "<a href='/wiki/index/'><strong>Wiki</strong></a>";
-                $str .= " | <a href='/wiki/recent-updates/'>Recent Updates</a>";
+                $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";

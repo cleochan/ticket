@@ -25,7 +25,7 @@ class Wiki_IndexController extends Zend_Controller_Action
             $this->view->system_version = $get_title -> GetVal("system_version");
 
             //make top menu
-            $this->view->top_menu = $this->_menu -> GetTopMenu($this->getRequest()->getControllerName());
+            $this->view->top_menu = $this->_menu -> GetTopMenu($this->getRequest()->getModuleName());
     }
 
     public function indexAction()
