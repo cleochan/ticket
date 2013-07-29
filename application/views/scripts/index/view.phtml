@@ -400,7 +400,7 @@ function addFileInput() {
 				</td>
 			</tr>
                         <tr class="row-<?php echo (2-$n%2); $n++;?>">
-                            <td class="category">Check Points<br /><a class="alinks" href="/index/export-csv/id/<?php foreach($this->lists['unchecked'] as $key => $value){ } echo $value['t_id'];?>" id="export_datas">Export Detail</a></td>
+                            <td class="category">Check Points<br /><a class="alinks" href="/index/export-csv/id/<?php foreach($this->lists['unchecked'] as $key => $value){ echo $value['t_id']; }?>" id="export_datas">Export Detail</a></td>
                             <td colspan="3" id='checklistContainer'><?php echo $this->render('/index/olist.phtml');?></td>
 			</tr>
 

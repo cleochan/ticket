@@ -453,7 +453,7 @@ class Tickets extends Zend_Db_Table
 		$find->from("tickets",array("status","count(id) as CT"));
 		
 		//Step1: limit the project
-		if($_SESSION['search_ticket_projects_current'])
+		if(isset($_SESSION['search_ticket_projects_current']))
 		{
 			$find->where("project = ?", $_SESSION['search_ticket_projects_current']);
 		}
