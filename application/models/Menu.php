@@ -636,6 +636,7 @@ class Menu {
     }
 
     public function GetWikiMenu($param) {
+		$str = "";
         switch ($param) {
             case "recent-updates":
                 $str .= " <a href='/wiki/index/recent-updates/'><strong>Recent Updates</strong></a>";
