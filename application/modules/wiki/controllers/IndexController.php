@@ -2,13 +2,24 @@
 
 class Wiki_IndexController extends Zend_Controller_Action
 {
-    private $_menu; 
-    function init() {
-        $this->db = Zend_Registry::get("db");
-        $this->_menu = new Menu(); 
+    private $_menu;
+    /**
+     *
+     * @var Wiki_Models_DbTable_Topics 
+     */
+    private $_topicsModel;
+    /**
+     *
+     * @var Wiki_Models_DbTable_Contents 
+     */
+    private $_contentsModel;
+    public function init() {
+        $this->_menu = new Menu();
+        $this->_topicsModel = new Wiki_Models_DbTable_Topics();
+        $this->_contentsModel = new Wiki_Models_DbTable_Contents();
     }
 
-    function preDispatch()
+    public function preDispatch()
     {  
             if('call-file' != $this->getRequest()->getActionName())
             {
@@ -26,15 +37,44 @@ class Wiki_IndexController extends Zend_Controller_Action
 
             //make top menu
             $this->view->top_menu = $this->_menu -> GetTopMenu($this->getRequest()->getModuleName());
+            $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
     }
 
     public function indexAction()
     {
         $this->view->title = "Wiki";
-        $this->view->menu = $this->_menu->GetWikiMenu(NULL);
-
     }
-
-
+    
+    
+    public function createAction(){
+        $form = new Wiki_Forms_Create();
+        $this->view->form = $form;
+         if ($this->_request->isPost()) {
+            if ($form->isValidPartial($_POST)) {
+                //date_default_timezone_set('PRC');
+                $userinfo = Zend_Auth::getInstance()->getStorage()->read();
+                $this->_topicsModel->__title = $this->_request->getPost('title');
+                $this->_topicsModel->__uid = $userinfo->id;
+                $this->_topicsModel->__create_time = date('Y-m-d H:i:s');
+                $this->_topicsModel->__status = 1;
+                $this->_topicsModel->__cid = $this->_request->getPost('category');
+                $insertId = $this->_topicsModel->create();
+                if($insertId!==NULL){
+                    $this->_contentsModel->__tid = $insertId;
+                    $this->_contentsModel->__content = $this->_request->getPost('content');
+                    $this->_contentsModel->__uid = $userinfo->id;
+                    $this->_contentsModel->__attachment = './';
+                    $this->_contentsModel->__is_default = 1;
+                    $this->_contentsModel->__status = 1;
+                    $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
+                    $insertIdC = $this->_contentsModel->create();
+                    //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
+                    echo 'then redirect to wiki detail page';
+                }  else {
+                    die('insert error');
+                }
+            }
+         }
+    }
 }
 

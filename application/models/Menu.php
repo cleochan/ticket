@@ -665,19 +665,19 @@ class Menu {
                 $str .= " | <a href='/wiki/searched/'><strong>Searched</strong></a>";
                 $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
                 break;
-            case "create-topic":
+            case "create":
                 $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
-                $str .= " | <a href='/wiki/create-topic/'><strong>Create Topic</strong></a>";
+                $str .= " | <a href='/wiki/Index/create/'><strong>Create Topic</strong></a>";
                 break;
             default:
                 $str .= " <a href='/wiki/recent-updates/'>Recent Updates</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/searched/'>Searched</a>";
-                $str .= " | <a href='/wiki/create-topic/'>Create Topic</a>";
+                $str .= " | <a href='/wiki/Index/create/'>Create Topic</a>";
                 break;
         }
         return $str;

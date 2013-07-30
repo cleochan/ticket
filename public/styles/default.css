@@ -217,3 +217,75 @@ line-height:21px;
 padding-left:16px;
 background:url(/images/star/withoutstar.png) no-repeat left center
 }
+.wiki{}
+.wiki .strong{
+    font-weight: bold;
+}
+.wiki .error{
+    color: #bb0000;
+}
+.wiki ul{
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.wiki .el{
+    
+}
+.wiki .el #title{
+    height:30px;
+}
+.wiki .el #category{
+    height:30px;
+    width:150px;
+}
+.wiki #submit{
+    width:150px;
+    height:38px;
+}
+/*表单*/
+.wiki input[type="text"],.wiki input[type="password"],.wiki select,.wiki textArea
+{
+    background-color:#f9f9f9;
+    border-width: 1px;
+    border-top: #D0D0D0 1px solid;
+    border-left: #D0D0D0 1px solid;
+    border-right: #EEE 1px solid;
+    border-bottom: #EEE 1px solid;
+}
+.wiki input:focus,.wiki select:focus,.wiki textArea:focus
+{
+    outline: none;
+    border-color:#459455 #5B5 #6D5 #5B5;
+}
+.wiki input[type="submit"],.wiki input[type="button"],.wiki button,.wiki .button-style
+{
+    border:none;
+    background-color: #c8c8e8;
+    display: inline-block;
+    padding: 5px 10px 6px;
+    color: #fff !important;
+    font-family:"微软雅黑",'Open Sans',arial,sans-serif;
+    text-decoration: none;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+    -webkit-transition:background-color .5s ease-in;
+    -moz-transition: background-color .5s ease-in;
+     -o-transition: background-color .5s ease-in;
+     -ms-transition: background-color .5s ease-in;
+     transition: background-color .5s ease-in;
+}
+
+.wiki input[type="submit"]:hover,.wiki input[type="button"]:hover,.wiki button:hover,.wiki .button-style:hover
+{
+    background-color:#ccccff;
+}
