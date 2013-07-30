@@ -35,6 +35,21 @@ class Wiki_IndexController extends Zend_Controller_Action
 
     }
 
+	function contributorAction()
+	{
+	    $this->view->title = "Contributor";
+		$this->view->menu = $this->_menu->GetWikiMenu(NULL);
+		$params = $this->_request->getParams();
+		
+		$contributors = new Wiki_Model_Contributor();
+       	$contributor_array = $contributors -> getContributors();
+		$this->view->contributor_array = $contributor_array ;
+		
+		$this->view->top_menu = $this->_menu -> GetTopMenu($this->getRequest()->getModuleName());
+		
+
+
+	}
 
 }
 
