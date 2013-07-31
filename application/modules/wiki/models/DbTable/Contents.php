@@ -17,13 +17,13 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
      * @var Zend_Db_Adapter_Abstract 
      */
     protected $_db;
-    private $__tid;
-    private $__uid;
-    private $__create_time;
-    private $__content;
-    private $__attachment;
-    private $__is_default;
-    private $__status;
+    protected $__tid;
+    protected $__uid;
+    protected $__create_time;
+    protected $__content;
+    protected $__attachment;
+    protected $__is_default;
+    protected $__status;
     
     public function init(){
         $this->_db = Zend_Registry::get("db");
@@ -36,5 +36,9 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
         $where = $this->_db->quoteInto('is_default = 1 And id = ?', $contentId);
         $this->change($where);
     }
-    
+    public function Set($contentId) {
+        $this->__content = '7777777777777777777777777777';
+        $where = $this->_db->quoteInto('id = ?', $contentId);
+        $this->change($where);
+    }
 }
