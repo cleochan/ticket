@@ -1,0 +1,25 @@
+<br /><br />
+<div id="view-content">
+        <h1>Contributions</h1>
+	<div>
+		<table width="80%" align="center" cellspacing="1">
+			<tbody>
+				<tr>
+					<td class="form-title" style="text-align: left;">Department</td>
+					<td class="form-title" style="text-align: left;">Name</td>
+					<td class="form-title" style="text-align: left;">Contribution</td>
+				</tr>
+				<?php if($this->contributor_array):?>
+					<?php foreach($this->contributor_array as $key => $val):?>
+						<tr class="row-1">
+							<td><?=$val['department_name']?></td>
+							<td><?=$val['contributor_name']?></td>
+							<td><?=$val['contributions']?></td>
+						</tr>
+					<?php endforeach;?>			
+				<?php endif;?>
+			</tbody>
+		</table>
+	</div>
+	
+</div>

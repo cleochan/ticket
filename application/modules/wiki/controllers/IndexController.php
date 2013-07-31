@@ -1,55 +1,53 @@
 <?php
 
-class Wiki_IndexController extends Zend_Controller_Action
-{
+class Wiki_IndexController extends Zend_Controller_Action {
+
     private $_menu;
+
     /**
      *
      * @var Wiki_Models_DbTable_Topics 
      */
     private $_topicsModel;
+
     /**
      *
      * @var Wiki_Models_DbTable_Contents 
      */
     private $_contentsModel;
+
     public function init() {
         $this->_menu = new Menu();
-        $this->_topicsModel = new Wiki_Models_DbTable_Topics();
-        $this->_contentsModel = new Wiki_Models_DbTable_Contents();
+        $this->_topicsModel = new Wiki_Model_DbTable_Topics();
+        $this->_contentsModel = new Wiki_Model_DbTable_Contents();
     }
 
-    public function preDispatch()
-    {  
-            if('call-file' != $this->getRequest()->getActionName())
-            {
-                $auth = Zend_Auth::getInstance();
-                $users = new Users();
-                if(!$auth->hasIdentity() || !$users->IsValid())
-                { 
-                    $this->_redirect('/login/logout?url='.$_SERVER["REQUEST_URI"]);
-                }
+    public function preDispatch() {
+        if ('call-file' != $this->getRequest()->getActionName()) {
+            $auth = Zend_Auth::getInstance();
+            $users = new Users();
+            if (!$auth->hasIdentity() || !$users->IsValid()) {
+                $this->_redirect('/login/logout?url=' . $_SERVER["REQUEST_URI"]);
             }
-            //get system title
-            $get_title = new Params();
-            $this->view->system_title = $get_title -> GetVal("system_title");
-            $this->view->system_version = $get_title -> GetVal("system_version");
+        }
+        //get system title
+        $get_title = new Params();
+        $this->view->system_title = $get_title->GetVal("system_title");
+        $this->view->system_version = $get_title->GetVal("system_version");
 
-            //make top menu
-            $this->view->top_menu = $this->_menu -> GetTopMenu($this->getRequest()->getModuleName());
-            $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
+        //make top menu
+        $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
+        $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         $this->view->title = "Wiki";
     }
-    
-    
-    public function createAction(){
-        $form = new Wiki_Forms_Create();
+
+    public function createAction() {
+        $form = new Wiki_Form_Create();
         $this->view->form = $form;
-         if ($this->_request->isPost()) {
+        if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
                 //date_default_timezone_set('PRC');
                 $userinfo = Zend_Auth::getInstance()->getStorage()->read();
@@ -59,7 +57,7 @@ class Wiki_IndexController extends Zend_Controller_Action
                 $this->_topicsModel->__status = 1;
                 $this->_topicsModel->__cid = $this->_request->getPost('category');
                 $insertId = $this->_topicsModel->create();
-                if($insertId!==NULL){
+                if ($insertId !== NULL) {
                     $this->_contentsModel->__tid = $insertId;
                     $this->_contentsModel->__content = $this->_request->getPost('content');
                     $this->_contentsModel->__uid = $userinfo->id;
@@ -70,11 +68,25 @@ class Wiki_IndexController extends Zend_Controller_Action
                     $insertIdC = $this->_contentsModel->create();
                     //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
                     echo 'then redirect to wiki detail page';
-                }  else {
+                } else {
                     die('insert error');
                 }
             }
-         }
+        }
     }
+
+    function contributorAction() {
+        $params = $this->_request->getParams();
+        $this->view->title = "Contributor";
+        $this->view->menu = $this->_menu->GetWikiMenu($params);
+
+
+        $contributors = new Wiki_Model_Contributor();
+        $contributor_array = $contributors->getContributors();
+        $this->view->contributor_array = $contributor_array;
+
+        $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
+    }
+
 }
 

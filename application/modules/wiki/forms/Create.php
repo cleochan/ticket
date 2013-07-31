@@ -1,6 +1,6 @@
 <?php
 
-class Wiki_Forms_Create extends Zend_Form
+class Wiki_Form_Create extends Zend_Form
 {
 
   public $ElementDecorators = array(

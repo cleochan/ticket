@@ -10,7 +10,7 @@
  *
  * @author Ron
  */
-class Wiki_Models_DbTable_Contents extends Wiki_Models_DbTable_Abstract{
+class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     protected $_name = 'wiki_contents';
     /**
      *

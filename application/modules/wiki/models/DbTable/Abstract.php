@@ -4,7 +4,7 @@
  *
  * @author Ron
  */
-abstract class Wiki_Models_DbTable_Abstract extends Zend_Db_Table_Abstract {
+abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
     protected $columnMarking = '__';
     /**
      * 

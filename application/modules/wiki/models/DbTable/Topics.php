@@ -1,6 +1,6 @@
 <?php
 
-class Wiki_Models_DbTable_Topics extends Wiki_Models_DbTable_Abstract
+class Wiki_Model_DbTable_Topics extends Wiki_Model_DbTable_Abstract
 {
 
     protected $_name = 'wiki_topics';

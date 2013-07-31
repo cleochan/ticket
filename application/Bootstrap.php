@@ -8,5 +8,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		Zend_Session::setOptions($sessionConfig->toArray());
 		Zend_Session::start();
 	}
+	
+	protected function _initModulesAutoload()
+	{
+	    $autoloader = new Zend_Application_Module_Autoloader(array(
+	        'namespace' => 'Wiki',
+	        'basePath' => APPLICATION_PATH.'/modules/wiki'
+	    ));
+	    return $autoloader;
+	}
+	
 }
 
