@@ -75,63 +75,18 @@ class Wiki_IndexController extends Zend_Controller_Action {
         }
     }
 
-	function showContributorAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Contributor";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-		
-		$contributors = new Wiki_Model_Contributor();
-		
-		if(isset($params['userid'])){
-			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
-		}
-		else{
-			echo "Invalid User";
-		}
-		
-		$this->view->contributor = $contributor;
-		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
-	}
-
     function contributorAction() {
         $params = $this->_request->getParams();
-	    $this->view->title = "Contributions";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
+        $this->view->title = "Contributor";
+        $this->view->menu = $this->_menu->GetWikiMenu($params);
 
-		if(isset($params['page'])){
-			$current_page = $params['page'];
-		}
-		else{
-			$current_page = 1;
-		}
 
         $contributors = new Wiki_Model_Contributor();
-        $contributor_array = $contributors->getContributors($current_page);
-		$this->view->pages = $contributors -> getPageCount(count($contributor_array)); 
+        $contributor_array = $contributors->getContributors();
         $this->view->contributor_array = $contributor_array;
-		
+
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
     }
-
-		function contributionsAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Contributions";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-		
-		$contributors = new Wiki_Model_Contributor();
-		
-		if(isset($params['userid'])){
-			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
-		}
-		else{
-			echo "Invalid User";
-		}
-		
-		$this->view->contributor = $contributor;
-		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
-	}
 
 }
 
