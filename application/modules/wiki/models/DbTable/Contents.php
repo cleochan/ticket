@@ -17,13 +17,13 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
      * @var Zend_Db_Adapter_Abstract 
      */
     protected $_db;
-    public $__tid;
-    public $__uid;
-    public $__create_time;
-    public $__content;
-    public $__attachment;
-    public $__is_default;
-    public $__status;
+    private $__tid;
+    private $__uid;
+    private $__create_time;
+    private $__content;
+    private $__attachment;
+    private $__is_default;
+    private $__status;
     
     public function init(){
         $this->_db = Zend_Registry::get("db");
