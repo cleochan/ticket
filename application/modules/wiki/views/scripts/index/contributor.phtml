@@ -5,9 +5,9 @@
 		<table width="80%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
-					<td class="form-title" width="30%" style="text-align: left;">Department</td>
-					<td class="form-title" width="40%" style="text-align: left;">Name</td>
-					<td class="form-title" width="30%" style="text-align: left;">Contribution</td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_0"] ?>">Department</a></td>
+					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Name</a></td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Contributions</a></td>
 				</tr>
 				<?php if($this->contributor_array):?>
 					<?php foreach($this->contributor_array as $key => $val):?>
@@ -23,9 +23,8 @@
 	</div>
 	<div align="right" style="margin-right: 10%">
 		<?php if($this->pages):?>
-			
 					<?php for($i = 1; $i<$this->pages+1; $i++):?>
-						<a href="?page=<?=$i?>"> <?= $i?></a>
+						<a href="<?php echo $this->page_urls["page_".$i] ?>"> <?= $i?></a>
 					<?php endfor;?>	
 		<?php endif; ?>
 

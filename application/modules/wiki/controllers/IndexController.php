@@ -91,6 +91,8 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		}
 		
 		$this->view->contributor = $contributor;
+		$this->view->latest_topics = $contributors->getLimitedContributedTopicsByID($uid);
+		
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 	}
 
@@ -98,6 +100,9 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
+        $contributors = new Wiki_Model_Contributor();
+		
+		$tableKeys = array(	0=>"dptname", 1=>"name", 2=>"contribution" );
 
 		if(isset($params['page'])){
 			$current_page = $params['page'];
@@ -105,21 +110,72 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		else{
 			$current_page = 1;
 		}
-
-        $contributors = new Wiki_Model_Contributor();
-        $contributor_array = $contributors->getContributors($current_page);
-		$this->view->pages = $contributors -> getPageCount(count($contributor_array)); 
-        $this->view->contributor_array = $contributor_array;
 		
+		if(isset($params['sortBy'])){
+			$sort_column_by = $params['sortBy'];
+		}
+		else {
+			$sort_column_by = "dptname";
+		}
+		
+		if(isset($params['sortBy'])){
+			$sort_column_order = $params['sortOrder'];
+		}
+		else {
+			$sort_column_order = "ASC";
+		}
+		
+		$page_urls = array();
+		$i = 0;
+		foreach($tableKeys as $key=>$val){
+			$page_urls["column_".$i] = "";
+			$reverseorder = "";
+			
+			if(!isset($params['page'])){
+				$page_urls["column_".$i] .= "?page=".$current_page;
+				}
+			else {
+				$page_urls["column_".$i] .= "?page=".$params['page'];
+			}
+			$page_urls["column_".$i] .= "&sortBy=".$val;
+			(($sort_column_order === "ASC") &&($tableKeys[$i]==$sort_column_by) ? $reverseorder = "DESC" : $reverseorder = "ASC"); 
+			$page_urls["column_".$i] .= "&sortOrder=".$reverseorder;
+			$i++;
+		}
+
+        $contributor_array = $contributors->getContributors($current_page, $sort_column_by, $sort_column_order);
+        
+        $this->view->current_page = $current_page;
+		$this->view->pages = $contributors -> getPageCount("wiki_contributors", 0, "uid"); 
+
+		for($p = 1; $p<$this->view->pages+1; $p++){
+			$page_urls["page_".$p] = "";
+
+			$page_urls["page_".$p] .= "?page=".$p;
+			$page_urls["page_".$p] .= "&sortBy=".$sort_column_by;
+			$page_urls["page_".$p] .= "&sortOrder=".$sort_column_order;
+			
+		}
+		var_dump($page_urls);
+		$this->view->page_urls = $page_urls;
+        $this->view->contributor_array = $contributor_array;
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
     }
 
-		function contributionsAction(){
+	function contributionsAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
 		$contributors = new Wiki_Model_Contributor();
+		
+		if(isset($params['page'])){
+			$current_page = $params['page'];
+			
+		}
+		else{
+			$current_page = 1;
+		}
 		
 		if(isset($params['userid'])){
 			$uid = $params['userid'];
@@ -129,8 +185,20 @@ class Wiki_IndexController extends Zend_Controller_Action {
 			echo "Invalid User";
 		}
 		
+		$this->view->current_page = $current_page;
 		$this->view->contributor = $contributor;
+		$contributed_topics = $contributors->getAllContributedTopicsByID($uid, $current_page);
+		$this->view->pages = $contributors -> getPageCount("wiki_comments", $uid, "id", "uid"); 
+		
+		$pageUrls = array();
+		for($i = 1; $i<$this->view->pages+1; $i++){
+			$pageUrls[$i] = "?userid=".$uid."&page=".$i; 
+		}
+
+		$this->view->p_urls = $pageUrls;
+		$this->view->all_topics = $contributed_topics;
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
+
 	}
 
 }

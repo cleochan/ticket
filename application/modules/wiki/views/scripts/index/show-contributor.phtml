@@ -19,6 +19,14 @@
 								<td class="form-title" width="70%" style="text-align: left;">Topic</td>
 								<td class="form-title" width="30%" style="text-align: left;">Date</td>
 							</tr>
+							<?php if($this->latest_topics):?>
+								<?php foreach($this->latest_topics as $key => $val):?>
+								<tr>
+									<td><?=$val['topic_title']?></td>
+									<td><?=$val['date_created']?></td>
+								</tr>
+								<?php endforeach;?>			
+							<?php endif;?>	
 					</tbody>
 				</table>
 		</div>
