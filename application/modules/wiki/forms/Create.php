@@ -6,8 +6,6 @@ class Wiki_Form_Create extends Zend_Form
   public $ElementDecorators = array(
         'ViewHelper',
         array('Errors', array('class' => 'error')),
-        array('Label', array('tag' => 'div','class'=>'fields-label')),
-        array('HtmlTag', array('tag' => 'div', 'class' => 'el')),
         //array('HtmlTag', array('tag' => 'tr'))
     );
     public $EmptyDecorators = array(
@@ -16,7 +14,7 @@ class Wiki_Form_Create extends Zend_Form
 
     public function init() {
         parent::init();
-        $this->addPrefixPath('Mark_Form_Element_', 'Mark/Form/Element/', 'element'); //设置搜索Element的路径
+        //$this->addPrefixPath('Mark_Form_Element_', 'Mark/Form/Element/', 'element'); //设置搜索Element的路径
         //$this->setConfig($config->form);
         $this->setDisableLoadDefaultDecorators(TRUE);
         $this->setDecorators(array(
@@ -24,7 +22,8 @@ class Wiki_Form_Create extends Zend_Form
             'Form'
         ));
         $this->addElement('text', 'title', array(
-            'label' => 'Title:',
+            //'label' => 'Title:',
+            'value' =>'Please Enter Title Here',
             'required' => TRUE,
             'decorators' => $this->ElementDecorators,
             'validators' => array(
@@ -34,7 +33,7 @@ class Wiki_Form_Create extends Zend_Form
         ));
 
         $this->addElement('textarea', 'content', array(
-            'label' => 'Content:',
+            //'label' => 'Content:',
             'required' => TRUE,
             'decorators' => $this->ElementDecorators,
             'validators' => array(
