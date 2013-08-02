@@ -10,8 +10,8 @@
 				<table width="60%" align="center" cellspacing="1">
 					<tbody>
 							<tr>
-								<td class="form-title" width="60%" style="text-align: left;">Topic</td>
-								<td class="form-title" width="20%" style="text-align: left;">Date</td>
+								<td class="form-title" width="60%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_0"] ?>">Topic</a></td>
+								<td class="form-title" width="20%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Date</a></td>
 							</tr>
 							<?php if($this->all_topics):?>
 								<?php foreach($this->all_topics as $key => $val):?>
@@ -24,12 +24,15 @@
 					</tbody>
 				</table>
 		</div>
-		<div align="right" style="margin-right: 10%">
-			<?php if($this->p_urls):?>
-						<?php foreach($this->p_urls as $key => $val):?>
-									<a href=<?=$val?>><?= $key?></a>
-						<?php endforeach;?>	
-			<?php endif; ?>
-		</div>
+	<div align="right" style="margin-right: 10%">
+		<?php if($this->pages):
+				if($this->pages>2):$maxPageNav = $this->current_page + 3; else: $maxPageNav = $this->current_page; endif; ?>
+					<?php for($i = $this->current_page-3; $i<=$maxPageNav; $i++):?>
+						<?php if(($i > 0)&&($i <= $this->pages)):?>
+						<a href="<?php echo $this->page_urls["page_".$i] ?>"> <?= $i?></a>
+						<?php endif; ?>
+					<?php endfor;?>	
+		<?php endif; ?>
+	</div>
 </div>
 	

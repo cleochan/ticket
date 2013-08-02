@@ -22,11 +22,13 @@
 		</table>
 	</div>
 	<div align="right" style="margin-right: 10%">
-		<?php if($this->pages):?>
-					<?php for($i = 1; $i<$this->pages+1; $i++):?>
+		<?php if($this->pages):
+				if($this->pages>3):$maxPageNav = $this->current_page + 3; else: $maxPageNav = $this->current_page; endif; ?>
+					<?php for($i = $this->current_page-3; $i<=$maxPageNav; $i++):?>
+						<?php if(($i > 0)&&($i <= $this->pages)):?>
 						<a href="<?php echo $this->page_urls["page_".$i] ?>"> <?= $i?></a>
+						<?php endif; ?>
 					<?php endfor;?>	
 		<?php endif; ?>
-
 	</div>
 </div>

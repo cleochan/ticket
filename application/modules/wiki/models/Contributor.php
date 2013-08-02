@@ -19,12 +19,7 @@ class Wiki_Model_Contributor{
 		$select->joinLeft("departments as d", "d.id=u.department", array("d.name as dptname"));
 		$select->group("w.uid");
 		if($sortBy!=""){
-			echo $order;	
 			$select->order($sortBy . " " . $order);
-		}
-		else {
-			echo "no sortby";
-			$select->order("dptname ASC");
 		}
 		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
@@ -76,7 +71,7 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */
-	function getAllContributedTopicsByID($id, $current_page){
+	function getAllContributedTopicsByID($id, $current_page, $sortBy="datecreated", $order="ASC"){
 		
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		
@@ -84,7 +79,9 @@ class Wiki_Model_Contributor{
 		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
 		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("create_time as datecreated"));
 		$select->where("t.uid = ?", $id);
-		$select->order("datecreated DESC");
+		if($sortBy!=""){
+			$select->order($sortBy . " " . $order);
+		}
 		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
 
@@ -158,10 +155,6 @@ class Wiki_Model_Contributor{
 		}
 
 		return $pagesFound;
-	}
-	
-	function sortByColumn($columnName){
-		
 	}
 	
 }

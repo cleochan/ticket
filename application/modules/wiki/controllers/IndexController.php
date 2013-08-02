@@ -118,7 +118,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 			$sort_column_by = "dptname";
 		}
 		
-		if(isset($params['sortBy'])){
+		if(isset($params['sortOrder'])){
 			$sort_column_order = $params['sortOrder'];
 		}
 		else {
@@ -156,7 +156,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 			$page_urls["page_".$p] .= "&sortOrder=".$sort_column_order;
 			
 		}
-		var_dump($page_urls);
+
 		$this->view->page_urls = $page_urls;
         $this->view->contributor_array = $contributor_array;
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
@@ -169,12 +169,27 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		
 		$contributors = new Wiki_Model_Contributor();
 		
+		$tableKeys = array(	0=>"title", 1=>"datecreated");
+
 		if(isset($params['page'])){
 			$current_page = $params['page'];
-			
 		}
 		else{
 			$current_page = 1;
+		}
+		
+		if(isset($params['sortBy'])){
+			$sort_column_by = $params['sortBy'];
+		}
+		else {
+			$sort_column_by = "datecreated";
+		}
+		
+		if(isset($params['sortOrder'])){
+			$sort_column_order = $params['sortOrder'];
+		}
+		else {
+			$sort_column_order = "ASC";
 		}
 		
 		if(isset($params['userid'])){
@@ -185,17 +200,40 @@ class Wiki_IndexController extends Zend_Controller_Action {
 			echo "Invalid User";
 		}
 		
+		$page_urls = array();
+		$i = 0;
+		foreach($tableKeys as $key=>$val){
+			$page_urls["column_".$i] = "";
+			$reverseorder = "";
+			
+			$page_urls["column_".$i] .= "?userid=".$uid;
+			if(!isset($params['page'])){
+				$page_urls["column_".$i] .= "&page=".$current_page;
+			}
+			else {
+				$page_urls["column_".$i] .= "&page=".$params['page'];
+			}
+			$page_urls["column_".$i] .= "&sortBy=".$val;
+			(($sort_column_order === "ASC") &&($tableKeys[$i]==$sort_column_by) ? $reverseorder = "DESC" : $reverseorder = "ASC"); 
+			$page_urls["column_".$i] .= "&sortOrder=".$reverseorder;
+			$i++;
+		}
+		
 		$this->view->current_page = $current_page;
 		$this->view->contributor = $contributor;
-		$contributed_topics = $contributors->getAllContributedTopicsByID($uid, $current_page);
+		$contributed_topics = $contributors->getAllContributedTopicsByID($uid, $current_page, $sort_column_by, $sort_column_order);
 		$this->view->pages = $contributors -> getPageCount("wiki_comments", $uid, "id", "uid"); 
 		
-		$pageUrls = array();
-		for($i = 1; $i<$this->view->pages+1; $i++){
-			$pageUrls[$i] = "?userid=".$uid."&page=".$i; 
+		for($p = 1; $p<$this->view->pages+1; $p++){
+			$page_urls["page_".$p] = "";
+			$page_urls["page_".$p] .= "?userid=".$uid;
+			$page_urls["page_".$p] .= "&page=".$p;
+			$page_urls["page_".$p] .= "&sortBy=".$sort_column_by;
+			$page_urls["page_".$p] .= "&sortOrder=".$sort_column_order;
+			
 		}
 
-		$this->view->p_urls = $pageUrls;
+		$this->view->page_urls = $page_urls;
 		$this->view->all_topics = $contributed_topics;
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 
