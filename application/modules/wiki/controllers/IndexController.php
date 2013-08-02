@@ -15,11 +15,17 @@ class Wiki_IndexController extends Zend_Controller_Action {
      * @var Wiki_Models_DbTable_Contents 
      */
     private $_contentsModel;
+    /**
+     *
+     * @var Wiki_Model_Detail 
+     */
+    private $_detailModel;
 
     public function init() {
         $this->_menu = new Menu();
         $this->_topicsModel = new Wiki_Model_DbTable_Topics();
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
+        $this->_detailModel = new Wiki_Model_Detail();
     }
 
     public function preDispatch() {
@@ -28,6 +34,9 @@ class Wiki_IndexController extends Zend_Controller_Action {
             $users = new Users();
             if (!$auth->hasIdentity() || !$users->IsValid()) {
                 $this->_redirect('/login/logout?url=' . $_SERVER["REQUEST_URI"]);
+                if(!isset($_SESSION['ckfinder'])){
+                    $_SESSION['ckfinder'] = TRUE;
+                }
             }
         }
         //get system title
@@ -39,6 +48,11 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
     }
+    public function detailAction(){
+        $tid = $this->_request->get('id');
+        $data = $this->_detailModel->getDetail($tid);
+        $this->view->data = $data[0];
+    } 
 
     public function indexAction() {
         $this->view->title = "Wiki";
@@ -46,6 +60,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 
     public function createAction() {
         $form = new Wiki_Form_Create();
+        $form->getElement('title');
         $this->view->form = $form;
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
@@ -67,7 +82,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
                     $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
                     $insertIdC = $this->_contentsModel->create();
                     //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
-                    echo 'then redirect to wiki detail page';
+                    $this->_redirect('/wiki/index/detail/id/'.$insertId);
                 } else {
                     die('insert error');
                 }

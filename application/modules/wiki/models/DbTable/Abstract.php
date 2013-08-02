@@ -8,7 +8,7 @@ abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
     protected $columnMarking = '__';
     protected $data;
 
-        /**
+    /**
      * 
      * @return array A array include the properties which have set value
      */

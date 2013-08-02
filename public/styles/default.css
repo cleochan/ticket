@@ -218,11 +218,15 @@ padding-left:16px;
 background:url(/images/star/withoutstar.png) no-repeat left center
 }
 .wiki{}
+.wiki a:hover{
+   text-decoration: underline; 
+}
 .wiki .strong{
     font-weight: bold;
 }
 .wiki .error{
     color: #bb0000;
+    padding-top: 5px;
 }
 .wiki ul{
     list-style: none;
@@ -230,15 +234,20 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     margin: 0px;
 }
 
-.wiki .el{
+.wiki{
     
 }
-.wiki .el #title{
+.wiki #title{
     height:30px;
+    width:100%;
+    font-size: 18px;    
+    padding-left: 5px;
+    color: #ccc;
 }
-.wiki .el #category{
-    height:30px;
-    width:150px;
+.wiki #category{
+    font-size: 18px;
+    height:34px;
+    width:100%;
 }
 .wiki #submit{
     width:150px;
@@ -247,7 +256,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 /*表单*/
 .wiki input[type="text"],.wiki input[type="password"],.wiki select,.wiki textArea
 {
-    background-color:#f9f9f9;
+    background-color:#ffffff;
     border-width: 1px;
     border-top: #D0D0D0 1px solid;
     border-left: #D0D0D0 1px solid;
@@ -261,12 +270,12 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 }
 .wiki input[type="submit"],.wiki input[type="button"],.wiki button,.wiki .button-style
 {
-    border:none;
+/*    border:none;
     background-color: #c8c8e8;
     display: inline-block;
     padding: 5px 10px 6px;
     color: #fff !important;
-    font-family:"微软雅黑",'Open Sans',arial,sans-serif;
+    font-family:"微软雅黑",Helvetica, arial, freesans, clean, sans-serif;
     text-decoration: none;
     border-radius: 6px;
     -moz-border-radius: 6px;
@@ -282,7 +291,20 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     -moz-transition: background-color .5s ease-in;
      -o-transition: background-color .5s ease-in;
      -ms-transition: background-color .5s ease-in;
-     transition: background-color .5s ease-in;
+     transition: background-color .5s ease-in;*/
+    border: 1px solid #DDD;
+    color: #FFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #60B044;
+    background-image: -moz-linear-gradient(#8ADD6D, #60B044);
+    background-image: -webkit-linear-gradient(#8ADD6D, #60B044);
+    background-image: linear-gradient(#8ADD6D, #60B044);
+    background-repeat: repeat-x;
+    border-color: #5CA941;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .wiki input[type="submit"]:hover,.wiki input[type="button"]:hover,.wiki button:hover,.wiki .button-style:hover
