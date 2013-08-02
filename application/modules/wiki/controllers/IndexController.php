@@ -26,6 +26,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->_topicsModel = new Wiki_Model_DbTable_Topics();
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
+		$this->_contributors = new Wiki_Model_Contributor();
     }
 
     public function preDispatch() {
@@ -95,18 +96,16 @@ class Wiki_IndexController extends Zend_Controller_Action {
 	    $this->view->title = "Contributor";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
-		$contributors = new Wiki_Model_Contributor();
-		
 		if(isset($params['userid'])){
 			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
+			$contributor = $this->_contributors->getContributorByID($uid);
 		}
 		else{
 			echo "Invalid User";
 		}
 		
 		$this->view->contributor = $contributor;
-		$this->view->latest_topics = $contributors->getLimitedContributedTopicsByID($uid);
+		$this->view->latest_topics = $this->_contributors->getLimitedContributedTopicsByID($uid);
 		
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 	}
@@ -115,7 +114,6 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-        $contributors = new Wiki_Model_Contributor();
 		
 		$tableKeys = array(	0=>"dptname", 1=>"name", 2=>"contribution" );
 
@@ -158,10 +156,10 @@ class Wiki_IndexController extends Zend_Controller_Action {
 			$i++;
 		}
 
-        $contributor_array = $contributors->getContributors($current_page, $sort_column_by, $sort_column_order);
+        $contributor_array = $this->_contributors->getContributors($current_page, $sort_column_by, $sort_column_order);
         
         $this->view->current_page = $current_page;
-		$this->view->pages = $contributors -> getPageCount("wiki_contributors", 0, "uid"); 
+		$this->view->pages = $this->_contributors->getPageCount("wiki_contributors", 0, "uid"); 
 
 		for($p = 1; $p<$this->view->pages+1; $p++){
 			$page_urls["page_".$p] = "";
@@ -181,8 +179,6 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-		
-		$contributors = new Wiki_Model_Contributor();
 		
 		$tableKeys = array(	0=>"title", 1=>"datecreated");
 
@@ -209,7 +205,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		
 		if(isset($params['userid'])){
 			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
+			$contributor = $this->_contributors->getContributorByID($uid);
 		}
 		else{
 			echo "Invalid User";
@@ -236,8 +232,8 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		
 		$this->view->current_page = $current_page;
 		$this->view->contributor = $contributor;
-		$contributed_topics = $contributors->getAllContributedTopicsByID($uid, $current_page, $sort_column_by, $sort_column_order);
-		$this->view->pages = $contributors -> getPageCount("wiki_comments", $uid, "id", "uid"); 
+		$contributed_topics = $this->_contributors->getAllContributedTopicsByID($uid, $current_page, $sort_column_by, $sort_column_order);
+		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", $uid, "id", "uid"); 
 		
 		for($p = 1; $p<$this->view->pages+1; $p++){
 			$page_urls["page_".$p] = "";
@@ -252,6 +248,38 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$this->view->all_topics = $contributed_topics;
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 
+	}
+
+	function recentUpdatesAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Recent Updates";
+		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
+		
+		$contributors = new Wiki_Model_Contributor();
+		
+		//$tableKeys = array(	0=>"title", 1=>"datecreated");
+		
+		if(isset($params['page'])){
+			$current_page = $params['page'];
+		}
+		else{
+			$current_page = 1;
+		}
+		
+		if(isset($params['sortBy'])){
+			$sort_column_by = $params['sortBy'];
+		}
+		else {
+			$sort_column_by = "datecreated";
+		}
+		
+		if(isset($params['sortOrder'])){
+			$sort_column_order = $params['sortOrder'];
+		}
+		else {
+			$sort_column_order = "ASC";
+		}
+		
 	}
 
 }
