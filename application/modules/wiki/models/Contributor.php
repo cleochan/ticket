@@ -6,9 +6,14 @@ class Wiki_Model_Contributor{
 	
 	function __construct(){
         $this->db = Zend_Registry::get("db");
-		define("RECORDS_PER_PAGE", 20);
+				define("RECORDS_PER_PAGE", 20);
 		define("LATEST_TOPICS", 10);
+		$this->navHelper = $this->getNavHelper();
     }
+	
+	function _init(){
+
+	}
     
 	function getContributors($current_page, $sortBy="dptname", $order="ASC"){
 		
@@ -19,12 +24,7 @@ class Wiki_Model_Contributor{
 		$select->joinLeft("departments as d", "d.id=u.department", array("d.name as dptname"));
 		$select->group("w.uid");
 		if($sortBy!=""){
-			echo $order;	
 			$select->order($sortBy . " " . $order);
-		}
-		else {
-			echo "no sortby";
-			$select->order("dptname ASC");
 		}
 		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
@@ -76,7 +76,7 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */
-	function getAllContributedTopicsByID($id, $current_page){
+	function getAllContributedTopicsByID($id, $current_page, $sortBy="datecreated", $order="ASC"){
 		
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		
@@ -84,7 +84,9 @@ class Wiki_Model_Contributor{
 		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
 		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("create_time as datecreated"));
 		$select->where("t.uid = ?", $id);
-		$select->order("datecreated DESC");
+		if($sortBy!=""){
+			$select->order($sortBy . " " . $order);
+		}
 		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
 
@@ -138,6 +140,38 @@ class Wiki_Model_Contributor{
 
 		return $result;
 	}
+		
+		function getRecentUpdates($current_page, $sortBy="datecreated", $order="ASC"){
+		
+		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
+		$select = $this->db->select();
+		$select->from("users as u", array("u.realname as name", "u.id as userid"));
+		$select->joinLeft("wiki_topics as t", "u.id=t.uid", array("title"));
+		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("c.id as commentid", "create_time as datecreated"));
+		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
+		$select->where("u.id = t.uid");
+		if($sortBy!=""){
+			$select->order($sortBy . " " . $order);
+		}
+		$select->limit(RECORDS_PER_PAGE, $row_position);
+		$data = $this->db->fetchAll($select);
+
+		$result = array();
+		
+        foreach($data as $key => $val)
+        {
+            $temp = array();
+            $temp['contributor_name'] = $val['name'];
+            $temp['date_created'] = $val['datecreated'];
+            $temp['topic_title'] = $val['title'];
+ 			$temp['category_name'] = $val['catname'];
+			$temp['comment_id'] = $val['commentid'];
+			$temp['user_id'] = $val['userid'];
+			$result[] = $temp;
+        }
+
+		return $result;
+	}
 	
 	function getPageCount($dbName, $id=0, $idName="", $searchCol=""){
 		
@@ -160,8 +194,8 @@ class Wiki_Model_Contributor{
 		return $pagesFound;
 	}
 	
-	function sortByColumn($columnName){
-		
+	function getNavHelper(){
+		return new NavHelper();
 	}
 	
 }

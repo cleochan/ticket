@@ -32,6 +32,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
+	$this->_contributors = new Wiki_Model_Contributor();
     }
 
     public function preDispatch() {
@@ -157,18 +158,13 @@ class Wiki_IndexController extends Zend_Controller_Action {
 	    $this->view->title = "Contributor";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
-		$contributors = new Wiki_Model_Contributor();
-		
 		if(isset($params['userid'])){
 			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
+			$contributor = $this->_contributors->getContributorByID($uid);
+			$this->view->contributor = $contributor;
+			
+			$this->view->latest_topics = $this->_contributors->getLimitedContributedTopicsByID($uid);
 		}
-		else{
-			echo "Invalid User";
-		}
-		
-		$this->view->contributor = $contributor;
-		$this->view->latest_topics = $contributors->getLimitedContributedTopicsByID($uid);
 		
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 	}
@@ -177,63 +173,38 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-        $contributors = new Wiki_Model_Contributor();
 		
-		$tableKeys = array(	0=>"dptname", 1=>"name", 2=>"contribution" );
+		$tableKeys = array(	1=>"dptname", 2=>"name", 3=>"contribution" );
 
-		if(isset($params['page'])){
-			$current_page = $params['page'];
-		}
-		else{
-			$current_page = 1;
+		if(!isset($params['page'])){
+			$this->getRequest()->setParam('page', 1);
 		}
 		
-		if(isset($params['sortBy'])){
-			$sort_column_by = $params['sortBy'];
-		}
-		else {
-			$sort_column_by = "dptname";
+		if(!isset($params['sortBy'])){
+			$this->getRequest()->setParam('sortBy', "dptname");
 		}
 		
-		if(isset($params['sortBy'])){
-			$sort_column_order = $params['sortOrder'];
-		}
-		else {
-			$sort_column_order = "ASC";
+		if(!isset($params['sortOrder'])){
+			$this->getRequest()->setParam('sortOrder', "ASC");
 		}
 		
+		$params = $this->_request->getParams();
 		$page_urls = array();
-		$i = 0;
-		foreach($tableKeys as $key=>$val){
-			$page_urls["column_".$i] = "";
-			$reverseorder = "";
-			
-			if(!isset($params['page'])){
-				$page_urls["column_".$i] .= "?page=".$current_page;
-				}
-			else {
-				$page_urls["column_".$i] .= "?page=".$params['page'];
+		for($i=1; $i<count($tableKeys)+1; $i++){
+				$page_urls["column_".$i] = $this->_contributors->navHelper->writeURL($params, $tableKeys[$i], $params['page']);
 			}
-			$page_urls["column_".$i] .= "&sortBy=".$val;
-			(($sort_column_order === "ASC") &&($tableKeys[$i]==$sort_column_by) ? $reverseorder = "DESC" : $reverseorder = "ASC"); 
-			$page_urls["column_".$i] .= "&sortOrder=".$reverseorder;
-			$i++;
-		}
 
-        $contributor_array = $contributors->getContributors($current_page, $sort_column_by, $sort_column_order);
+        $contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'), 
+       															   $this->getRequest()->getParam('sortBy'), 
+       															   $this->getRequest()->getParam('sortOrder'));
         
-        $this->view->current_page = $current_page;
-		$this->view->pages = $contributors -> getPageCount("wiki_contributors", 0, "uid"); 
+        $this->view->current_page = $this->getRequest()->getParam('page');
+		$this->view->pages = $this->_contributors->getPageCount("wiki_contributors", 0, "uid"); 
 
 		for($p = 1; $p<$this->view->pages+1; $p++){
-			$page_urls["page_".$p] = "";
-
-			$page_urls["page_".$p] .= "?page=".$p;
-			$page_urls["page_".$p] .= "&sortBy=".$sort_column_by;
-			$page_urls["page_".$p] .= "&sortOrder=".$sort_column_order;
-			
+			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
 		}
-		var_dump($page_urls);
+
 		$this->view->page_urls = $page_urls;
         $this->view->contributor_array = $contributor_array;
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
@@ -244,38 +215,87 @@ class Wiki_IndexController extends Zend_Controller_Action {
 	    $this->view->title = "Contributions";
 		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
-		$contributors = new Wiki_Model_Contributor();
-		
-		if(isset($params['page'])){
-			$current_page = $params['page'];
-			
+		$tableKeys = array(	1=>"title", 2=>"datecreated");
+
+		if(!isset($params['page'])){
+			$this->getRequest()->setParam('page', 1);
 		}
-		else{
-			$current_page = 1;
+		
+		if(!isset($params['sortBy'])){
+			$this->getRequest()->setParam('sortBy', "datecreated");
+		}
+		
+		if(!isset($params['sortOrder'])){
+			$this->getRequest()->setParam('sortOrder', "ASC");
 		}
 		
 		if(isset($params['userid'])){
 			$uid = $params['userid'];
-			$contributor = $contributors->getContributorByID($uid);
-		}
-		else{
-			echo "Invalid User";
+			$contributor = $this->_contributors->getContributorByID($uid);
+			$this->view->contributor = $contributor;
 		}
 		
-		$this->view->current_page = $current_page;
-		$this->view->contributor = $contributor;
-		$contributed_topics = $contributors->getAllContributedTopicsByID($uid, $current_page);
-		$this->view->pages = $contributors -> getPageCount("wiki_comments", $uid, "id", "uid"); 
+		$params = $this->_request->getParams(); //Get params again once missing values are set
+		$page_urls = array();
+		for($i=1; $i<count($tableKeys)+1; $i++){
+				$page_urls["column_".$i] = $this->_contributors->navHelper->writeURL($params, $tableKeys[$i], $params['page']);
+			}
 		
-		$pageUrls = array();
-		for($i = 1; $i<$this->view->pages+1; $i++){
-			$pageUrls[$i] = "?userid=".$uid."&page=".$i; 
+		$this->view->current_page = $this->getRequest()->getParam('page');
+
+		$contributed_topics = $this->_contributors->getAllContributedTopicsByID($uid, 
+																				$this->getRequest()->getParam('page'), 
+																				$this->getRequest()->getParam('sortBy'), 
+																				$this->getRequest()->getParam('sortOrder'));
+		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", $uid, "id", "uid"); 
+		
+		for($p = 1; $p<$this->view->pages+1; $p++){
+			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
 		}
 
-		$this->view->p_urls = $pageUrls;
+		$this->view->page_urls = $page_urls;
 		$this->view->all_topics = $contributed_topics;
 		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 
+	}
+
+	function recentUpdatesAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Recent Updates";
+		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
+
+		$tableKeys = array(	1=>"datecreated", 2=>"cname", 3=>"title", 4=>"name");
+		
+		if(!isset($params['page'])){
+			$this->getRequest()->setParam('page', 1);
+		}
+		
+		if(!isset($params['sortBy'])){
+			$this->getRequest()->setParam('sortBy', "datecreated");
+		}
+		
+		if(!isset($params['sortOrder'])){
+			$this->getRequest()->setParam('sortOrder', "ASC");
+		}
+		$params = $this->_request->getParams(); //Get params again once missing values are set
+		$page_urls = array();
+		for($i=1; $i<count($tableKeys)+1; $i++){
+				$page_urls["column_".$i] = $this->_contributors->navHelper->writeURL($params, $tableKeys[$i], $params['page']);
+			}
+		$recent_updates = $this->_contributors->getRecentUpdates($this->getRequest()->getParam('page'), 
+																 $this->getRequest()->getParam('sortBy'), 
+																 $this->getRequest()->getParam('sortOrder'));
+																 
+		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", 0, "id"); 
+		
+		for($p = 1; $p<$this->view->pages+1; $p++){
+			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
+		}
+
+		$this->view->page_urls = $page_urls;
+		$this->view->current_page = $this->getRequest()->getParam('page');
+		$this->view->recent_updates = $recent_updates;
+		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 	}
 
 }

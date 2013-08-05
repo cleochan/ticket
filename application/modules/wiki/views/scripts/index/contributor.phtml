@@ -5,9 +5,9 @@
 		<table width="80%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_0"] ?>">Department</a></td>
-					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Name</a></td>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Contributions</a></td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Department</a></td>
+					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Name</a></td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_3"] ?>">Contributions</a></td>
 				</tr>
 				<?php if($this->contributor_array):?>
 					<?php foreach($this->contributor_array as $key => $val):?>
@@ -22,11 +22,13 @@
 		</table>
 	</div>
 	<div align="right" style="margin-right: 10%">
-		<?php if($this->pages):?>
-					<?php for($i = 1; $i<$this->pages+1; $i++):?>
+		<?php if($this->pages):
+				if($this->pages>2):$maxPageNav = $this->current_page + 3; else: $maxPageNav = $this->current_page; endif; ?>
+					<?php for($i = $this->current_page-3; $i<=$maxPageNav; $i++):?>
+						<?php if(($i > 0)&&($i <= $this->pages)):?>
 						<a href="<?php echo $this->page_urls["page_".$i] ?>"> <?= $i?></a>
+						<?php endif; ?>
 					<?php endfor;?>	
 		<?php endif; ?>
-
 	</div>
 </div>
