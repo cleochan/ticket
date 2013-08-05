@@ -240,8 +240,42 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki{
     
 }
+.wiki .tb-style table,.wiki .tb-style th,.wiki .tb-style td{
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+.wiki .tb-style th,.wiki .tb-style td{
+    height: 34px;
+    border-right: 1px solid #D8D8D8;
+}
+.wiki .tb-style table{
+    padding: 0px;
+    border: 1px solid #D8D8D8;
+    -webkit-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.4);  
+}
+.wiki .tb-style table th{
+    color: rgb(85, 85, 85);
+    background-image: linear-gradient(#FAFAFA, #EAEAEA);
+    background-repeat: repeat-x;
+    text-shadow: 0 1px 0 #FFF;
+    border-bottom: 1px solid #D8D8D8;
+    background-color: #EAEAEA;
+}
+.wiki .tb-style table tr{
+    /*border-bottom: 3px solid #D8D8D8;*/
+}
+.wiki .tb-style table tr:nth-of-type(odd){
+    background-color: #F7F7F7; 
+}
+.wiki .tb-style table td{
+    text-align: center;
+}
 .wiki .message{
-    padding: 10px;
+/*    font-weight: bold;*/
+    color: #459455;
+    padding: 8px 10px;
+    margin: 10px 4px;
 }
 .wiki #title{
     height:30px;
@@ -259,25 +293,35 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     width:150px;
     height:38px;
 }
+.wiki .back a{
+    
+    color: #fff;
+    text-decoration: none;
+}
 .wiki .detail{
-/*     padding: 10px 20px;
-    -webkit-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.5);    
-    box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.5);*/
+    margin-top: 20px;
+     padding: 10px 20px;
+    -webkit-box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);    
+    box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);
 }
 .wiki .detail .title{
     text-align: center;
+    font-weight: bold;
 }
 .wiki .detail .info{
     text-align: center;
 }
-.wiki .detail .button-style{
+.wiki .history{
+    margin-top: 20px;
+}
+.wiki .button-style{
     display:block;
     width:120px;
     height:35px;
     line-height: 35px;
     text-align: center;
 }
-.wiki .detail .button-style:hover{
+.wiki .button-style:hover{
     text-decoration: none;
 }
 /*表单*/

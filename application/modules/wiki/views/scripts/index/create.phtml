@@ -1,20 +1,22 @@
 <?php
 $this->Scripts = <<<EOF
-<script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>        
-EOF;
-?>
+<script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>
 <script type="text/javascript">
     $(function(){
+        var content = $('#content').html();
         $('#title').click(function(){
             $(this).select();
-            $(this).css('color','#000')
-
+            $(this).css('color','#000')        
         });
+        
     });
 </script>
+EOF;
+?>
+
 
 <div class="wiki">
-    <form action="<?php echo $this->escape($this->form->getAction()) ?>"
+    <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
               method="<?php echo $this->escape($this->form->getMethod()) ?>"
               enctype="multipart/form-data">
         <table width="100%">

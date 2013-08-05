@@ -1,3 +1,8 @@
+<?php
+$this->Css = <<<EOF
+    <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents.css">        
+EOF;
+?>
 <div class='wiki'>
     <div class="detail">
         <h1 class="title">
@@ -9,7 +14,7 @@
             Last Update Time:<?php echo $this->data['update_time'] ?>&nbsp;|&nbsp;
             Update By:<?php echo $this->data['update_name'] ?>
         </h4>
-        <div class="content">
+        <div class="content cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
             <?php echo $this->data['content'] ?>
         </div>
         <div class="handle">
@@ -20,7 +25,15 @@
                         <td><a class="button-style" href="/wiki/index/edit/id/<?php echo $this->data['tid'] ?>">Edit this topic</a></td>
                         <td><a class="button-style" href="/wiki/index/history/id/<?php echo $this->data['tid'] ?>">Browse History</a></td>
                         <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id?>
-                        <?php if($this->data['creator_uid']===$uid):?><td><a class="button-style" href="/wiki/index/delete/id/<?php echo $this->data['tid'] ?>">Delete this topic</a></td><?php endif;?>
+                        <?php if($this->data['creator_uid']===$uid):?><td><a id="delete" class="button-style" href="/wiki/index/delete/id/<?php echo $this->data['tid'] ?>">Delete this topic</a></td><?php endif;?>
+                        <script type="text/javascript">
+                             $('#delete').click(function(){
+                                 if(confirm("Are you sure to delete this topic?")){
+                                     return true;
+                                 }
+                                 return false;
+                             });
+                        </script>
                     </tr>
                 </tbody>
             </table>
