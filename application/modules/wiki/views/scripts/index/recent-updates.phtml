@@ -5,18 +5,18 @@
 		<table width="80%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_0"] ?>">Date</a></td>
-					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Category</a></td>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Topic</a></td>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Contributor</a></td>
+					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Date</a></td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Category</a></td>
+					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_3"] ?>">Topic</a></td>
+					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_4"] ?>">Contributor</a></td>
 				</tr>
-				<?php if($this->contributor_array):?>
-					<?php foreach($this->contributor_array as $key => $val):?>
+				<?php if($this->recent_updates):?>
+					<?php foreach($this->recent_updates as $key => $val):?>
 						<tr class="row-1">
-							<td><?=$val['department_name']?></td>
-							<td><a href="/wiki/index/show-contributor/?userid=<?=$val['contributor_id']?>"><?=$val['contributor_name']?></a></td>
-							<td><a href="/wiki/index/contributions/?userid=<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
-							<td><a href="/wiki/index/contributions/?userid=<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
+							<td><?=$val['date_created']?></td>
+							<td><a href=""><?=$val['category_name']?></a></td>
+							<td><a href=""><?=$val['topic_title']?></a></td>
+							<td><a href=""><?=$val['contributor_name']?></a></td>
 						</tr>
 					<?php endforeach;?>			
 				<?php endif;?>
