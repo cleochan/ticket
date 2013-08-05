@@ -12,6 +12,14 @@
  */
 class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     protected $_name = 'wiki_contents';
+    protected $_sequence = false;  
+    protected $_referenceMap = array(  
+        'TopicsRef' => array(  
+            'columns'       => 'tid',  
+            'refTableClass' => 'Wiki_Model_DbTable_Topics',  
+            'refColumns'    => 'id'  
+        )  
+    );
     /**
      *
      * @var Zend_Db_Adapter_Abstract 
@@ -30,10 +38,10 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     }
     public function SetAsDefault($contentId,$topicId) {
         $this->__is_default = 0;
-        $where = $this->_db->quoteInto('is_default = 0 And tid = ?', $topicId);
+        $where = $this->_db->quoteInto('is_default = 1 And tid = ?', $topicId);
         $this->change($where);
         $this->__is_default = 1;
-        $where = $this->_db->quoteInto('is_default = 1 And id = ?', $contentId);
+        $where = $this->_db->quoteInto('id = ?', $contentId);
         $this->change($where);
     }
     public function Set($contentId) {

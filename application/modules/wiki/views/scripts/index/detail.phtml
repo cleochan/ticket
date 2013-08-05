@@ -1,17 +1,30 @@
 <div class='wiki'>
-    <h1>
+    <div class="detail">
+        <h1 class="title">
         <?php echo $this->data['title'] ?>
-    </h1>
-    <h4>
-        Author:<?php echo $this->data['realname'] ?>
-    </h4>
-    <h4>
-        Create Time:<?php echo $this->data['create_time'] ?>
-    </h4>
-    <h4>
-        Last Update Time:<?php echo $this->data['update_time'] ?>
-    </h4>
-    <div>
-        <?php echo $this->data['content'] ?>
+        </h1>
+        <h4 class="info">
+            Author:<?php echo $this->data['creator_name'] ?>&nbsp;|&nbsp;
+            Create Time:<?php echo $this->data['create_time'] ?>&nbsp;|&nbsp;
+            Last Update Time:<?php echo $this->data['update_time'] ?>&nbsp;|&nbsp;
+            Update By:<?php echo $this->data['update_name'] ?>
+        </h4>
+        <div class="content">
+            <?php echo $this->data['content'] ?>
+        </div>
+        <div class="handle">
+            <table>
+                <tbody>
+                    <tr>
+                        
+                        <td><a class="button-style" href="/wiki/index/edit/id/<?php echo $this->data['tid'] ?>">Edit this topic</a></td>
+                        <td><a class="button-style" href="/wiki/index/history/id/<?php echo $this->data['tid'] ?>">Browse History</a></td>
+                        <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id?>
+                        <?php if($this->data['creator_uid']===$uid):?><td><a class="button-style" href="/wiki/index/delete/id/<?php echo $this->data['tid'] ?>">Delete this topic</a></td><?php endif;?>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+<!--<pre><?=print_r($this->data)?></pre>-->

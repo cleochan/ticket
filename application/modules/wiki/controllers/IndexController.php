@@ -20,12 +20,18 @@ class Wiki_IndexController extends Zend_Controller_Action {
      * @var Wiki_Model_Detail 
      */
     private $_detailModel;
+    /**
+     *
+     * @var Zend_Db_Adapter_Abstract 
+     */
+    private $_db;
 
     public function init() {
         $this->_menu = new Menu();
         $this->_topicsModel = new Wiki_Model_DbTable_Topics();
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
+        $this->_db = Zend_Registry::get('db');
     }
 
     public function preDispatch() {
@@ -51,16 +57,72 @@ class Wiki_IndexController extends Zend_Controller_Action {
     public function detailAction(){
         $tid = $this->_request->get('id');
         $data = $this->_detailModel->getDetail($tid);
-        $this->view->data = $data[0];
+        $data['tid'] =$tid; 
+        $this->view->data = $data;
     } 
-
     public function indexAction() {
         $this->view->title = "Wiki";
+        //print_r($this->_topicsModel->findAllD());
     }
-
+    public function historyAction(){
+        $tid = $this->_request->get('id');
+        $this->view->data = $this->_detailModel->getDetails($tid);
+    }
+    public function deleteAction(){
+        $tid = $this->_request->get('id');
+        $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
+        $this->_detailModel->deleteTopic($uid, $tid);
+        $this->_redirect('/wiki/index/index');
+    }
+    public function editAction() {
+            $form = new Wiki_Form_Create();
+            $this->view->title = "Wiki";
+            $tid = $this->_request->get('id');
+            $this->view->tid = $tid;
+            $hidden = new Zend_Form_Element_Hidden('tid');
+            $hidden->setValue($tid)->setName('tid');
+            $form->addElement($hidden);
+            $detail = $this->_detailModel->getDetail($tid);
+            $content = $form->getElement('content');
+            $title = $form->getElement('title');
+            $category = $form->getElement('category');
+            $content->setValue($detail['content']);
+            $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
+//            $category->setValue($detail['cid'])->setAttrib('disabled', 'ture');
+            $category->setValue($detail['cid']);
+            $this->view->form = $form;
+        if ($this->_request->isPost()) {
+            if ($form->isValidPartial($_POST)) {
+                $userinfo = Zend_Auth::getInstance()->getStorage()->read();
+                $tid = $this->_request->getPost('tid');
+                if ($tid !== NULL) {
+                    $where = $this->_db->quoteInto('id=?', $tid);
+                    $this->_topicsModel->__cid = $this->_request->getPost('category');
+//                    $this->_topicsModel->__title = $this->_request->getPost('title');
+                    $this->_topicsModel->change($where);
+                    
+                    $this->_contentsModel->__tid = $tid;
+                    $this->_contentsModel->__content = $this->_request->getPost('content');
+                    $this->_contentsModel->__uid = $userinfo->id;
+                    $this->_contentsModel->__attachment = './';
+                    $this->_contentsModel->__is_default = 1;
+                    $this->_contentsModel->__status = 1;
+                    $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
+                    $insertIdC = $this->_contentsModel->create();
+                    $insertIdC!=FALSE?$this->_contentsModel->SetAsDefault($insertIdC,$tid):  die('insert error');
+                    $this->view->message = 'The data was saved';
+//                    $this->_redirect('/wiki/index/detail/id/'.$tid);
+                } else {
+                    die('insert error');
+                }
+            }
+        }else{
+            
+        }
+        //print_r($this->_topicsModel->findAllD());
+    }
     public function createAction() {
         $form = new Wiki_Form_Create();
-        $form->getElement('title');
         $this->view->form = $form;
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
@@ -80,7 +142,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
                     $this->_contentsModel->__is_default = 1;
                     $this->_contentsModel->__status = 1;
                     $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
-                    $insertIdC = $this->_contentsModel->create();
+                    $this->_contentsModel->create();
                     //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
                     $this->_redirect('/wiki/index/detail/id/'.$insertId);
                 } else {

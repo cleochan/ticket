@@ -217,7 +217,10 @@ line-height:21px;
 padding-left:16px;
 background:url(/images/star/withoutstar.png) no-repeat left center
 }
-.wiki{}
+.wiki{
+    width:1024px;
+    margin: 0px auto 0px auto;
+}
 .wiki a:hover{
    text-decoration: underline; 
 }
@@ -237,6 +240,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki{
     
 }
+.wiki .message{
+    padding: 10px;
+}
 .wiki #title{
     height:30px;
     width:100%;
@@ -249,9 +255,30 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     height:34px;
     width:100%;
 }
-.wiki #submit{
+.wiki #submit,.wiki .back{
     width:150px;
     height:38px;
+}
+.wiki .detail{
+/*     padding: 10px 20px;
+    -webkit-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.5);    
+    box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.5);*/
+}
+.wiki .detail .title{
+    text-align: center;
+}
+.wiki .detail .info{
+    text-align: center;
+}
+.wiki .detail .button-style{
+    display:block;
+    width:120px;
+    height:35px;
+    line-height: 35px;
+    text-align: center;
+}
+.wiki .detail .button-style:hover{
+    text-decoration: none;
 }
 /*表单*/
 .wiki input[type="text"],.wiki input[type="password"],.wiki select,.wiki textArea
@@ -305,9 +332,14 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     vertical-align: middle;
     cursor: pointer;
+    -webkit-transition:background-color .5s ease-in;
+    -moz-transition: background-color .5s ease-in;
+    -o-transition: background-color .5s ease-in;
+    -ms-transition: background-color .5s ease-in;
+    transition: background-color .5s ease-in;
 }
 
 .wiki input[type="submit"]:hover,.wiki input[type="button"]:hover,.wiki button:hover,.wiki .button-style:hover
 {
-    background-color:#ccccff;
+    background-color:chartreuse;
 }

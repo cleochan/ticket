@@ -1,0 +1,54 @@
+<?php
+$this->Scripts = <<<EOF
+<script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>        
+EOF;
+?>
+<script type="text/javascript">
+    $(function(){
+        $('#title').click(function(){
+            $(this).select();
+            $(this).css('color','#000')
+
+        });
+    });
+</script>
+
+<div class="wiki">
+    <form action="<?php echo $this->escape($this->form->getAction()) ?>"
+              method="<?php echo $this->escape($this->form->getMethod()) ?>"
+              enctype="multipart/form-data">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td valign="top"><?php echo $this->form->title; ?></td>
+                    <td valign="top"><?php echo $this->form->category; ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <?php echo $this->form->content; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->form->tid; ?></td>
+                    <td style="text-align: right;"><button class="back" onclick="locaction.href='/wiki/index/detail/id/<?php echo $this->tid; ?>'">back to topic</button><?php echo $this->form->submit; ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <script type="text/javascript">
+        CKEDITOR.replace('content',{
+            extraPlugins: 'autogrow',
+            height:'500px',
+            filebrowserBrowseUrl: '/scripts/ckfinder/ckfinder.html',
+            filebrowserImageBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Images',
+            filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
+            filebrowserUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+            filebrowserImageUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+            filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+        });
+    </script>
+    <?php if(isset($this->message)):?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+        <script></script>
+    <?php endif;?>
+</div>

@@ -39,7 +39,7 @@ abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
         if(count($this->data)<=0) throw new ErrorException('argument $data is empty');
         $result = $this->insert($this->data);
         unset($this->data);
-        return $result;
+        return $this->getAdapter()->lastInsertId();
     }
     
     public function change($where) {

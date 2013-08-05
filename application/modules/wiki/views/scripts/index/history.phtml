@@ -1,0 +1,23 @@
+<div class="wiki">
+    <div class="history">
+<!--        <pre><?=print_r($this->data)?></pre>-->
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td>Version</td>
+                    <td>Update Time</td>
+                    <td>Contributor</td>
+                    <td>Topic</td>
+                </tr>
+                <?php foreach ($this->data as $value):?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><?php echo $value['update_time'] ?></td>
+                    <td><?php echo $value['update_name'] ?></td>
+                    <td><a href="/wiki/index/detail/id/<?php echo $value['id'];?>"><?php echo $value['title'] ?></a></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
+</div>
