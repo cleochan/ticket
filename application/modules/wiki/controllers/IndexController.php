@@ -32,7 +32,9 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-	$this->_contributors = new Wiki_Model_Contributor();
+		$this->_contributors = new Wiki_Model_Contributor();
+		$this->_categories = new Wiki_Model_DbTable_Category();
+
     }
 
     public function preDispatch() {
@@ -172,7 +174,6 @@ class Wiki_IndexController extends Zend_Controller_Action {
     function contributorAction() {
         $params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
 		$tableKeys = array(	1=>"dptname", 2=>"name", 3=>"contribution" );
 
@@ -199,7 +200,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
        															   $this->getRequest()->getParam('sortOrder'));
         
         $this->view->current_page = $this->getRequest()->getParam('page');
-		$this->view->pages = $this->_contributors->getPageCount("wiki_contributors", 0, "uid"); 
+		$this->view->pages = $this->_contributors->getPageCount("wiki_contributors", "uid"); 
 
 		for($p = 1; $p<$this->view->pages+1; $p++){
 			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
@@ -207,13 +208,11 @@ class Wiki_IndexController extends Zend_Controller_Action {
 
 		$this->view->page_urls = $page_urls;
         $this->view->contributor_array = $contributor_array;
-        $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
     }
 
 	function contributionsAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Contributions";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 		
 		$tableKeys = array(	1=>"title", 2=>"datecreated");
 
@@ -247,7 +246,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 																				$this->getRequest()->getParam('page'), 
 																				$this->getRequest()->getParam('sortBy'), 
 																				$this->getRequest()->getParam('sortOrder'));
-		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", $uid, "id", "uid"); 
+		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", "id", $uid, "uid"); 
 		
 		for($p = 1; $p<$this->view->pages+1; $p++){
 			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
@@ -255,14 +254,11 @@ class Wiki_IndexController extends Zend_Controller_Action {
 
 		$this->view->page_urls = $page_urls;
 		$this->view->all_topics = $contributed_topics;
-		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
-
 	}
 
 	function recentUpdatesAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Recent Updates";
-		$this->view->menu = $this->_menu->GetWikiMenu($params['action']);
 
 		$tableKeys = array(	1=>"datecreated", 2=>"cname", 3=>"title", 4=>"name");
 		
@@ -277,6 +273,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		if(!isset($params['sortOrder'])){
 			$this->getRequest()->setParam('sortOrder', "ASC");
 		}
+		
 		$params = $this->_request->getParams(); //Get params again once missing values are set
 		$page_urls = array();
 		for($i=1; $i<count($tableKeys)+1; $i++){
@@ -286,7 +283,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 																 $this->getRequest()->getParam('sortBy'), 
 																 $this->getRequest()->getParam('sortOrder'));
 																 
-		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", 0, "id"); 
+		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", "id"); 
 		
 		for($p = 1; $p<$this->view->pages+1; $p++){
 			$page_urls["page_".$p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
@@ -295,8 +292,18 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$this->view->page_urls = $page_urls;
 		$this->view->current_page = $this->getRequest()->getParam('page');
 		$this->view->recent_updates = $recent_updates;
-		$this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
 	}
 
+	function categoryAction(){
+		//$this->_categories->create(0, "ZendTest3", 1);
+		$params = $this->_request->getParams();
+	    $this->view->title = "Category";
+		$parentCategories = $this->_categories->getParentCategories();
+		$subCategories = $this->_categories->getSubCategories();	
+		
+	//	sort($categories);
+		$this->view->parentCategories = $parentCategories;
+		$this->view->subCategories = $subCategories;
+	}
 }
 

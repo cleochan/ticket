@@ -640,7 +640,7 @@ class Menu {
         switch ($param) {
             case "recent-updates":
                 $str .= " <a href='/wiki/index/recent-updates/'><strong>Recent Updates</strong></a>";
-                $str .= " | <a href='/wiki/index/index/category/'>Category</a>";
+                $str .= " | <a href='/wiki/index/category/'>Category</a>";
                 $str .= " | <a href='/wiki/index/contributor/'>Contributor</a>";
                 $str .= " | <a href='/wiki/index/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/index/create/'>Create Topic</a>";

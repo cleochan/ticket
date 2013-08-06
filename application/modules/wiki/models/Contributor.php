@@ -6,8 +6,8 @@ class Wiki_Model_Contributor{
 	
 	function __construct(){
         $this->db = Zend_Registry::get("db");
-				define("RECORDS_PER_PAGE", 20);
-		define("LATEST_TOPICS", 10);
+		defined('RECORDS_PER_PAGE') || define("RECORDS_PER_PAGE", 20);
+		defined('LATEST_TOPICS') || define("LATEST_TOPICS", 10);
 		$this->navHelper = $this->getNavHelper();
     }
 	
@@ -173,10 +173,23 @@ class Wiki_Model_Contributor{
 		return $result;
 	}
 	
-	function getPageCount($dbName, $id=0, $idName="", $searchCol=""){
+	/**
+	 * Get Page CountFunction
+	 * 
+	 * Finds the number of navigation pages needed. Uses row per page limit specified by constant RECORDS_PER_PAGE.
+	 * 
+	 * @param string $tableName - Database Table name, must match exactly
+	 * @param integer $id - Numeric value to be found if using a Where clause. No need to specify this if getting all rows.
+	 * @param string $idName - Table column to count rows of.
+	 * @param string $searchCol - Table column for Where clause. Only specify if limiting page count to specific criteria, such as a particular user ID.
+	 * 
+	 * @return integer $pagesFound
+	 * @author Jonathan Coupe
+	 */	
+	function getPageCount($tableName, $idName="", $id=0, $searchCol=""){
 		
 		$getPages = $this->db->select();
-		$getPages->from( $dbName." as t", array("COUNT(".$idName.") as count"));
+		$getPages->from( $tableName." as t", array("COUNT(".$idName.") as count"));
 		if((!$id==0)&&(!$idName==="")){
 			$getPages->where("t.".$searchCol." = ?", $id);
 		}
