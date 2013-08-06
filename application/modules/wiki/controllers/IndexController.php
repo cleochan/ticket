@@ -34,7 +34,14 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
 	$this->_contributors = new Wiki_Model_Contributor();
     }
-
+    public function indexAction() {
+        $this->view->title = "Wiki";
+        $suc = $this->_request->get('msg');
+        if($suc==1){
+            $this->view->message = 'The topic is deleted successfully';
+        }
+        $this->view->data = $this->_detailModel->getTopics();
+    }
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
@@ -57,23 +64,43 @@ class Wiki_IndexController extends Zend_Controller_Action {
     }
     public function detailAction(){
         $tid = $this->_request->get('id');
+        $suc = $this->_request->get('msg');
+        if($suc==1){
+            $this->view->message = 'The topic is created as you see :)';
+        }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] =$tid; 
         $this->view->data = $data;
     } 
-    public function indexAction() {
-        $this->view->title = "Wiki";
-        //print_r($this->_topicsModel->findAllD());
-    }
+
     public function historyAction(){
         $tid = $this->_request->get('id');
         $this->view->data = $this->_detailModel->getDetails($tid);
+        $this->view->tid = $tid;
+    }
+    public function revertAction(){
+        $tid = $this->_request->get('id');
+        $vid = $this->_request->get('version');
+        $data = $this->_detailModel->getDetailWithVersion($tid,$vid);
+        $prevId = $this->_detailModel->getPreviousVersionId($tid,$vid);
+        $nextId = $this->_detailModel->getNextVersionId($tid,$vid);
+        $data['tid'] =$tid; 
+        $data['prevId'] = $prevId;
+        $data['nextId'] = $nextId;
+        $this->view->data = $data;
+    }
+    public function setDefaultAction(){
+        $tid = $this->_request->get('id');
+        $vid = $this->_request->get('version');
+        $this->_contentsModel->SetAsDefault($vid, $tid);
+        $url = '/wiki/index/revert/id/'.$tid.'/version/'.$vid;
+        $this->_redirect($url);
     }
     public function deleteAction(){
         $tid = $this->_request->get('id');
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
-        $this->_redirect('/wiki/index/index');
+        $this->_redirect('/wiki/index/index/msg/1');
     }
     public function editAction() {
             $form = new Wiki_Form_Create();
@@ -145,7 +172,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
                     $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
                     $this->_contentsModel->create();
                     //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
-                    $this->_redirect('/wiki/index/detail/id/'.$insertId);
+                    $this->_redirect('/wiki/index/detail/id/'.$insertId.'/msg/1');
                 } else {
                     die('insert error');
                 }

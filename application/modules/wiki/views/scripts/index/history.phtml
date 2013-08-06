@@ -1,6 +1,14 @@
 <div class="wiki">
     <div class="history tb-style">
 <!--        <pre><?//=print_r($this->data)?></pre>-->
+        <div class="tool-bar" style="margin-bottom: 15px;">
+            <div class="fr">
+                <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
+                <a href="/wiki/index/detail/id/<?php echo  $this->tid; ?>" style="line-height: 16px;">Back to topic</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
         <table width="100%" cellpadding="0" cellspacing="0">
             <tbody>
                 <tr>
@@ -8,13 +16,15 @@
                     <th>Update Time</th>
                     <th>Contributor</th>
                     <th>Topic</th>
+                    <th>Show</th>
                 </tr>
                 <?php foreach ($this->data as $value):?>
                 <tr>
                     <td><?php echo $value['version_id'] ?></td>
                     <td><?php echo $value['update_time'] ?></td>
                     <td><?php echo $value['update_name'] ?></td>
-                    <td><a href="/wiki/index/detail/id/<?php echo $value['id'];?>"><?php echo $value['title'] ?></a></td>
+                    <td><a target="_blank" title="Click to view this version" href="/wiki/index/revert/id/<?php echo $value['id'];?>/version/<?php echo $value['version_id'];?>"><?php echo $value['title'] ?></a></td>
+                    <td align="center"><?php if($value['is_default']) echo '<span class="ui-icon ui-icon-circle-check" style="margin: 0 auto;"></span>';?></td>
                 </tr>
                 <?php endforeach;?>
             </tbody>

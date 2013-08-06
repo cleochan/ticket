@@ -1,9 +1,12 @@
 <?php
 $this->Css = <<<EOF
-    <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents.css">        
+    <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents_view.css">        
 EOF;
 ?>
 <div class='wiki'>
+    <?php if(isset($this->message)):?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+    <?php endif;?>
     <div class="detail">
         <h1 class="title">
         <?php echo $this->data['title'] ?>

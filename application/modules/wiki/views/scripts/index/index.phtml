@@ -1,5 +1,30 @@
-<br /><br />
-<div id="view-content">
-        <h1>This is wiki module</h1>
-	<p>View script for controller <b>index</b> and script/action name <b>index</b></p>
+<div class="wiki">
+    <?php if(isset($this->message)):?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+    <?php endif;?>
+    <div class="index tb-style">
+<!--        <pre><?//=print_r($this->data)?></pre>-->
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <th>Topic</th>
+                    <th>Category</th>
+                    <th>Creator</th>
+                    <th>Create Time</th>
+                    <th>Last Update By</th>
+                    <th>Last Update Time</th>
+                </tr>
+                <?php foreach ($this->data as $value):?>
+                <tr>
+                    <td><a target="_blank" href="/wiki/index/detail/id/<?php echo $value['id'] ?>"><?php echo $value['title'] ?></a></td>
+                    <td><?php echo $value['cname'] ?></td>
+                    <td><?php echo $value['creator_name'] ?></td>
+                    <td><?php echo $value['create_time'] ?></td>
+                    <td><?php echo $value['update_time'] ?></td>
+                    <td><?php echo $value['update_name'] ?></td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
 </div>

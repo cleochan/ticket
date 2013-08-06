@@ -237,9 +237,11 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     margin: 0px;
 }
 
-.wiki{
-    
-}
+.wiki{}
+.wiki .mauto{margin-left: auto;margin-right: auto;}
+.wiki .clear{clear: both;}
+.wiki .fr{float: right;}
+.wiki .fl{float: left;}
 .wiki .tb-style table,.wiki .tb-style th,.wiki .tb-style td{
     padding: 0px;
     margin: 0px;
@@ -252,7 +254,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .tb-style table{
     padding: 0px;
     border: 1px solid #D8D8D8;
-    -webkit-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.4);  
+    -webkit-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.4);
+    box-shadow:  1px 1px 10px 0px rgba(0, 0, 0, 0.4);
 }
 .wiki .tb-style table th{
     color: rgb(85, 85, 85);
@@ -279,6 +283,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 }
 .wiki #title{
     height:30px;
+    line-height: 30px;
     width:100%;
     font-size: 18px;    
     padding-left: 5px;
@@ -287,6 +292,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki #category{
     font-size: 18px;
     height:34px;
+    line-height: 34px;
     width:100%;
 }
 .wiki #submit,.wiki .back{
@@ -301,8 +307,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .detail{
     margin-top: 20px;
      padding: 10px 20px;
-    -webkit-box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);    
-    box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow:  1px 1px 2px 1px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow:  1px 1px 2px 1px rgba(0, 0, 0, 0.3); 
+    box-shadow:  1px 1px 2px 1px rgba(0, 0, 0, 0.3);
 }
 .wiki .detail .title{
     text-align: center;
@@ -311,12 +318,15 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .detail .info{
     text-align: center;
 }
+.wiki .index{
+    margin-top: 20px;
+}
 .wiki .history{
     margin-top: 20px;
 }
 .wiki .button-style{
     display:block;
-    width:120px;
+    padding:0px 10px;
     height:35px;
     line-height: 35px;
     text-align: center;
@@ -376,14 +386,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     vertical-align: middle;
     cursor: pointer;
-    -webkit-transition:background-color .5s ease-in;
-    -moz-transition: background-color .5s ease-in;
-    -o-transition: background-color .5s ease-in;
-    -ms-transition: background-color .5s ease-in;
-    transition: background-color .5s ease-in;
 }
 
 .wiki input[type="submit"]:hover,.wiki input[type="button"]:hover,.wiki button:hover,.wiki .button-style:hover
 {
-    background-color:chartreuse;
+    background-color:#66cc00;
 }

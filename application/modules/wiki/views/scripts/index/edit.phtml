@@ -3,21 +3,27 @@ $this->Scripts = <<<EOF
 <script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>
 <script type="text/javascript">
     $(function(){
-        $('#title').click(function(){
+       /* $('#title').click(function(){
             $(this).select();
             $(this).css('color','#000')
 
+        });*/
+        var tosubmit=false;
+        $(window).bind('beforeunload ',function() {
+            if(CKEDITOR.instances.content.checkDirty()&&tosubmit==false){
+               return "Your edition are not be saved, are you sure to leave this page?";
+            }
         });
-
-        $('#content').focus();
         $('#topic_form').submit(function(){
+            tosubmit=true;
             if(!CKEDITOR.instances.content.checkDirty()){
                 alert('It seem no need to submit,because the content do not change:)');
+                tosubmit=false;
                 return false;
             } else {
                 return true;
             }
-        }); 
+        });
     });
 </script>
 EOF;
@@ -27,8 +33,15 @@ EOF;
 <div class="wiki">
     <?php if(isset($this->message)):?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
-        <script></script>
     <?php endif;?>
+    <div class="tool-bar" style="margin-top: 15px;margin-right:6px;">
+        <div class="fr">
+            <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
+            <a href="/wiki/index/detail/id/<?php echo $this->tid; ?>" style="line-height: 16px;">Back to topic</a>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
     <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
               method="<?php echo $this->escape($this->form->getMethod()) ?>"
               enctype="multipart/form-data">
@@ -51,7 +64,7 @@ EOF;
         </table>
     </form>
     <script type="text/javascript">
-        CKEDITOR.replace('content',{
+        var edit = CKEDITOR.replace('content',{
             extraPlugins: 'autogrow',
             height:'500px',
             filebrowserBrowseUrl: '/scripts/ckfinder/ckfinder.html',
@@ -59,7 +72,7 @@ EOF;
             filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
             filebrowserUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
             filebrowserImageUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
-            filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+            filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
         });
     </script>
 </div>
