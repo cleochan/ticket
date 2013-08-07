@@ -94,8 +94,9 @@ class Wiki_IndexController extends Zend_Controller_Action {
     public function setDefaultAction(){
         $tid = $this->_request->get('id');
         $vid = $this->_request->get('version');
-        $this->_contentsModel->SetAsDefault($vid, $tid);
-        $url = '/wiki/index/revert/id/'.$tid.'/version/'.$vid;
+        $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
+        $newcid = $this->_contentsModel->Revert($vid, $uid);
+        $url = '/wiki/index/revert/id/'.$tid.'/version/'.$newcid;
         $this->_redirect($url);
     }
     public function deleteAction(){
@@ -109,39 +110,48 @@ class Wiki_IndexController extends Zend_Controller_Action {
             $this->view->title = "Wiki";
             $tid = $this->_request->get('id');
             $this->view->tid = $tid;
+            $detail = $this->_detailModel->getDetail($tid);
+            /*saved the topic id to post*/
             $hidden = new Zend_Form_Element_Hidden('tid');
             $hidden->setValue($tid)->setName('tid');
             $form->addElement($hidden);
-            $detail = $this->_detailModel->getDetail($tid);
+            
+             /*saved the version id to post*/
+            $hiddenv = new Zend_Form_Element_Hidden('vid');
+            $hiddenv->setValue($detail['vid'])->setName('vid');
+            $form->addElement($hiddenv);
+            
+            /* set value to form*/
             $content = $form->getElement('content');
             $title = $form->getElement('title');
             $category = $form->getElement('category');
             $content->setValue($detail['content']);
             $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
-//            $category->setValue($detail['cid'])->setAttrib('disabled', 'ture');
             $category->setValue($detail['cid']);
+            
             $this->view->form = $form;
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
                 $userinfo = Zend_Auth::getInstance()->getStorage()->read();
                 $tid = $this->_request->getPost('tid');
                 if ($tid !== NULL) {
+                    /* if the category change,save it*/
                     $where = $this->_db->quoteInto('id=?', $tid);
                     $this->_topicsModel->__cid = $this->_request->getPost('category');
-//                    $this->_topicsModel->__title = $this->_request->getPost('title');
                     $this->_topicsModel->change($where);
                     
+                    /* create a new version*/
                     $this->_contentsModel->__tid = $tid;
                     $this->_contentsModel->__content = $this->_request->getPost('content');
                     $this->_contentsModel->__uid = $userinfo->id;
                     $this->_contentsModel->__attachment = './';
                     $this->_contentsModel->__is_default = 1;
                     $this->_contentsModel->__status = 1;
+                    $this->_contentsModel->__preversion_id = $this->_request->getPost('vid');
                     $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
                     $insertIdC = $this->_contentsModel->create();
                     $insertIdC!=FALSE?$this->_contentsModel->SetAsDefault($insertIdC,$tid):  die('insert error');
                     $this->view->message = 'The data was saved';
-//                    $this->_redirect('/wiki/index/detail/id/'.$tid);
                 } else {
                     die('insert error');
                 }

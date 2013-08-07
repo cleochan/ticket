@@ -2,10 +2,10 @@
 
 class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract
 {
-	protected $_db;
+    protected $_db;
     protected $_name = 'wiki_category';
-	protected $_primary = 'id';
-	protected $_sequence = true;
+    protected $_primary = 'id';
+    protected $_sequence = true;
     protected $__parent_id;
     protected $__cname;
     protected $__status;

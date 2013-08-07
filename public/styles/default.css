@@ -292,7 +292,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki #category{
     font-size: 18px;
     height:34px;
-    line-height: 34px;
+    line-height: 28px;
     width:100%;
 }
 .wiki #submit,.wiki .back{

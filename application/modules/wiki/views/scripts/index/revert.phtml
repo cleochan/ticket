@@ -11,6 +11,14 @@ EOF;
                 <a href="/wiki/index/history/id/<?php echo  $this->data['id']; ?>" style="line-height: 16px;">Back to history</a>
                 <div class="clear"></div>
             </div>
+            <div class="fl">
+                <div class="fl strong" style="line-height: 16px;margin-right: 10px;">Version ID:<?php echo  $this->data['version_id'];?> </div>
+                <?php if($this->data['is_default']==TRUE): ?>
+                <span class="ui-icon ui-icon-circle-check" title="Current Version"></span>
+                <?php endif;?>
+                
+                <div class="clear"></div>
+            </div>
             <div class="clear"></div>
         </div>
         <h1 class="title">

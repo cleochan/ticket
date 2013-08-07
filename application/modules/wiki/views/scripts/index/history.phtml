@@ -16,6 +16,7 @@
                     <th>Update Time</th>
                     <th>Contributor</th>
                     <th>Topic</th>
+                    <th>From</th>
                     <th>Show</th>
                 </tr>
                 <?php foreach ($this->data as $value):?>
@@ -23,7 +24,8 @@
                     <td><?php echo $value['version_id'] ?></td>
                     <td><?php echo $value['update_time'] ?></td>
                     <td><?php echo $value['update_name'] ?></td>
-                    <td><a target="_blank" title="Click to view this version" href="/wiki/index/revert/id/<?php echo $value['id'];?>/version/<?php echo $value['version_id'];?>"><?php echo $value['title'] ?></a></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['version_id']));?>"><?php echo $value['title'] ?></a></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['preversion_id']));?>"><?php echo $value['preversion_id'] ?></a></td>
                     <td align="center"><?php if($value['is_default']) echo '<span class="ui-icon ui-icon-circle-check" style="margin: 0 auto;"></span>';?></td>
                 </tr>
                 <?php endforeach;?>

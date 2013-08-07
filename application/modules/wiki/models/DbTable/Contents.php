@@ -29,6 +29,7 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     protected $__uid;
     protected $__create_time;
     protected $__content;
+    protected $__preversion_id;
     protected $__attachment;
     protected $__is_default;
     protected $__status;
@@ -44,7 +45,24 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
         $where = $this->_db->quoteInto('id = ?', $contentId);
         $this->change($where);
     }
-    public function Set($contentId) {
+    public function Revert($contentId,$uid) {
+        $select = $this->select();
+        $select->from($this->_name, array('tid', 'uid', 'create_time','content','is_default',`status`,'preversion_id'))
+                ->where('id=?',$contentId);
+        $row = $this->fetchRow();
+        $this->__uid = $uid;
+        $this->__tid = $row->tid;
+        $this->__status = $row->status;
+        $this->__preversion_id = $contentId;
+        $this->__create_time = date('Y-m-d H:i:s');
+        $this->__content = $row->content;
+        $this->__is_default = 0;
+        $this->create();
+        $insertId = $this->_db->lastInsertId();
+        $this->SetAsDefault($insertId, $row->tid);
+        return $insertId;
+    }
+    public function Clear($contentId) {
         $this->__content = '7777777777777777777777777777';
         $where = $this->_db->quoteInto('id = ?', $contentId);
         $this->change($where);
