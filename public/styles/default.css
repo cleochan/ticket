@@ -219,7 +219,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 }
 .wiki{
     width:1024px;
+    min-height: 350px;
     margin: 0px auto 0px auto;
+    position: relative;
 }
 .wiki a:hover{
    text-decoration: underline; 
@@ -395,4 +397,23 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 
 html body div#view-content.wiki form#category_form table.category_table tbody tr td.element{
 	width: 75%;
+}
+
+html body div#view-content.wiki div#category_list {
+	position: relative;
+	min-width: 512px;
+	max-width: 100%;
+	height: auto;
+	float:left;
+}
+
+html body div#view-content.wiki div#edit_form {
+	position: relative;
+	min-width: 512px;
+	height: auto;
+	float:right;
+}
+
+.wiki .buttonMenuBottom{
+	position: relative;
 }

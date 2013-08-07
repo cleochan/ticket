@@ -52,9 +52,7 @@ class Wiki_Form_AddCategory extends Zend_Form {
             )
         ));
 		
-		$this->addElement('submit', 'back', array(
-			'label' => 'Back',
-			'attribs' => array ('class' => 'button-style'),
+		$this->addElement('hidden', 'category_id', array(
             'decorators' => $this->EmptyDecorators
         ));
 		

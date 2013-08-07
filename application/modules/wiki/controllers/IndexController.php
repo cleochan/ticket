@@ -326,8 +326,8 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$params = $this->_request->getParams();
 	    $this->view->title = "Category";
 		
-		$parentCategories = $this->_categories->getParentCategories();
-		$subCategories = $this->_categories->getSubCategories();	
+		$parentCategories = $this->_categories->getCategories(false, true);
+		$subCategories = $this->_categories->getCategories(true, true);	
 		
 		$this->view->parentCategories = $parentCategories;
 		$this->view->subCategories = $subCategories;
@@ -342,10 +342,31 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		    if ($this->_request->isPost()) {
             	if ($form->isValidPartial($_POST)) {
 						$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-					    $this->view->message = 'Category Added. Returning to Categories..';
+					    //$this->view->message = 'Category Added. Returning to Categories..';
                    		$this->_redirect('/wiki/index/category');
 					}
 			}
 	}
+	
+	function editCategoryAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Edit Category";
+		$form = new Wiki_Form_AddCategory();
+		$parentCategories = $this->_categories->getCategories(false);
+		$subCategories = $this->_categories->getCategories(true);	
+		
+		$this->view->parentCategories = $parentCategories;
+		$this->view->subCategories = $subCategories;
+		
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+						$this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+					   // $this->view->message = 'Category Editted Successfully. Returning to Categories..';
+                   		$this->_redirect('/wiki/index/category');
+					}
+			}
+	}
+	
 }
 

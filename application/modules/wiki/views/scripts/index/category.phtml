@@ -2,7 +2,7 @@
 <div id="view-content" class='wiki'>
 	<div class='content'>
 	    <h1 align="center">Categories</h1>
-		<div style="margin-left:10%">
+		<div id="category_list">
 			<ol>
 					<?php if($this->parentCategories):?>
 						<?php foreach($this->parentCategories as $key => $val):?>
@@ -19,11 +19,21 @@
 						<?php endforeach;?>	
 					<?php endif;?>		
 			</ol>
-		</div>
-		<div style="margin-left:20%">
-			<a class="button-style" href="/wiki/index/add-category">Add Category</a>
-			<a class="button-style" href="">Edit Category</a> 
-			<a class="button-style" href="">Remove Category</a>
+			
+			<div align="bottom" valign="bottom" class="buttonMenuBottom">
+				<table width="80%" align="center" cellspacing="1">
+					<tbody>
+						<tr>
+							<td><a class="button-style" href="/wiki/index/add-category">Add Category</a></td>
+							<td><a class="button-style" href="/wiki/index/edit-category">Edit Category</a></td>
+							<td><a class="button-style" href="/wiki/index/delete-category">Remove Category</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+
+	
+	
 </div>
