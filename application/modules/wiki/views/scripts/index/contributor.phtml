@@ -13,8 +13,8 @@
 					<?php foreach($this->contributor_array as $key => $val):?>
 						<tr class="row-1">
 							<td><?=$val['department_name']?></td>
-							<td><a href="/wiki/index/show-contributor/?userid=<?=$val['contributor_id']?>"><?=$val['contributor_name']?></a></td>
-							<td><a href="/wiki/index/contributions/?userid=<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
+							<td><a href="/wiki/index/show-contributor/userid/<?=$val['contributor_id']?>"><?=$val['contributor_name']?></a></td>
+							<td><a href="/wiki/index/contributions/userid/<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
 						</tr>
 					<?php endforeach;?>			
 				<?php endif;?>

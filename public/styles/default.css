@@ -390,5 +390,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 
 .wiki input[type="submit"]:hover,.wiki input[type="button"]:hover,.wiki button:hover,.wiki .button-style:hover
 {
-    background-color:#66cc00;
+    background-color:chartreuse;
+}
+
+html body div#view-content.wiki form#category_form table.category_table tbody tr td.element{
+	width: 75%;
 }

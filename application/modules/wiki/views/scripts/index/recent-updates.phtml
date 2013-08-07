@@ -14,7 +14,7 @@
 					<?php foreach($this->recent_updates as $key => $val):?>
 						<tr class="row-1">
 							<td><?=$val['date_created']?></td>
-							<td><a href=""><?=$val['category_name']?></a></td>
+							<td><a href=""><?=$val['parent_name']?> > <?=$val['category_name']?></a></td>
 							<td><a href=""><?=$val['topic_title']?></a></td>
 							<td><a href="/wiki/index/show-contributor/?userid=<?=$val['user_id']?>"><?=$val['contributor_name']?></a></td>
 						</tr>

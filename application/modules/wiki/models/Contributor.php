@@ -148,7 +148,8 @@ class Wiki_Model_Contributor{
 		$select->from("users as u", array("u.realname as name", "u.id as userid"));
 		$select->joinLeft("wiki_topics as t", "u.id=t.uid", array("title"));
 		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("c.id as commentid", "create_time as datecreated"));
-		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
+		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname", "ct.id as subcatid"));
+		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("u.id = t.uid");
 		if($sortBy!=""){
 			$select->order($sortBy . " " . $order);
@@ -165,6 +166,7 @@ class Wiki_Model_Contributor{
             $temp['date_created'] = $val['datecreated'];
             $temp['topic_title'] = $val['title'];
  			$temp['category_name'] = $val['catname'];
+			$temp['parent_name'] = $val['parent'];
 			$temp['comment_id'] = $val['commentid'];
 			$temp['user_id'] = $val['userid'];
 			$result[] = $temp;
