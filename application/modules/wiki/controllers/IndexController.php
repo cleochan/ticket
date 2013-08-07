@@ -59,7 +59,6 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $get_title = new Params();
         $this->view->system_title = $get_title->GetVal("system_title");
         $this->view->system_version = $get_title->GetVal("system_version");
-
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
@@ -235,6 +234,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 
 		$this->view->page_urls = $page_urls;
         $this->view->contributor_array = $contributor_array;
+		
     }
 
 	function contributionsAction(){
@@ -325,12 +325,27 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		//$this->_categories->create(0, "ZendTest3", 1);
 		$params = $this->_request->getParams();
 	    $this->view->title = "Category";
+		
 		$parentCategories = $this->_categories->getParentCategories();
 		$subCategories = $this->_categories->getSubCategories();	
 		
-	//	sort($categories);
 		$this->view->parentCategories = $parentCategories;
 		$this->view->subCategories = $subCategories;
+	//var_dump($this->getRequest());
+	}
+	
+	function addCategoryAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Add Category";
+		$form = new Wiki_Form_AddCategory();
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+						$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+					    $this->view->message = 'Category Added. Returning to Categories..';
+                   		$this->_redirect('/wiki/index/category');
+					}
+			}
 	}
 }
 
