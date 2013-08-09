@@ -76,14 +76,17 @@ class Wiki_TopicController extends Zend_Controller_Action {
                 $tid = $this->_request->getParam('id');
                 $content = $this->_request->getPost('content');
                 $commentModel->AddComment($tid, $uid, $content);
+                $contentEle = $form->getElement('content');
+                $contentEle->setValue('');
+                $this->_redirect('/wiki/topic/detail/id/'.$tid.'/#comments');
             }
         }
         $this->view->form = $form;
         $tid = $this->_request->get('id');
         $suc = $this->_request->get('msg');
-        if ($suc == 1) {
-            $this->view->message = 'The topic is created as you see :)';
-        }
+//        if ($suc == 1) {
+//            $this->view->message = 'The topic is created as you see :)';
+//        }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] = $tid;
         $this->view->data = $data;
@@ -182,12 +185,10 @@ class Wiki_TopicController extends Zend_Controller_Action {
             if ($form->isValidPartial($_POST)) {
                 //date_default_timezone_set('PRC');
                 $userinfo = Zend_Auth::getInstance()->getStorage()->read();
-                $this->_topicsModel->__title = $this->_request->getPost('title');
-                $this->_topicsModel->__uid = $userinfo->id;
-                $this->_topicsModel->__create_time = date('Y-m-d H:i:s');
-                $this->_topicsModel->__status = 1;
-                $this->_topicsModel->__cid = $this->_request->getPost('category');
-                $insertId = $this->_topicsModel->create();
+                $title = $this->_request->getPost('title');
+                $uid = $userinfo->id;
+                $cid = $this->_request->getPost('category');
+                $insertId = $this->_topicsModel->CreateTopic($title,$uid,$cid);
                 if ($insertId !== NULL) {
                     $content = $this->_request->getPost('content');
                     $uid = $userinfo->id;

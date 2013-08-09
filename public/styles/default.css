@@ -246,6 +246,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .line{
     border-top: solid 1px #EEEEEE;
 }
+.wiki .line.dashed{
+    border-top: dashed 1px #EEEEEE;
+}
 .wiki .shadow{
     -webkit-box-shadow:  1px 1px 3px 1px rgba(0, 0, 0, 0.3);
     -moz-box-shadow:  1px 1px 3px 1px rgba(0, 0, 0, 0.3); 
@@ -253,11 +256,20 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     background-color: #fff;
     behavior: url(/styles/PIE/PIE.htc);
 }
+.wiki .mb10{
+   margin-bottom: 10px;
+}
 .wiki .mr10{
    margin-right: 10px;
 }
 .wiki .mt15{
    margin-top: 15px;
+}
+.wiki .mt30{
+   margin-top: 30px;
+}
+.wiki .mb30{
+   margin-bottom: 30px;
 }
 .wiki .p15{
    padding: 15px;
@@ -350,6 +362,10 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki dd,.wiki dl,.wiki dt{
     margin: 0px;
     padding: 0px;
+}
+.wiki .comments dd{
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 .wiki .comments .username{
     margin: 0px;

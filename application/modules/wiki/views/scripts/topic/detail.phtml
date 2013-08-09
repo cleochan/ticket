@@ -45,8 +45,8 @@ EOF;
                 </tbody>
             </table>
         </div>
-        <div class="line mt15"></div>
-        <div class="comments">
+        <div class="line mt15 mb30"></div>
+        <div class="comments" id="comments">
             <h2 class="strong">Comments</h2>
             <div class="container">
                 <dl>
@@ -57,7 +57,7 @@ EOF;
                     <dd style="color:#555;">
                         <?php echo $value['content'];?>
                     </dd>
-                    <?php print_r();?>
+                    <div class="line dashed mb10"></div>
                 <?php endforeach;?>
                 </dl>
             </div>
