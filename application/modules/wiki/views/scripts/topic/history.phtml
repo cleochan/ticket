@@ -4,7 +4,7 @@
         <div class="tool-bar" style="margin-bottom: 15px;">
             <div class="fr">
                 <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
-                <a href="/wiki/index/detail/id/<?php echo  $this->tid; ?>" style="line-height: 16px;">Back to topic</a>
+                <a href="<?php echo $this->ActionUrl('detail',array('id'=>$this->tid));?>" style="line-height: 16px;">Back to topic</a>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
@@ -25,8 +25,22 @@
                     <td><?php echo $value['update_time'] ?></td>
                     <td><?php echo $value['update_name'] ?></td>
                     <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['version_id']));?>"><?php echo $value['title'] ?></a></td>
-                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['preversion_id']));?>"><?php echo $value['preversion_id'] ?></a></td>
-                    <td align="center"><?php if($value['is_default']) echo '<span class="ui-icon ui-icon-circle-check" style="margin: 0 auto;"></span>';?></td>
+                    <td>
+                        <a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['preversion_id']));?>">
+                            <?php if($value['preversion_id']): ?>
+                                <?php echo $value['preversion_id']?>
+                            <?php else:?>
+                                &nbsp;
+                            <?php endif;?>
+                        </a>
+                    </td>
+                    <td align="center">
+                        <?php if($value['is_default']):?> 
+                            <span class="ui-icon ui-icon-circle-check" style="margin: 0 auto;"></span>
+                        <?php else:?>
+                            &nbsp;
+                        <?php endif;?>
+                    </td>
                 </tr>
                 <?php endforeach;?>
             </tbody>

@@ -32,8 +32,8 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-		$this->_contributors = new Wiki_Model_Contributor();
-		$this->_categories = new Wiki_Model_DbTable_Category();
+        $this->_contributors = new Wiki_Model_Contributor();
+        $this->_categories = new Wiki_Model_DbTable_Category();
 
     }
     public function indexAction() {

@@ -99,14 +99,7 @@ var CKBUILDER_CONFIG = {
 	languages : {
 		'zh-cn' : 1,
 		'zh' : 1,
-		'en' : 1,
-	},
+		'en' : 1
+	}
         
-};
-CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here. For example:
-        config.language = 'en';
-	// config.uiColor = '#AADC6E';
-        config.height = '400px';
-        config.removePlugins = 'about,forms'
 };

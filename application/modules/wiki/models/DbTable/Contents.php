@@ -45,26 +45,39 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
         $where = $this->_db->quoteInto('id = ?', $contentId);
         $this->change($where);
     }
+    public function GetOneById($Id){
+        $rowset = $this->find($Id);
+        return $rowset[0];
+    }
+
     public function Revert($contentId,$uid) {
-        $select = $this->select();
-        $select->from($this->_name, array('tid', 'uid', 'create_time','content','is_default',`status`,'preversion_id'))
-                ->where('id=?',$contentId);
-        $row = $this->fetchRow();
-        $this->__uid = $uid;
-        $this->__tid = $row->tid;
-        $this->__status = $row->status;
-        $this->__preversion_id = $contentId;
-        $this->__create_time = date('Y-m-d H:i:s');
-        $this->__content = $row->content;
-        $this->__is_default = 0;
-        $this->create();
-        $insertId = $this->_db->lastInsertId();
-        $this->SetAsDefault($insertId, $row->tid);
+        $row = $this->GetOneById($contentId);
+        $tid = $row->tid;
+        $preversion_id = $contentId;
+        $content = $row->content;
+        $insertId = $this->CreateContent($tid, $uid, $content, $preversion_id, TRUE);
         return $insertId;
     }
-    public function Clear($contentId) {
-        $this->__content = '7777777777777777777777777777';
-        $where = $this->_db->quoteInto('id = ?', $contentId);
-        $this->change($where);
+    
+    public function CreateContent($tid,$uid,$content,$preversion_id,$is_set_default){
+        $this->__tid = $tid;
+        $this->__content = $content;
+        $this->__uid = $uid;
+        $this->__is_default = 0;
+        $this->__status = 1;
+        $this->__preversion_id = $preversion_id;
+        $this->__create_time = date('Y-m-d H:i:s');
+        $this->create();
+        if($is_set_default){
+            $insertId = $this->_db->lastInsertId();
+            $insertId != FALSE ? $this->SetAsDefault($insertId, $tid) : die('insert error');
+        }
+        return $insertId;
     }
+
+    public function Clear() {
+        $where = $this->_db->quoteInto('create_time<? AND is_default !=1',date('Y-m-1 00:00:00'));
+        $this->delete($where);
+    }
+    
 }

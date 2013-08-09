@@ -1,0 +1,36 @@
+<br /><br />
+<div id="view-content">
+        <h1 align="center">Recent Updates</h1>
+	<div>
+		<table width="80%" align="center" cellspacing="1">
+			<tbody>
+				<tr>
+					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Date</a></td>
+					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Category</a></td>
+					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_3"] ?>">Topic</a></td>
+					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_4"] ?>">Contributor</a></td>
+				</tr>
+				<?php if($this->recent_updates):?>
+					<?php foreach($this->recent_updates as $key => $val):?>
+						<tr class="row-1">
+							<td><?=$val['date_created']?></td>
+							<td><a href=""><?=$val['parent_name']?> > <?=$val['category_name']?></a></td>
+							<td><a href=""><?=$val['topic_title']?></a></td>
+							<td><a href="/wiki/index/show-contributor/?userid=<?=$val['user_id']?>"><?=$val['contributor_name']?></a></td>
+						</tr>
+					<?php endforeach;?>			
+				<?php endif;?>
+			</tbody>
+		</table>
+	</div>
+	<div align="right" style="margin-right: 10%">
+		<?php if($this->pages):
+				if($this->pages>2):$maxPageNav = $this->current_page + 3; else: $maxPageNav = $this->current_page; endif; ?>
+					<?php for($i = $this->current_page-3; $i<=$maxPageNav; $i++):?>
+						<?php if(($i > 0)&&($i <= $this->pages)):?>
+						<a href="<?php echo $this->page_urls["page_".$i] ?>"> <?= $i?></a>
+						<?php endif; ?>
+					<?php endfor;?>	
+		<?php endif; ?>
+	</div>
+</div>
