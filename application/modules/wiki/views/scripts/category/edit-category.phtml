@@ -1,0 +1,41 @@
+<script type="text/javascript" src="/scripts/category_modify.js"></script>
+		<br /><br />
+			<div id="view-content" class='wiki'>		
+				    <h1 align="center">Edit Category</h1>
+				   <div id="category_list"> 
+				   	<h3>Select Category to Edit</h3>
+					<?php if($this->categories):?>
+						<?php echo $this->categories; ?>
+					<?php endif;?>	
+				   </div>
+				 	<div id="edit_form">		   
+				    <form valign="top" align="center" id="category_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
+			              method="<?php echo $this->escape($this->form->getMethod()) ?>"
+			              enctype="multipart/form-data">
+					        <table align="center" class="category_table">
+					            <tbody>
+					                <tr>
+					                    <td id="categoryName"><?php echo $this->form->cname; ?></td>
+					                </tr>
+					             	<tr>
+					                    <td id="categoryStatus"><?php echo $this->form->status; ?></td>
+					                </tr>
+					                <tr>
+					                    <td id="categoryParentID"><?php echo $this->form->parent_id; ?></td>
+					                </tr>
+					                <tr>
+					                    <td id="categoryID"><?php echo $this->form->category_id; ?></td>
+					                </tr>
+					                <tr>
+					                	<td ><a class="button-style" href="/wiki/category">Back</a></td>
+					                    <td style="text-align: right;"><?php echo $this->form->submit; ?></td>
+					                </tr>
+					            </tbody>
+					        </table>
+				 </form>
+			</div>
+				 
+			</div>
+			
+
+

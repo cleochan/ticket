@@ -15,17 +15,14 @@ class Wiki_Model_DbTable_Topics extends Wiki_Model_DbTable_Abstract
         
     }
 
-    public function findAllD(){
-        $row = $this->find(32)->current();
-        $select = $this->select();
-        $select->from('users',array('realname'));
-        return $row->findDependentRowset('Wiki_Model_DbTable_Contents')->current()->findDependentRowset('Wiki_Model_DbTable_Users','ContentRef',$select)->getRow(0);
-    }
-    public function getDetail($id){
-        $row = $this->find($id)->current();
-        $select = $this->select();
-        $select->from('users',array('realname'));
-        $content = $row->findDependentRowset('Wiki_Model_DbTable_Contents');
+    public function CreateTopic($title, $uid, $cid) {
+        $this->__uid = $uid;
+        $this->__cid = $cid;
+        $this->__title = $title;
+        $this->__create_time = date('Y-m-d H:i:s');
+        $this->__status = 1;
+        $this->create();
+        return $this->_db->lastInsertId();
     }
 }
 

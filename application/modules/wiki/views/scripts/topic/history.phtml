@@ -1,0 +1,49 @@
+<div class="wiki">
+    <div class="history tb-style">
+<!--        <pre><?//=print_r($this->data)?></pre>-->
+        <div class="tool-bar" style="margin-bottom: 15px;">
+            <div class="fr">
+                <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
+                <a href="<?php echo $this->ActionUrl('detail',array('id'=>$this->tid));?>" style="line-height: 16px;">Back to topic</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <th>Version</th>
+                    <th>Update Time</th>
+                    <th>Contributor</th>
+                    <th>Topic</th>
+                    <th>From</th>
+                    <th>Show</th>
+                </tr>
+                <?php foreach ($this->data as $value):?>
+                <tr>
+                    <td><?php echo $value['version_id'] ?></td>
+                    <td><?php echo $value['update_time'] ?></td>
+                    <td><?php echo $value['update_name'] ?></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['version_id']));?>"><?php echo $value['title'] ?></a></td>
+                    <td>
+                        <a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['preversion_id']));?>">
+                            <?php if($value['preversion_id']): ?>
+                                <?php echo $value['preversion_id']?>
+                            <?php else:?>
+                                &nbsp;
+                            <?php endif;?>
+                        </a>
+                    </td>
+                    <td align="center">
+                        <?php if($value['is_default']):?> 
+                            <span class="ui-icon ui-icon-circle-check" style="margin: 0 auto;"></span>
+                        <?php else:?>
+                            &nbsp;
+                        <?php endif;?>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
+</div>

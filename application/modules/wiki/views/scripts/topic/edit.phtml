@@ -27,6 +27,11 @@ $this->Scripts = <<<EOF
     });
 </script>
 EOF;
+if(false){
+    /* this comment is for code hint */
+    /* @var $this Zend_View */
+    $this;
+}
 ?>
 
 
@@ -37,7 +42,7 @@ EOF;
     <div class="tool-bar" style="margin-top: 15px;margin-right:6px;">
         <div class="fr">
             <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
-            <a href="/wiki/index/detail/id/<?php echo $this->tid; ?>" style="line-height: 16px;">Back to topic</a>
+            <a href="<?php echo $this->ActionUrl('detail',array('id'=>$this->tid));?>" style="line-height: 16px;">Back to topic</a>
             <div class="clear"></div>
         </div>
         <div class="clear"></div>
@@ -55,10 +60,11 @@ EOF;
                     <td colspan="2">
                         <?php echo $this->form->content; ?>
                         <?php echo $this->form->tid; ?>
+                        <?php echo $this->form->vid; ?>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: right;"><button class="back" onclick="location.href='/wiki/index/detail/id/<?php echo $this->tid;?>';return false;">back to topic</button><?php echo $this->form->submit; ?></td>
+                    <td colspan="2" style="text-align: right;"><button class="back" onclick="location.href='<?php echo $this->ActionUrl('detail',array('id'=>$this->tid)); ?>';return false;">back to topic</button><?php echo $this->form->submit; ?></td>
                 </tr>
             </tbody>
         </table>
@@ -72,7 +78,7 @@ EOF;
             filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
             filebrowserUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
             filebrowserImageUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
-            filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+            filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
         });
     </script>
 </div>

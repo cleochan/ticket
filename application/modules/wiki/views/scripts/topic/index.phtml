@@ -16,7 +16,7 @@
                 </tr>
                 <?php foreach ($this->data as $value):?>
                 <tr>
-                    <td><a target="_blank" href="<?php echo $this->ActionUrl('detail',array('id'=>$value['id']),'topic') ?>"><?php echo $value['title'] ?></a></td>
+                    <td><a target="_blank" href="/wiki/index/detail/id/<?php echo $value['id'] ?>"><?php echo $value['title'] ?></a></td>
                     <td><?php echo $value['cname'] ?></td>
                     <td><?php echo $value['creator_name'] ?></td>
                     <td><?php echo $value['create_time'] ?></td>

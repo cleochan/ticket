@@ -3,18 +3,6 @@
 class Wiki_IndexController extends Zend_Controller_Action {
 
     private $_menu;
-
-    /**
-     *
-     * @var Wiki_Models_DbTable_Topics 
-     */
-    private $_topicsModel;
-
-    /**
-     *
-     * @var Wiki_Models_DbTable_Contents 
-     */
-    private $_contentsModel;
     /**
      *
      * @var Wiki_Model_Detail 
@@ -28,12 +16,10 @@ class Wiki_IndexController extends Zend_Controller_Action {
 
     public function init() {
         $this->_menu = new Menu();
-        $this->_topicsModel = new Wiki_Model_DbTable_Topics();
-        $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-		$this->_contributors = new Wiki_Model_Contributor();
-		$this->_categories = new Wiki_Model_DbTable_Category();
+        $this->_contributors = new Wiki_Model_Contributor();
+        $this->_categories = new Wiki_Model_DbTable_Category();
 
     }
     public function indexAction() {
@@ -63,124 +49,6 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
     }
-    public function detailAction(){
-        $tid = $this->_request->get('id');
-        $suc = $this->_request->get('msg');
-        if($suc==1){
-            $this->view->message = 'The topic is created as you see :)';
-        }
-        $data = $this->_detailModel->getDetail($tid);
-        $data['tid'] =$tid; 
-        $this->view->data = $data;
-    } 
-
-    public function historyAction(){
-        $tid = $this->_request->get('id');
-        $this->view->data = $this->_detailModel->getDetails($tid);
-        $this->view->tid = $tid;
-    }
-    public function revertAction(){
-        $tid = $this->_request->get('id');
-        $vid = $this->_request->get('version');
-        $data = $this->_detailModel->getDetailWithVersion($tid,$vid);
-        $prevId = $this->_detailModel->getPreviousVersionId($tid,$vid);
-        $nextId = $this->_detailModel->getNextVersionId($tid,$vid);
-        $data['tid'] =$tid; 
-        $data['prevId'] = $prevId;
-        $data['nextId'] = $nextId;
-        $this->view->data = $data;
-    }
-    public function setDefaultAction(){
-        $tid = $this->_request->get('id');
-        $vid = $this->_request->get('version');
-        $this->_contentsModel->SetAsDefault($vid, $tid);
-        $url = '/wiki/index/revert/id/'.$tid.'/version/'.$vid;
-        $this->_redirect($url);
-    }
-    public function deleteAction(){
-        $tid = $this->_request->get('id');
-        $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
-        $this->_detailModel->deleteTopic($uid, $tid);
-        $this->_redirect('/wiki/index/index/msg/1');
-    }
-    public function editAction() {
-            $form = new Wiki_Form_Create();
-            $this->view->title = "Wiki";
-            $tid = $this->_request->get('id');
-            $this->view->tid = $tid;
-            $hidden = new Zend_Form_Element_Hidden('tid');
-            $hidden->setValue($tid)->setName('tid');
-            $form->addElement($hidden);
-            $detail = $this->_detailModel->getDetail($tid);
-            $content = $form->getElement('content');
-            $title = $form->getElement('title');
-            $category = $form->getElement('category');
-            $content->setValue($detail['content']);
-            $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
-//            $category->setValue($detail['cid'])->setAttrib('disabled', 'ture');
-            $category->setValue($detail['cid']);
-            $this->view->form = $form;
-        if ($this->_request->isPost()) {
-            if ($form->isValidPartial($_POST)) {
-                $userinfo = Zend_Auth::getInstance()->getStorage()->read();
-                $tid = $this->_request->getPost('tid');
-                if ($tid !== NULL) {
-                    $where = $this->_db->quoteInto('id=?', $tid);
-                    $this->_topicsModel->__cid = $this->_request->getPost('category');
-//                    $this->_topicsModel->__title = $this->_request->getPost('title');
-                    $this->_topicsModel->change($where);
-                    
-                    $this->_contentsModel->__tid = $tid;
-                    $this->_contentsModel->__content = $this->_request->getPost('content');
-                    $this->_contentsModel->__uid = $userinfo->id;
-                    $this->_contentsModel->__attachment = './';
-                    $this->_contentsModel->__is_default = 1;
-                    $this->_contentsModel->__status = 1;
-                    $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
-                    $insertIdC = $this->_contentsModel->create();
-                    $insertIdC!=FALSE?$this->_contentsModel->SetAsDefault($insertIdC,$tid):  die('insert error');
-                    $this->view->message = 'The data was saved';
-//                    $this->_redirect('/wiki/index/detail/id/'.$tid);
-                } else {
-                    die('insert error');
-                }
-            }
-        }else{
-            
-        }
-        //print_r($this->_topicsModel->findAllD());
-    }
-    public function createAction() {
-        $form = new Wiki_Form_Create();
-        $this->view->form = $form;
-        if ($this->_request->isPost()) {
-            if ($form->isValidPartial($_POST)) {
-                //date_default_timezone_set('PRC');
-                $userinfo = Zend_Auth::getInstance()->getStorage()->read();
-                $this->_topicsModel->__title = $this->_request->getPost('title');
-                $this->_topicsModel->__uid = $userinfo->id;
-                $this->_topicsModel->__create_time = date('Y-m-d H:i:s');
-                $this->_topicsModel->__status = 1;
-                $this->_topicsModel->__cid = $this->_request->getPost('category');
-                $insertId = $this->_topicsModel->create();
-                if ($insertId !== NULL) {
-                    $this->_contentsModel->__tid = $insertId;
-                    $this->_contentsModel->__content = $this->_request->getPost('content');
-                    $this->_contentsModel->__uid = $userinfo->id;
-                    $this->_contentsModel->__attachment = './';
-                    $this->_contentsModel->__is_default = 1;
-                    $this->_contentsModel->__status = 1;
-                    $this->_contentsModel->__create_time = date('Y-m-d H:i:s');
-                    $this->_contentsModel->create();
-                    //$insertId!==NULL?$this->_contentsModel->SetAsDefault($insertIdC,$insertId):  die('insert error');
-                    $this->_redirect('/wiki/index/detail/id/'.$insertId.'/msg/1');
-                } else {
-                    die('insert error');
-                }
-            }
-        }
-    }
-
 	function showContributorAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Contributor";
@@ -321,52 +189,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$this->view->recent_updates = $recent_updates;
 	}
 
-	function categoryAction(){
-		//$this->_categories->create(0, "ZendTest3", 1);
-		$params = $this->_request->getParams();
-	    $this->view->title = "Category";
-		
-		$parentCategories = $this->_categories->getCategories(false, true);
-		$subCategories = $this->_categories->getCategories(true, true);	
-		
-		$this->view->parentCategories = $parentCategories;
-		$this->view->subCategories = $subCategories;
-	//var_dump($this->getRequest());
-	}
-	
-	function addCategoryAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Add Category";
-		$form = new Wiki_Form_AddCategory();
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-						$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-					    //$this->view->message = 'Category Added. Returning to Categories..';
-                   		$this->_redirect('/wiki/index/category');
-					}
-			}
-	}
-	
-	function editCategoryAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Edit Category";
-		$form = new Wiki_Form_AddCategory();
-		$parentCategories = $this->_categories->getCategories(false);
-		$subCategories = $this->_categories->getCategories(true);	
-		
-		$this->view->parentCategories = $parentCategories;
-		$this->view->subCategories = $subCategories;
-		
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-						$this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-					   // $this->view->message = 'Category Editted Successfully. Returning to Categories..';
-                   		$this->_redirect('/wiki/index/category');
-					}
-			}
-	}
+
 	
 }
 

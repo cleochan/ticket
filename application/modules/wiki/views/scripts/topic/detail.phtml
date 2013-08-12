@@ -1,0 +1,115 @@
+<?php
+/*@var $this Zend_View*/
+$this->Css = <<<EOF
+    <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents_view.css">        
+EOF;
+$this->Scripts = <<<EOF
+    <script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>       
+EOF;
+
+?>
+<div class='wiki'>
+    <?php if (isset($this->message)): ?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+    <?php endif; ?>
+    <div class="detail">
+        <h1 class="title">
+            <?php echo $this->data['title'] ?>
+        </h1>
+        <h4 class="info">
+            Author:<?php echo $this->data['creator_name'] ?>&nbsp;|&nbsp;
+            Create Time:<?php echo $this->data['create_time'] ?>&nbsp;|&nbsp;
+            Last Update Time:<?php echo $this->data['update_time'] ?>&nbsp;|&nbsp;
+            Update By:<?php echo $this->data['update_name'] ?>
+        </h4>
+        <div class="content cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
+            <?php echo $this->data['content'] ?>
+        </div>
+        <div class="handle">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><a class="button-style" href="<?php echo $this->ActionUrl('edit',array('id'=>$this->data['tid'])); ?>">Edit this topic</a></td>
+                        <td><a class="button-style" href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid'])); ?>">Browse History</a></td>
+                        <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id ?>
+                        <?php if ($this->data['creator_uid'] === $uid): ?><td><a id="delete" class="button-style btn-red" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete this topic</a></td><?php endif; ?>
+                <script type="text/javascript">
+                    $('#delete').click(function() {
+                        if (confirm("Are you sure to delete this topic?")) {
+                            return true;
+                        }
+                        return false;
+                    });
+                </script>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="line mt15 mb30"></div>
+        <div class="comments" id="comments">
+            <h2 class="strong">Comments</h2>
+            <div class="container">
+                <dl>
+                <?php foreach ($this->comments as $value):?>
+                    <dt>
+                        <span class="strong"  style="color:#555;"><?php echo $value['realname'];?></span>&nbsp;&nbsp;<span style="color:#a7adb1;"><?php echo $value['create_time']; ?></span>
+                    </dt>
+                    <dd style="color:#555;">
+                        <?php echo $value['content'];?>
+                    </dd>
+                    <div class="line dashed mb10"></div>
+                <?php endforeach;?>
+                </dl>
+            </div>
+            <div class="post">
+                <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
+                      method="<?php echo $this->escape($this->form->getMethod()) ?>"
+                      enctype="multipart/form-data">
+                    <table  width="100%">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h4 class="strong">Add Comments</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <?php echo $this->form->content ?>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">
+                                    <?php echo $this->form->submit ?>  
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                <script type="text/javascript">
+                    var edit = CKEDITOR.replace('content',{
+                        toolbar: 'Basic',
+                        height:'200px',
+                        filebrowserBrowseUrl: '/scripts/ckfinder/ckfinder.html',
+                        filebrowserImageBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Images',
+                        filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
+                        filebrowserUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+                        filebrowserImageUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+                        filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+                    });
+                    CKEDITOR.editorConfig = function( config ) {
+                            config.toolbarGroups = [
+                                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                                    { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] }
+
+                            ];
+                            config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript';
+                            config.removeDialogTabs = 'link:advanced';
+                            config.language = 'en';
+                            config.height = '400px';
+                    };
+                </script>
+            </div>
+        </div>
+    </div>
+
+</div>
