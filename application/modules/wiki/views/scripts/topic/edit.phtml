@@ -9,6 +9,7 @@ $this->Scripts = <<<EOF
 
         });*/
         var tosubmit=false;
+        var category_val = $('#category').val();
         $(window).bind('beforeunload ',function() {
             if(CKEDITOR.instances.content.checkDirty()&&tosubmit==false){
                return "Your edition are not be saved, are you sure to leave this page?";
@@ -16,7 +17,8 @@ $this->Scripts = <<<EOF
         });
         $('#topic_form').submit(function(){
             tosubmit=true;
-            if(!CKEDITOR.instances.content.checkDirty()){
+            var category_new_val = $('#category').val();
+            if(!CKEDITOR.instances.content.checkDirty()&&category_val==category_new_val){
                 alert('It seem no need to submit,because the content do not change:)');
                 tosubmit=false;
                 return false;

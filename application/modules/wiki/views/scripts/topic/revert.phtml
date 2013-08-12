@@ -5,6 +5,16 @@ EOF;
 ?>
 <div class='wiki'>
     <?php if($this->data['content']):?>
+    <div class="navigation">
+        <?php $str = '' ?>
+        <?php foreach($this->categorys as $item):?>
+            <?php
+               $str = '<a href="#">'.$item['cname'].'</a>'.' > '.$str;
+
+            ?>
+        <?php endforeach;?>
+        <?php echo $str.'<a href="#">'.$this->data['cname'].'</a>'.' > '.'<a href="#">'.$this->data['title'].'</a>'.' > Version'.$this->data['version_id'];?>
+    </div>
     <div class="detail">
         <div class="tool-bar">
             <div class="fr">
@@ -54,7 +64,7 @@ EOF;
                         <?php if($this->data['creator_uid']===$uid):?><td><a id="revert" class="button-style btn-red" href="<?php echo $this->ActionUrl('set-default',array('id'=>$this->data['tid'],'version'=>$this->data['version_id']));?>">Revert to this version</a></td><?php endif;?>
                         <script type="text/javascript">
                              $('#revert').click(function(){
-                                 if(confirm("Are you sure to revert this version?")){
+                                 if(confirm("This handle will revert to this version and create a new history item,would you like to do that?")){
                                      return true;
                                  }
                                  return false;

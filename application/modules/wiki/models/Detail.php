@@ -32,7 +32,7 @@ class Wiki_Model_Detail {
         $select = $this->db->select();
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time','uid AS creator_uid'))
                 ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
+                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname','parent_id'))
                 ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('content','create_time AS update_time', 'u.realname AS update_name','ct.id AS vid'))
                 ->where('t.id=:id AND ct.is_default=1');
         return $this->db->fetchRow($select, array('id' => $id));
@@ -72,7 +72,7 @@ class Wiki_Model_Detail {
         $select = $this->db->select();
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time','uid AS creator_uid'))
                 ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
+                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname','parent_id'))
                 ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('content','is_default','create_time AS update_time', 'u.realname as update_name','id AS version_id'))
                 ->where('t.id=:id AND ct.id=:vid');
         return $this->db->fetchRow($select, array('id' => $id,'vid'=>$vid));

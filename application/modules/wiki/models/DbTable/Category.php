@@ -24,6 +24,38 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
     function init() {
         
     }
+    public function getChildrenHtml($parentId,&$separator,&$resultHtml){
+        $select = $this->select();
+        $select->from($this->_name, array('id','cname'))
+                ->where('parent_id=?', $parentId);
+        $result= $this->fetchAll($select)->toArray();
+        if($result!=NULL && count($result)>0){
+            foreach ($result as $row) {
+                $resultHtml .= $separator.$row['cname'].'</br>';
+                $separator.='-';
+                $this->getChildrenHtml($row['id'],$separator,$resultHtml);
+            }
+            $separator='';
+        }
+        return $resultHtml;
+    }
+    public function getParentsHtml($parentId, &$return) {
+        if ($parentId != NULL) {
+            $select = $this->select();
+            $select->from($this->_name, array('id', 'cname', 'parent_id'))
+                    ->where('id=?', $parentId);
+            $row = $this->fetchRow($select);
+            if ($row != NULL) {
+                $row = $row->toArray();
+                $return[] = $row;
+                $this->getParentsHtml($row['parent_id'], $return);
+            }
+            return $return;
+        }else{
+            return NULL;
+        }
+    }
+
 
     function getParentCategories() {
 
@@ -74,6 +106,23 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         $this->__cname = $cname;
         $this->__status = $status;
         parent::create();
+    }
+
+    public function getOptions($parentId,&$separator,&$resultHtml) {
+        $select = $this->select();
+        $select->from($this->_name, array('id','cname'))
+                ->where('parent_id=?', $parentId);
+        $result= $this->fetchAll($select)->toArray();
+        if($result!=NULL && count($result)>0){
+            foreach ($result as $row) {
+                $key = $row['id'];
+                $resultHtml[$key] = $separator.' '.$row['cname'];
+                $separator.='- ';
+                $this->getOptions($row['id'],$separator,$resultHtml);
+            }
+            $separator='';
+        }
+        return $resultHtml;
     }
 
 }

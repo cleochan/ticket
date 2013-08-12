@@ -5,8 +5,7 @@ $this->Scripts = <<<EOF
     $(function(){
         var content = $('#content').html();
         $('#title').click(function(){
-            $(this).select();
-            $(this).css('color','#000')        
+            $(this).select();     
         });
         var tosubmit=false;
         $(window).bind('beforeunload ',function() {

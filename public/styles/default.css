@@ -328,7 +328,6 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     width:100%;
     font-size: 18px;    
     padding-left: 5px;
-    color: #ccc;
 }
 .wiki #category{
     font-size: 18px;
@@ -358,7 +357,14 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .detail .comments{
     
 }
+.wiki .navigation{
+    margin: 10px 0px;
+}
 
+.wiki .navigation a,.wiki .navigation{
+    font-size: 14px;
+    font-weight: bold;
+} 
 .wiki dd,.wiki dl,.wiki dt{
     margin: 0px;
     padding: 0px;

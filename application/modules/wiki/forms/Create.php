@@ -43,7 +43,6 @@ class Wiki_Form_Create extends Zend_Form
         $this->addElement('select', 'category', array(
             'label' => 'Category:',
             'required' => TRUE,
-            'multiOptions'=>array('1'=>'type1', '2'=>'type2'),
             'decorators' => $this->ElementDecorators,
             'validators' => array(
                 Custom_Tools_Validators::NotEmpty()

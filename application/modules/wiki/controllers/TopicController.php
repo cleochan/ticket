@@ -21,7 +21,11 @@ class Wiki_TopicController extends Zend_Controller_Action {
      * @var Wiki_Model_Detail 
      */
     private $_detailModel;
-
+    /**
+     *
+     * @var Wiki_Model_DbTable_Category 
+     */
+    private $_categories;
     /**
      *
      * @var Zend_Db_Adapter_Abstract 
@@ -89,6 +93,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
 //        }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] = $tid;
+        $this->view->categorys = $this->_categories->getParentsHtml($data['parent_id']);
         $this->view->data = $data;
         $this->view->comments = $commentModel->GetComments($tid);
     }
@@ -107,6 +112,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $data['tid'] = $tid;
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
+        $this->view->categorys = $this->_categories->getParentsHtml($data['parent_id']);
         $this->view->data = $data;
     }
 
@@ -149,6 +155,10 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $category = $form->getElement('category');
         $content->setValue($detail['content']);
         $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
+        /* var $form Zend_Form_Element_Select*/
+        $options = $this->_categories->getOptions(0);
+        $categoryEle = $form->getElement('category');
+        $categoryEle->addMultiOptions($options);
         $category->setValue($detail['cid']);
 
         $this->view->form = $form;
@@ -181,6 +191,11 @@ class Wiki_TopicController extends Zend_Controller_Action {
     public function createAction() {
         $form = new Wiki_Form_Create();
         $this->view->form = $form;
+        /* var $form Zend_Form_Element_Select*/
+        $options = $this->_categories->getOptions(0);
+        $categoryEle = $form->getElement('category');
+        $categoryEle->addMultiOptions(array(''=>'Please Choose A Type'));
+        $categoryEle->addMultiOptions($options);
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
                 //date_default_timezone_set('PRC');

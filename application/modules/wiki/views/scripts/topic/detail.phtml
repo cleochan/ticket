@@ -12,6 +12,17 @@ EOF;
     <?php if (isset($this->message)): ?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
     <?php endif; ?>
+    <?php if($this->data['title']!=NULL&&strlen($this->data['title'])>0):?>
+    <div class="navigation">
+        <?php $str = '' ?>
+        <?php foreach($this->categorys as $item):?>
+            <?php
+               $str = '<a href="#">'.$item['cname'].'</a>'.' > '.$str;
+
+            ?>
+        <?php endforeach;?>
+        <?php echo $str.'<a href="#">'.$this->data['cname'].'</a>'.' > '.$this->data['title'];?>
+    </div>
     <div class="detail">
         <h1 class="title">
             <?php echo $this->data['title'] ?>
@@ -111,5 +122,9 @@ EOF;
             </div>
         </div>
     </div>
-
+    <?php else:?>
+        <div class="shadow mt15 p15 radius">
+        This topic was not found
+        </div>
+    <?php endif;?>
 </div>
