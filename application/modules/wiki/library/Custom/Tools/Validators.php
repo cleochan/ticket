@@ -15,7 +15,7 @@ class Custom_Tools_Validators{
      * @param bool $isContinue
      * @return array
      */
-    public static function Db_NoRecordExists ($tableName,$columnField,$errorMessage='Record is exists',$isContinue=TRUE){
+    public static function Db_NoRecordExists ($tableName,$columnField,$errorMessage='Record already exists',$isContinue=TRUE){
         
         return  array('Db_NoRecordExists', $isContinue, array($tableName, $columnField,'messages'=>array(Zend_Validate_Db_RecordExists::ERROR_RECORD_FOUND=>$errorMessage)));
         
@@ -40,7 +40,7 @@ class Custom_Tools_Validators{
      * @param bool $isContinue
      * @return array
      */
-    public static function NotEmpty ($errorMessage='Not allow empty',$isContinue=TRUE){
+    public static function NotEmpty ($errorMessage='Empty fields not allowed',$isContinue=TRUE){
         
         return array('NotEmpty',$isContinue,array('messages'=>array(Zend_Validate_NotEmpty::IS_EMPTY=>$errorMessage)));
         

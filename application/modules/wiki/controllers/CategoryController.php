@@ -17,10 +17,6 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->_categories = new Wiki_Model_DbTable_Category();
     }
 
-    public function indexAction() {
-
-    }
-
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
@@ -41,32 +37,60 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
     }
 
-    public function categoryAction() {
-        //$this->_categories->create(0, "ZendTest3", 1);
-        $params = $this->_request->getParams();
-        $this->view->title = "Category";
+	function indexAction(){
+		//$this->_categories->create(0, "ZendTest3", 1);
+		$params = $this->_request->getParams();
+	    $this->view->title = "Category";
+		
+		$this->view->categories = $categories =  $this->_categories->getCategories();
 
-        $parentCategories = $this->_categories->getParentCategories();
-        $subCategories = $this->_categories->getSubCategories();
+	//var_dump($this->getRequest());
+	}
+	
+	function addCategoryAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Add Category";
+		$this->view->categories = $categories =  $this->_categories->getCategories();
+		
+		$form = new Wiki_Form_AddCategory();
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+						$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                   		$this->_redirect('/wiki/category');
+					}
+			}
+	}
+	
+	function editCategoryAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Edit Category";
+		$form = new Wiki_Form_AddCategory();
+		$this->view->categories = $categories =  $this->_categories->getCategories();
+		
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+						$this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                   		$this->_redirect('/wiki/category');
+					}
+			}
+	}
 
-        $this->view->parentCategories = $parentCategories;
-        $this->view->subCategories = $subCategories;
-        //var_dump($this->getRequest());
-    }
-
-    public function addCategoryAction() {
-        $params = $this->_request->getParams();
-        $this->view->title = "Add Category";
-        $form = new Wiki_Form_AddCategory();
-        $this->view->form = $form;
-        if ($this->_request->isPost()) {
-            if ($form->isValidPartial($_POST)) {
-                $this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-                $this->view->message = 'Category Added. Returning to Categories..';
-                $this->_redirect('/wiki/index/category');
-            }
-        }
-    }
+	function deleteCategoryAction(){
+		$params = $this->_request->getParams();
+	    $this->view->title = "Delete Category";
+		$this->view->categories = $categories =  $this->_categories->getCategories();
+		$form = new Wiki_Form_AddCategory();
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+						$this->_categories->delete($this->_request->getPost('category_id'));
+                   		$this->_redirect('/wiki/category');
+					}
+			}
+		
+	}
 
 }
 

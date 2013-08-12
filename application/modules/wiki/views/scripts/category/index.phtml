@@ -1,0 +1,24 @@
+<br /><br />
+<div id="view-content" class='wiki'>
+	<div class='content'>
+	    <h1 align="center">Categories</h1>
+		<div id="category_list">
+					<?php if($this->categories):?>
+						<?php echo $this->categories; ?>
+					<?php endif;?>		
+			
+			<div align="bottom" valign="bottom" class="buttonMenuBottom">
+				<table width="80%" align="center" cellspacing="1">
+					<tbody>
+						<tr>
+							<td><a class="button-style" href="/wiki/category/add-category">Add Category</a></td>
+							<td><a class="button-style" href="/wiki/category/edit-category">Edit Category</a></td>
+							<td><a class="button-style" href="/wiki/category/delete-category">Remove Category</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</div>
