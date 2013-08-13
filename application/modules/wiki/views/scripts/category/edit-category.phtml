@@ -8,7 +8,7 @@
 						<?php echo $this->categories; ?>
 					<?php endif;?>	
 				   </div>
-				 	<div id="edit_form">		   
+				 	<div id="edit_window" class="editWindow" tabindex="0">		   
 				    <form valign="top" align="center" id="category_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
 			              method="<?php echo $this->escape($this->form->getMethod()) ?>"
 			              enctype="multipart/form-data">
@@ -34,8 +34,8 @@
 					        </table>
 				 </form>
 			</div>
-				 
 			</div>
-			
+<input type="hidden" id="window_type" value="edit" />
+
 
 
