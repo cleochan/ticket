@@ -483,3 +483,45 @@ html body div#view-content.wiki div#deleteMessage {
 	min-width: 512px;
 	top: 20px;
 }
+
+.wiki div#category_list h3 a.categoryLink{
+	cursor: pointer;
+}
+.wiki div#category_list ul li a.categoryLink{
+	cursor: pointer;
+}
+
+.wiki div#category_list h3 a.categoryLink:hover
+{ 
+	color:red;
+	text-decoration:none;
+}
+.wiki div#category_list ul li a.categoryLink:hover{
+	color:red;
+	text-decoration:none;
+}
+
+.editWindow {
+	border: solid black 1px;
+	background: white;
+	position: fixed;
+	min-width: 35%;
+	min-height: 22%;
+	left: 33%;
+	top: 50%;
+	z-index: 100;
+}
+
+.overlay {
+    background:rgba(0,0,0,0.3);
+    display:none;
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:99;
+    pointer-events:none
+}
+
+
