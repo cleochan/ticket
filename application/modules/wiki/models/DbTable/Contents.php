@@ -74,7 +74,7 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
         $select = $this->select();
         $select->from($this->_name, array(new Zend_Db_Expr('COUNT(*)')))
                 ->where('tid=?', $tid);
-        $st = $select->query(PDO::FETCH_ASSOC)->fetch();
+        //$st = $select->query(PDO::FETCH_ASSOC)->fetch();
 //        $select->from($this->_name, array('id'))
 //                ->where('tid=?', $tid)
 //                ->order('id DESC')
@@ -85,7 +85,7 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
 //            $ids[]=$row['id'];
 //        }
 //        $where = $this->_db->quoteInto('NOT IN(?)',$ids);
-        $this->delete($where);
+        //$this->delete($where);
     }
     
 }

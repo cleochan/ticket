@@ -218,6 +218,7 @@ padding-left:16px;
 background:url(/images/star/withoutstar.png) no-repeat left center
 }
 /*--Wiki Styles--*/
+
 .wiki{
     width:1024px;
     min-height: 350px;
@@ -309,7 +310,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     behavior: url(/styles/PIE/PIE.htc);
 }
 .wiki .tb-style table tr{
-    
+    background-color: #FFF; 
 }
 .wiki .tb-style table tr:nth-of-type(odd){
     background-color: #F7F7F7; 

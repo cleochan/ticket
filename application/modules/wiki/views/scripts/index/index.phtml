@@ -1,3 +1,13 @@
+<?php
+$this->Scripts = <<<EOF
+    <!--[if lt IE 7]>
+    <script style="text/javascript">
+        location.href='http://windows.microsoft.com/zh-cn/windows/upgrade-your-browser';
+    </script>
+    <![endif]-->      
+EOF;
+?>
+
 <div class="wiki">
     <?php if(isset($this->message)):?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>

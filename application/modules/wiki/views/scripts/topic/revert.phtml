@@ -9,11 +9,11 @@ EOF;
         <?php $str = '' ?>
         <?php foreach($this->categorys as $item):?>
             <?php
-               $str = '<a href="#">'.$item['cname'].'</a>'.' > '.$str;
+               $str =" <a href='#'>{$item['cname']}</a> > {$str}";
 
             ?>
         <?php endforeach;?>
-        <?php echo $str.'<a href="#">'.$this->data['cname'].'</a>'.' > '.'<a href="#">'.$this->data['title'].'</a>'.' > Version'.$this->data['version_id'];?>
+        <?php echo "{$str}<a href='#'>{$this->data['cname']}</a> > <a href='#'>{$this->data['title']}</a> > Version{$this->data['version_id']}";?>
     </div>
     <div class="detail">
         <div class="tool-bar">

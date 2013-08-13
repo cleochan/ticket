@@ -17,11 +17,10 @@ EOF;
         <?php $str = '' ?>
         <?php foreach($this->categorys as $item):?>
             <?php
-               $str = '<a href="#">'.$item['cname'].'</a>'.' > '.$str;
-
+               $str = "<a href='#'>{$item['cname']}</a> > {$str}";
             ?>
         <?php endforeach;?>
-        <?php echo $str.'<a href="#">'.$this->data['cname'].'</a>'.' > '.$this->data['title'];?>
+        <?php echo "$str<a href='#'>{$this->data['cname']}</a> > {$this->data['title']}";?>
     </div>
     <div class="detail">
         <h1 class="title">

@@ -1,33 +1,49 @@
-<br /><br />
-<div id="view-content">
-        <h1 align="center">Contributor</h1>
-	<div>
-		<div style="margin-left: 10%">
-				<?php if($this->contributor):?>
-					<?php foreach($this->contributor as $key => $val):?>
-							<h3>Name:</h3><?=$val['contributor_name']?>
-							<h3>Department:</h3><?=$val['department_name']?>
-							<h3>Total Contributions:</h3><?=$val['contributions']?>
-					<?php endforeach;?>			
-				<?php endif;?>
-		</div>
-		<div align="center">
-		<h2>Latest Topic Contributions</h1>
-				<table width="60%" align="center" cellspacing="1" >
-					<tbody>
-							<tr>
-								<td class="form-title" width="70%" style="text-align: left;">Topic</td>
-								<td class="form-title" width="30%" style="text-align: left;">Date</td>
-							</tr>
-							<?php if($this->latest_topics):?>
-								<?php foreach($this->latest_topics as $key => $val):?>
-								<tr>
-									<td><?=$val['topic_title']?></td>
-									<td><?=$val['date_created']?></td>
-								</tr>
-								<?php endforeach;?>			
-							<?php endif;?>	
-					</tbody>
-				</table>
-		</div>
+<div class="wiki">
+    <h4>Contributor</h4>
+
+        <div class='tb-style'>
+            <?php if ($this->contributor): ?>
+            <table width="50%" cellspacing="0">
+                <tbody>
+                    <?php foreach ($this->contributor as $key => $val): ?>
+                    <tr>
+                        <th width="40%" >Name</th>
+                        <td><?php echo  $val['contributor_name']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td><?php echo  $val['department_name']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Total Contributions</th>
+                        <td><?php echo  $val['contributions']; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+                			
+            <?php endif; ?>
+        </div>
+        <div>
+            <h4>Latest Topic Contributions</h1>
+        </div>
+        <div class='tb-style'>
+                <table width="100%" align="center" cellspacing="0" >
+                    <tbody>
+                        <tr>
+                            <th class="form-title" width="70%" >Topic</td>
+                            <th class="form-title" width="30%" >Date</td>
+                        </tr>
+                        <?php if ($this->latest_topics): ?>
+                            <?php foreach ($this->latest_topics as $key => $val): ?>
+                                <tr>
+                                    <td><?= $val['topic_title'] ?></td>
+                                    <td><?= $val['date_created'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>			
+                        <?php endif; ?>	
+                    </tbody>
+                </table>
+        </div>
+
 </div>

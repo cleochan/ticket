@@ -1,14 +1,21 @@
 <?php
 /**
- * 创建此类的目的在于简化插入和更新数据的操作,通常插入与更新操作都要写的大量的语句给字段赋值,而且有时字段多时难以记忆,
+ * Description of Content
+ *
+ * @package Wiki_Model_DbTable
+ * @author Ron
+ */
+
+/**
+ * 创建此类的目的在于简化插入和更新数据的操作
+ * 
+ * <p>通常插入与更新操作都要写的大量的语句给字段赋值,而且有时字段多时难以记忆,
  * 
  * 继承此类的Model可创建与表字段名相对应的带有$columnMarking前缀protected属性,例如:protected $__name;然后只需为相
  * 
  * 应的属性赋值,如:$this->$__name='ron';,一般IDE在此时都会有代码提示,由此减轻了记忆的负担,最后再调用change()或create()
  * 
- * 方法即可
- *
- * @author Ron
+ * 方法即可</p>
  */
 abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
     protected $columnMarking = '__';
@@ -26,7 +33,7 @@ abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
                 if(isset($this->$propertieName)){
                     $columnName = substr($propertieName,strlen($this->columnMarking));
                     $this->data[$columnName] = $this->$propertieName;
-                    unset($this->$propertieName);
+                    $this->$propertieName=NULL;
                 }
             }
         }

@@ -28,7 +28,12 @@ class Wiki_Model_DbTable_Comments extends Wiki_Model_DbTable_Abstract{
     public function init(){
         $this->_db = Zend_Registry::get("db");
     }
-    
+    /**
+     * 
+     * @param string $topic_id
+     * @param string $user_id
+     * @param string $content
+     */
     public function AddComment($topic_id,$user_id,$content){
         $this->__tid = $topic_id;
         $this->__uid = $user_id;
@@ -37,6 +42,11 @@ class Wiki_Model_DbTable_Comments extends Wiki_Model_DbTable_Abstract{
         $this->__status = 1;
         $this->create();
     }
+    /**
+     * 
+     * @param string $topic_id
+     * @return array
+     */
     public function GetComments($topic_id){
         $select = $this->_db->select();
         $select->from($this->_name.' AS c', array('uid','tid','content','create_time'))

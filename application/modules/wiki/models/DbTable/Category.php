@@ -17,13 +17,30 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         )
     );
 
-    function __construct() {
+    public function __construct() {
         $this->_db = Zend_Registry::get("db");
     }
 
-    function init() {
+    public function init() {
         
     }
+    public function getOptions($parentId, &$separator, &$resultHtml) {
+        $select = $this->select();
+        $select->from($this->_name, array('id', 'cname'))
+                ->where('parent_id=?', $parentId);
+        $result = $this->fetchAll($select)->toArray();
+        if ($result != NULL && count($result) > 0) {
+            foreach ($result as $row) {
+                $key = $row['id'];
+                $resultHtml[$key] = $separator . ' ' . $row['cname'];
+                $separator.='- ';
+                $this->getOptions($row['id'], $separator, $resultHtml);
+            }
+            $separator = '';
+        }
+        return $resultHtml;
+    }
+    
     public function getChildrenHtml($parentId,&$separator,&$resultHtml){
         $select = $this->select();
         $select->from($this->_name, array('id','cname'))
@@ -182,22 +199,7 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
 	}
     
 
-    public function getOptions($parentId,&$separator,&$resultHtml) {
-        $select = $this->select();
-        $select->from($this->_name, array('id','cname'))
-                ->where('parent_id=?', $parentId);
-        $result= $this->fetchAll($select)->toArray();
-        if($result!=NULL && count($result)>0){
-            foreach ($result as $row) {
-                $key = $row['id'];
-                $resultHtml[$key] = $separator.' '.$row['cname'];
-                $separator.='- ';
-                $this->getOptions($row['id'],$separator,$resultHtml);
-            }
-            $separator='';
-        }
-        return $resultHtml;
-    }
+
 
 }
 

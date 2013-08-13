@@ -1,5 +1,5 @@
 <br /><br />
-<div id="view-content">
+<div id="wiki">
         <h1 align="center">Contributor</h1>
 	<div>
 		<div style="margin-left: 10%">
@@ -11,13 +11,13 @@
 					<?php endforeach;?>			
 				<?php endif;?>
 		</div>
-		<div align="center">
+		<div class='tb-style'>
 		<h2>Latest Topic Contributions</h1>
 				<table width="60%" align="center" cellspacing="1" >
 					<tbody>
 							<tr>
-								<td class="form-title" width="70%" style="text-align: left;">Topic</td>
-								<td class="form-title" width="30%" style="text-align: left;">Date</td>
+								<th class="form-title" width="70%" >Topic</td>
+								<th class="form-title" width="30%" >Date</td>
 							</tr>
 							<?php if($this->latest_topics):?>
 								<?php foreach($this->latest_topics as $key => $val):?>

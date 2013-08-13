@@ -28,6 +28,11 @@ class Wiki_TopicController extends Zend_Controller_Action {
     private $_categories;
     /**
      *
+     * @var Wiki_Model_DbTable_Contributor
+     */
+    private $_contributorModel;
+    /**
+     *
      * @var Zend_Db_Adapter_Abstract 
      */
     private $_db;
@@ -40,6 +45,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
         $this->_contributors = new Wiki_Model_Contributor();
         $this->_categories = new Wiki_Model_DbTable_Category();
+        $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
     }
 
     public function indexAction() {
@@ -155,7 +161,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $category = $form->getElement('category');
         $content->setValue($detail['content']);
         $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
-        /* var $form Zend_Form_Element_Select*/
+        /* @var $categoryEle Zend_Form_Element_Select*/
         $options = $this->_categories->getOptions(0);
         $categoryEle = $form->getElement('category');
         $categoryEle->addMultiOptions($options);
@@ -177,6 +183,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $uid = $userinfo->id;
                     $preversion_id = $this->_request->getPost('vid');
                     $this->_contentsModel->CreateContent($tid, $uid, $content, $preversion_id,TRUE);
+                    $this->_contributorModel->UpdateRecord($tid,$uid);
                     $this->view->message = 'The data was saved';
                 } else {
                     die('insert error');
@@ -185,20 +192,19 @@ class Wiki_TopicController extends Zend_Controller_Action {
         } else {
             
         }
-        //print_r($this->_topicsModel->findAllD());
+
     }
 
     public function createAction() {
         $form = new Wiki_Form_Create();
         $this->view->form = $form;
-        /* var $form Zend_Form_Element_Select*/
+        /*@var $categoryEle Zend_Form_Element_Select*/
         $options = $this->_categories->getOptions(0);
         $categoryEle = $form->getElement('category');
         $categoryEle->addMultiOptions(array(''=>'Please Choose A Type'));
         $categoryEle->addMultiOptions($options);
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
-                //date_default_timezone_set('PRC');
                 $userinfo = Zend_Auth::getInstance()->getStorage()->read();
                 $title = $this->_request->getPost('title');
                 $uid = $userinfo->id;
@@ -208,6 +214,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $content = $this->_request->getPost('content');
                     $uid = $userinfo->id;
                     $this->_contentsModel->CreateContent($insertId, $uid, $content, NULL, TRUE);
+                    $this->_contributorModel->UpdateRecord($insertId,$uid);
 //                    $this->_forward('detail', NULL, NULL, array('id' => $insertId, 'msg' => 1));
                     $this->_redirect('/wiki/topic/detail/id/'.$insertId.'/msg/1');
                 } else {
