@@ -3,26 +3,34 @@
 $this->Css = <<<EOF
     <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents_view.css">        
 EOF;
-$this->Scripts = <<<EOF
-    <script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>       
+$this->Scripts = $this->Scripts.<<<EOF
+       
+    <!--[if !IE 6]>-->
+        <script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>
+    <!--<![endif]-->
+    <!--[if lte IE 6]>
+    <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+    <![endif]-->   
 EOF;
 
 ?>
+<?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id ?>
 <div class='wiki'>
     <?php if (isset($this->message)): ?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
     <?php endif; ?>
     <?php if($this->data['title']!=NULL&&strlen($this->data['title'])>0):?>
-    <div class="navigation">
-        <?php $str = '' ?>
-        <?php foreach($this->categorys as $item):?>
-            <?php
-               $str = "<a href='#'>{$item['cname']}</a> > {$str}";
-            ?>
-        <?php endforeach;?>
-        <?php echo "$str<a href='#'>{$this->data['cname']}</a> > {$this->data['title']}";?>
-    </div>
+
     <div class="detail">
+        <div class="tool-bar" style="margin-right:6px;">
+            <div class="fr">
+                [ <a  href="<?php echo $this->ActionUrl('edit',array('id'=>$this->data['tid'])); ?>">Edit</a> ]
+                [ <a  href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid'])); ?>">History</a> ]
+                <?php if ($this->data['creator_uid'] === $uid): ?>[ <a id="delete" class="delete" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete</a> ]<?php endif; ?>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
         <h1 class="title">
             <?php echo $this->data['title'] ?>
         </h1>
@@ -41,10 +49,9 @@ EOF;
                     <tr>
                         <td><a class="button-style" href="<?php echo $this->ActionUrl('edit',array('id'=>$this->data['tid'])); ?>">Edit this topic</a></td>
                         <td><a class="button-style" href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid'])); ?>">Browse History</a></td>
-                        <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id ?>
-                        <?php if ($this->data['creator_uid'] === $uid): ?><td><a id="delete" class="button-style btn-red" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete this topic</a></td><?php endif; ?>
+                        <td><?php if ($this->data['creator_uid'] === $uid): ?><a id="delete" class="button-style btn-red delete" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete this topic</a><?php endif; ?></td>
                 <script type="text/javascript">
-                    $('#delete').click(function() {
+                    $('.delete').click(function() {
                         if (confirm("Are you sure to delete this topic?")) {
                             return true;
                         }

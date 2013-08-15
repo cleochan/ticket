@@ -1,6 +1,11 @@
 <?php
-$this->Scripts = <<<EOF
-<script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>
+$this->Scripts = $this->Scripts.<<<EOF
+<!--[if !IE 6]>-->
+    <script type="text/javascript" src="/scripts/ckeditor4.2/ckeditor.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 6]>
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<![endif]-->  
 <script type="text/javascript">
     $(function(){
        /* $('#title').click(function(){

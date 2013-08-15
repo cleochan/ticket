@@ -107,7 +107,7 @@ class Wiki_Model_Detail {
                ->limit('1');
         return $this->db->fetchOne($select, array('id' => $id,'tid'=>$tid));
     }
-    public function getTopics($id) {
+    public function getTopics() {
         $select = $this->db->select();
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
                 ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
@@ -115,6 +115,18 @@ class Wiki_Model_Detail {
                 ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','create_time AS update_time', 'u.realname as update_name'))
                 ->where('ct.is_default=1')
                 ->order('t.id DESC');
+        return $this->db->fetchAll($select);
+    }
+    public function getTopicsPaging($page,$rowCount) {
+        $select = $this->db->select();
+        $limit_start = ($page-1)*$limit;
+        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
+                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
+                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
+                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','create_time AS update_time', 'u.realname as update_name'))
+                ->where('ct.is_default=1')
+                ->order('t.id DESC')
+                ->limitPage($page, $rowCount);
         return $this->db->fetchAll($select);
     }
 }

@@ -5,6 +5,11 @@ class Wiki_IndexController extends Zend_Controller_Action {
     private $_menu;
     /**
      *
+     * @var Wiki_Models_DbTable_Topics 
+     */
+    private $_topicsModel;
+    /**
+     *
      * @var Wiki_Model_Detail 
      */
     private $_detailModel;
@@ -17,6 +22,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
     public function init() {
         $this->_menu = new Menu();
         $this->_detailModel = new Wiki_Model_Detail();
+        $this->_topicsModel = new Wiki_Model_DbTable_Topics();
         $this->_db = Zend_Registry::get('db');
         $this->_contributors = new Wiki_Model_Contributor();
         $this->_categories = new Wiki_Model_DbTable_Category();
@@ -25,10 +31,17 @@ class Wiki_IndexController extends Zend_Controller_Action {
     public function indexAction() {
         $this->view->title = "Wiki";
         $suc = $this->_request->get('msg');
+        $page = $this->_request->get('page');
         if($suc==1){
             $this->view->message = 'The topic is deleted successfully';
         }
-        $this->view->data = $this->_detailModel->getTopics();
+        $rowCount = 10;
+        $count = $this->_topicsModel->GetTotal();
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($page);
+        $this->view->paginator = $paginator ; 
+        $this->view->data = $this->_detailModel->getTopicsPaging($page,$rowCount);
     }
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {

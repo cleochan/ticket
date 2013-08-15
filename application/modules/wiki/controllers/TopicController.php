@@ -136,7 +136,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
 //        $this->_forward('index', NULL, array('msg' => 1));
-        $this->_redirect('/wiki/topic/index/msg/1');
+        $this->_redirect('/wiki/index/index/msg/1');
     }
 
     public function editAction() {
@@ -223,6 +223,9 @@ class Wiki_TopicController extends Zend_Controller_Action {
             }
         }
     }
+    public function searchedAction(){
+    }
+
     public function autoClearAction(){
         if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
             $this->_contentsModel->Clear();

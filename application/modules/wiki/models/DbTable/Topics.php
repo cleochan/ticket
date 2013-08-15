@@ -24,5 +24,9 @@ class Wiki_Model_DbTable_Topics extends Wiki_Model_DbTable_Abstract
         $this->create();
         return $this->_db->lastInsertId();
     }
+
+    public function GetTotal() {
+        return $this->_db->fetchOne('SELECT count(*) FROM '.$this->_name);
+    }
 }
 
