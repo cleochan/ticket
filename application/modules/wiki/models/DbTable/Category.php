@@ -95,8 +95,6 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
 			$tree[] = $temp;
 
         }
-		
-		
 		$hiddenValues = $this->getHiddenFields($tree);
 		$result = $this->buildCatTree($tree); 
 		$outputString = $this->buildHtmlFromCategoryTree($result) . $hiddenValues;

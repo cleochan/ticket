@@ -7,7 +7,7 @@ class Wiki_Form_AddCategory extends Zend_Form {
         array('Errors', array('class' => 'error')),
         array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
 	    array('Label', array('tag' => 'td')),
-	    array(array('row' => 'HtmlTag'), array('tag' => 'tr'))
+	    array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'zend_row'))
     );
     public $EmptyDecorators = array(
         'ViewHelper',
@@ -53,8 +53,12 @@ class Wiki_Form_AddCategory extends Zend_Form {
         ));
 		
 		$this->addElement('hidden', 'category_id', array(
-            'decorators' => $this->EmptyDecorators
-        ));
+				'value' =>'Please Enter Parent ID',
+				'decorators' => $this->ElementDecorators,
+				 'validators' => array(
+                Custom_Tools_Validators::NotEmpty()
+          	)
+		));
 		
 		$this->addElement('submit', 'submit', array(
 			'label' => 'Submit',

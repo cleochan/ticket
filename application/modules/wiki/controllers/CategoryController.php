@@ -38,11 +38,38 @@ class Wiki_CategoryController extends Zend_Controller_Action {
     }
 
 	function indexAction(){
-		//$this->_categories->create(0, "ZendTest3", 1);
 		$params = $this->_request->getParams();
 	    $this->view->title = "Category";
 		
 		$this->view->categories = $categories =  $this->_categories->getCategories();
+
+		$form = new Wiki_Form_AddCategory();
+		$this->view->form = $form;
+		    if ($this->_request->isPost()) {
+            	if ($form->isValidPartial($_POST)) {
+					if(isset($_POST['select_action_menu'])){
+						switch($_POST['select_action_menu']){
+							case "add":
+								$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+	                   			$this->_redirect('/wiki/category');
+							break;
+							case "edit":
+								$this->_categories->edit($this->_request->getPost('category_id'), 
+														 $this->_request->getPost('parent_id'), 
+														 $this->_request->getPost('cname'), 
+														 $this->_request->getPost('status'));
+		                   		$this->_redirect('/wiki/category');
+							break;
+							case "delete":
+								$this->_categories->delete($this->_request->getPost('category_id'));
+		                   		$this->_redirect('/wiki/category');
+							break;	
+							default:
+							break;
+						}
+					}
+					}
+			}
 
 	//var_dump($this->getRequest());
 	}

@@ -527,7 +527,7 @@ html body div#view-content.wiki div#deleteMessage {
 	background: white;
 	position: fixed;
 	min-width: 35%;
-	min-height: 22%;
+	height: auto;
 	left: 33%;
 	top: 50%;
 	z-index: 100;
