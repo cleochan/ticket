@@ -17,7 +17,9 @@ $(document).ready(function() {
 		$("input#parent_id").parent().parent().show();
 		$("input#status").parent().parent().show();
 		displayWindow(true, e);
-		addCategoryWindowConfig(0);		
+		$('.select_action_form').val("add")
+		console.log($('.select_action_form').val())
+		addNewCategoryWindowConfig(0);
 	});
 
 	$(".categoryLink").click(function(e) {
@@ -118,6 +120,17 @@ $(document).ready(function() {
 			default:
 			break;
 		}
+	}
+	
+	function addNewCategoryWindowConfig(id) {
+		var inputs = [];
+		inputs = $("input." + id).map(function() {
+			return $(this).val();
+		}).get();
+		$("input#cname").val('Please Enter Category Name');
+		$("input#status").val(inputs[1]);
+		$("input#parent_id").val(0);
+		$("input#category_id").val(inputs[3]);
 	}
 	
 	function addCategoryWindowConfig(id) {
