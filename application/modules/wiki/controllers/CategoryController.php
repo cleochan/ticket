@@ -43,7 +43,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 		
 		$this->view->categories = $categories =  $this->_categories->getCategories();
 
-		$form = new Wiki_Form_AddCategory();
+		$form = new Wiki_Form_Category();
 		$this->view->form = $form;
 		    if ($this->_request->isPost()) {
             	if ($form->isValidPartial($_POST)) {
@@ -70,8 +70,6 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 					}
 					}
 			}
-
-	//var_dump($this->getRequest());
 	}
 	
 	function addCategoryAction(){
@@ -79,7 +77,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 	    $this->view->title = "Add Category";
 		$this->view->categories = $categories =  $this->_categories->getCategories();
 		
-		$form = new Wiki_Form_AddCategory();
+		$form = new Wiki_Form_Category();
 		$this->view->form = $form;
 		    if ($this->_request->isPost()) {
             	if ($form->isValidPartial($_POST)) {
@@ -92,7 +90,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 	function editCategoryAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Edit Category";
-		$form = new Wiki_Form_AddCategory();
+		$form = new Wiki_Form_Category();
 		$this->view->categories = $categories =  $this->_categories->getCategories();
 		
 		$this->view->form = $form;
@@ -108,7 +106,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 		$params = $this->_request->getParams();
 	    $this->view->title = "Delete Category";
 		$this->view->categories = $categories =  $this->_categories->getCategories();
-		$form = new Wiki_Form_AddCategory();
+		$form = new Wiki_Form_Category();
 		$this->view->form = $form;
 		    if ($this->_request->isPost()) {
             	if ($form->isValidPartial($_POST)) {
@@ -116,7 +114,6 @@ class Wiki_CategoryController extends Zend_Controller_Action {
                    		$this->_redirect('/wiki/category');
 					}
 			}
-		
 	}
 
 }

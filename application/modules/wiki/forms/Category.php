@@ -1,6 +1,6 @@
 <?php 
 
-class Wiki_Form_AddCategory extends Zend_Form {
+class Wiki_Form_Category extends Zend_Form {
 
 	public $ElementDecorators = array(
         'ViewHelper',
