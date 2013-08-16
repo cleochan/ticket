@@ -35,6 +35,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu("contributor");
+		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
 	function showContributorAction() {
