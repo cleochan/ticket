@@ -1,14 +1,14 @@
 <br /><br />
-<div id="view-content">
+<div class="wiki">
         <h1 align="center">Recent Updates</h1>
-	<div>
-		<table width="80%" align="center" cellspacing="1">
+	<div class="tb-style">
+		<table width="100%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
-					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Date</a></td>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Category</a></td>
-					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_3"] ?>">Topic</a></td>
-					<td class="form-title" width="15%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_4"] ?>">Contributor</a></td>
+					<th width="15%"><a href="<?php echo $this->page_urls["column_1"] ?>">Date</a></th>
+					<th width="30%"><a href="<?php echo $this->page_urls["column_2"] ?>">Category</a></th>
+					<th width="40%"><a href="<?php echo $this->page_urls["column_3"] ?>">Topic</a></th>
+					<th width="15%"><a href="<?php echo $this->page_urls["column_4"] ?>">Contributor</a></th>
 				</tr>
 				<?php if($this->recent_updates):?>
 					<?php foreach($this->recent_updates as $key => $val):?>

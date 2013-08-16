@@ -250,40 +250,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
 
-    function recentUpdatesAction() {
-        $params = $this->_request->getParams();
-        $this->view->title = "Recent Updates";
 
-        $tableKeys = array(1 => "datecreated", 2 => "catname", 3 => "title", 4 => "name");
-
-        if (!isset($params['page'])) {
-            $this->getRequest()->setParam('page', 1);
-        }
-
-        if (!isset($params['sortBy'])) {
-            $this->getRequest()->setParam('sortBy', "datecreated");
-        }
-
-        if (!isset($params['sortOrder'])) {
-            $this->getRequest()->setParam('sortOrder', "ASC");
-        }
-
-        $params = $this->_request->getParams(); //Get params again once missing values are set
-        $page_urls = array();
-        for ($i = 1; $i < count($tableKeys) + 1; $i++) {
-            $page_urls["column_" . $i] = $this->_contributors->navHelper->writeURL($params, $tableKeys[$i], $params['page']);
-        }
-        $recent_updates = $this->_contributors->getRecentUpdates($this->getRequest()->getParam('page'), $this->getRequest()->getParam('sortBy'), $this->getRequest()->getParam('sortOrder'));
-
-        $this->view->pages = $this->_contributors->getPageCount("wiki_comments", "id");
-
-        for ($p = 1; $p < $this->view->pages + 1; $p++) {
-            $page_urls["page_" . $p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
-        }
-
-        $this->view->page_urls = $page_urls;
-        $this->view->current_page = $this->getRequest()->getParam('page');
-        $this->view->recent_updates = $recent_updates;
-    }
 }
 
