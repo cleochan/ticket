@@ -82,7 +82,7 @@ class Wiki_Model_Contributor{
 		
 		$select = $this->db->select();
 		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
-		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("create_time as datecreated"));
+		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as datecreated"));
 		$select->where("t.uid = ?", $id);
 		if($sortBy!=""){
 			$select->order($sortBy . " " . $order);
@@ -120,7 +120,7 @@ class Wiki_Model_Contributor{
 		
 		$select = $this->db->select();
 		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
-		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("create_time as datecreated"));
+		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as datecreated"));
 		$select->where("t.uid = ?", $id);
 		$select->order("datecreated DESC");
 		$select->limit(LATEST_TOPICS, 0);
@@ -147,8 +147,8 @@ class Wiki_Model_Contributor{
 		$select = $this->db->select();
 		$select->from("users as u", array("u.realname as name", "u.id as userid"));
 		$select->joinLeft("wiki_topics as t", "u.id=t.uid", array("title"));
-		$select->joinLeft("wiki_comments as c", "t.id=c.tid", array("c.id as commentid", "create_time as datecreated"));
-		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname", "ct.id as subcatid"));
+		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("c.id as contentid", "create_time as datecreated"));
+		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
 		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("u.id = t.uid");
 		if($sortBy!=""){
@@ -167,7 +167,7 @@ class Wiki_Model_Contributor{
             $temp['topic_title'] = $val['title'];
  			$temp['category_name'] = $val['catname'];
 			$temp['parent_name'] = $val['parent'];
-			$temp['comment_id'] = $val['commentid'];
+			$temp['content_id'] = $val['contentid'];
 			$temp['user_id'] = $val['userid'];
 			$result[] = $temp;
         }

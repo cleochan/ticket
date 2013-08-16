@@ -71,14 +71,14 @@ $(document).ready(function() {
 	}
 	
 	function resetWindow(){
-		$('.zend_row').hide();
 		$('.select_action_form').show();
 		$('#select_action_comment').show();
+		$('.zend_row').hide();
 	}
 
 	function displayWindow(showWindow, e) {
 		if (!showWindow) {
-			$('#edit_window').hide(100);
+			$('#edit_window').hide();
 			fadeBackground(false);
 		} else {
 			$('#edit_window').fadeIn(200);

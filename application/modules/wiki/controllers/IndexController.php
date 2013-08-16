@@ -191,6 +191,8 @@ class Wiki_IndexController extends Zend_Controller_Action {
 																 $this->getRequest()->getParam('sortBy'), 
 																 $this->getRequest()->getParam('sortOrder'));
 																 
+																 var_dump($recent_updates);
+																 
 		$this->view->pages = $this->_contributors->getPageCount("wiki_comments", "id"); 
 		
 		for($p = 1; $p<$this->view->pages+1; $p++){
