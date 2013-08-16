@@ -1,0 +1,21 @@
+﻿Add Sort
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   application/modules/wiki/controllers/IndexController.php
+#	modified:   application/modules/wiki/controllers/TopicController.php
+#	modified:   application/modules/wiki/models/Detail.php
+#	modified:   application/modules/wiki/views/scripts/index/index.phtml
+#	modified:   application/modules/wiki/views/scripts/topic/create.phtml
+#	modified:   application/modules/wiki/views/scripts/topic/detail.phtml
+#	modified:   application/modules/wiki/views/scripts/topic/edit.phtml
+#	modified:   application/modules/wiki/views/scripts/topic/history.phtml
+#	modified:   public/scripts/ckeditor4.2/config.js
+#	modified:   public/scripts/ckeditor4.2/contents_view.css
+#	new file:   public/scripts/ckfinder/userfiles/_thumbs/Files/1349039857189.jpg
+#	new file:   public/scripts/ckfinder/userfiles/files/1349039857189.jpg
+#
+

@@ -6,12 +6,9 @@ $this->Scripts = $this->Scripts.<<<EOF
 <!--[if lte IE 6]>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 <![endif]-->  
+<script type="text/javascript" src="/scripts/jquery.html5-placeholder-shim.js"></script>
 <script type="text/javascript">
     $(function(){
-        var content = $('#content').html();
-        $('#title').click(function(){
-            $(this).select();     
-        });
         var tosubmit=false;
         $(window).bind('beforeunload ',function() {
             if(CKEDITOR.instances.content.checkDirty()&&tosubmit==false){
@@ -51,7 +48,7 @@ EOF;
                 <tbody>
                     <tr>
                         <td valign="top"><?php echo $this->form->title; ?></td>
-                        <td valign="top"><?php echo $this->form->category; ?></td>
+                        <td width="25%" valign="top"><?php echo $this->form->category; ?></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -70,6 +67,7 @@ EOF;
         var edit = CKEDITOR.replace('content',{
             extraPlugins: 'autogrow',
             height:'500px',
+            language : 'en',
             filebrowserBrowseUrl: '/scripts/ckfinder/ckfinder.html',
             filebrowserImageBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Images',
             filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
@@ -77,5 +75,23 @@ EOF;
             filebrowserImageUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
             filebrowserFlashUploadUrl: '/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
         });
+        CKEDITOR.editorConfig = function( config ) {
+            config.toolbarGroups = [
+		{ name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'links' },
+		{ name: 'insert' },
+                { name: 'colors' },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'styles' },
+		{ name: 'tools' },
+		{ name: 'others' }
+            ];
+            config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript,Iframe,Flash,Smiley';
+            config.removeDialogTabs = 'link:advanced;image:advanced;image:Link';
+            config.autoGrow_minHeight = 500;
+        };
     </script>
 </div>

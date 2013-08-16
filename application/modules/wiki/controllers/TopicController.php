@@ -101,11 +101,27 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $data['tid'] = $tid;
         $this->view->categorys = $this->_categories->getParentsHtml($data['parent_id']);
         $this->view->data = $data;
-        $this->view->comments = $commentModel->GetComments($tid);
+        
+        $rowCount = 10;
+        $page = $this->_request->get('page');
+        $count = $commentModel->GetTotal($tid);
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->getView()->assign(array('position'=>'#comments'));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($page);
+        $this->view->paginator = $paginator ;
+        $this->view->comments = $commentModel->GetComments($tid,$page,$rowCount);
     }
     public function historyAction() {
         $tid = $this->_request->get('id');
-        $this->view->data = $this->_detailModel->getDetails($tid);
+        $order = $this->_request->get('orederBy');
+        $sort= $this->_request->get('sortOrder');
+        if($sort==NULL||$sort==='DESC'){
+            $this->view->sort = 'ASC';
+        }else{
+            $this->view->sort = 'DESC';
+        }
+        $this->view->data = $this->_detailModel->getDetails($tid,$order,$sort);
         $this->view->tid = $tid;
     }
 
@@ -200,6 +216,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->form = $form;
         /*@var $categoryEle Zend_Form_Element_Select*/
         $options = $this->_categories->getOptions(0);
+        $title = $form->getElement('title');
+        $title->setAttrib('placeholder', 'Please Enter Your Title');
         $categoryEle = $form->getElement('category');
         $categoryEle->addMultiOptions(array(''=>'Please Choose A Type'));
         $categoryEle->addMultiOptions($options);
