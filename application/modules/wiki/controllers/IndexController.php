@@ -168,7 +168,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
 		$params = $this->_request->getParams();
 	    $this->view->title = "Recent Updates";
 
-		$tableKeys = array(	1=>"datecreated", 2=>"cname", 3=>"title", 4=>"name");
+		$tableKeys = array(	1=>"datecreated", 2=>"catname", 3=>"title", 4=>"name");
 		
 		if(!isset($params['page'])){
 			$this->getRequest()->setParam('page', 1);
