@@ -1,7 +1,6 @@
 <br /><br />
-<div id="wiki">
+<div class="wiki">
         <h1 align="center">Contributor</h1>
-	<div>
 		<div style="margin-left: 10%">
 				<?php if($this->contributor):?>
 					<?php foreach($this->contributor as $key => $val):?>
@@ -11,14 +10,14 @@
 					<?php endforeach;?>			
 				<?php endif;?>
 		</div>
-		<div class='tb-style'>
-		<h2>Latest Topic Contributions</h1>
-				<table width="60%" align="center" cellspacing="1" >
-					<tbody>
-							<tr>
-								<th class="form-title" width="70%" >Topic</td>
-								<th class="form-title" width="30%" >Date</td>
-							</tr>
+
+		<h2 class="center_header">Latest Topic Contributions</h2>
+		<div class="tb-style">
+				<table>
+						<tr>
+							<th>Topic</td>
+							<th>Date</td>
+						</tr>
 							<?php if($this->latest_topics):?>
 								<?php foreach($this->latest_topics as $key => $val):?>
 								<tr>
@@ -27,7 +26,6 @@
 								</tr>
 								<?php endforeach;?>			
 							<?php endif;?>	
-					</tbody>
 				</table>
 		</div>
 </div>

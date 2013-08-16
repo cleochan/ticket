@@ -573,3 +573,6 @@ html body div#view-content.wiki div#deleteMessage {
 .wiki div.content div#category_list ul:nth-child(2n+1){
     background-color: #F7F7F7; 
 }
+.center_header {
+	text-align: center;
+}

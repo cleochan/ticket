@@ -24,7 +24,7 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
     public function init() {
         
     }
-    public function getOptions($parentId, &$separator, &$resultHtml) {
+    public function getOptions($parentId, &$separator=null, &$resultHtml=null) {
         $select = $this->select();
         $select->from($this->_name, array('id', 'cname'))
                 ->where('parent_id=?', $parentId);
