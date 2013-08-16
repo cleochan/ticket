@@ -539,7 +539,7 @@ html body div#view-content.wiki div#deleteMessage {
 	position: fixed;
 	min-width: 35%;
 	height: auto;
-	left: 33%;
+	left: 30%;
 	top: 50%;
 	z-index: 100;
 }
@@ -553,7 +553,7 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 .wiki div#edit_window.editWindow form#category_form table#select_action.category_table {
-	min-width: 550px;
+	min-width: 750px;
 }
 /*--Category Styling--*/
 .wiki div.content div#category_list h3 {

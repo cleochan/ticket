@@ -78,7 +78,7 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
 		
 		$select = $this->_db->select();
 		$select->from("wiki_category as ct", array("ct.id as id", "ct.parent_id as parent_id", "ct.cname as cname", "ct.status as status"));
-		$select->order("parent_id ASC");
+		$select->order("cname ASC");
 		$select->where("ct.status = 1");
 
 		$data = $this->_db->fetchAll($select);
