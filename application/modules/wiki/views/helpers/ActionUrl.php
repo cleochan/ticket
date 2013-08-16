@@ -10,9 +10,9 @@ class Wiki_View_Helper_ActionUrl extends Zend_View_Helper_Url {
     /**
      * Order to get Url more simplely
      * @param string $actionName
-     * @param string $controllerName
      * @param array  $params
-     * @return string the url of action
+     * @param string $controllerName
+     * @return string The url of action
      */
     public function ActionUrl($actionName=NuLL, array $params = NULL, $controllerName = NULL, $moduleName = NULL) {
         $request = Zend_Controller_Front::getInstance()->getRequest();

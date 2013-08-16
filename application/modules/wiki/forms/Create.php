@@ -23,7 +23,6 @@ class Wiki_Form_Create extends Zend_Form
         ));
         $this->addElement('text', 'title', array(
             //'label' => 'Title:',
-            'value' =>'Please Enter Title Here',
             'required' => TRUE,
             'decorators' => $this->ElementDecorators,
             'validators' => array(
@@ -31,7 +30,7 @@ class Wiki_Form_Create extends Zend_Form
                 Custom_Tools_Validators::Db_NoRecordExists('wiki_topics', 'title')
             )
         ));
-
+        
         $this->addElement('textarea', 'content', array(
             //'label' => 'Content:',
             'required' => TRUE,

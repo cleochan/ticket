@@ -43,7 +43,7 @@ EOF;
         <div class="content cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
             <?php echo $this->data['content'] ?>
         </div>
-        <div class="handle">
+        <div class="handle mt10">
             <table>
                 <tbody>
                     <tr>
@@ -67,6 +67,7 @@ EOF;
             <h2 class="strong">Comments</h2>
             <div class="container">
                 <dl>
+                <?php if(is_array($this->comments)&&  count($this->comments)>0):?>
                 <?php foreach ($this->comments as $value):?>
                     <dt>
                         <span class="strong"  style="color:#555;"><?php echo $value['realname'];?></span>&nbsp;&nbsp;<span style="color:#a7adb1;"><?php echo $value['create_time']; ?></span>
@@ -76,7 +77,18 @@ EOF;
                     </dd>
                     <div class="line dashed mb10"></div>
                 <?php endforeach;?>
+                <?php else:?>
+                    <dt>There are not comment here :(</dt>
+                <?php endif;?>
                 </dl>
+            </div>
+            <div class="mt30">
+                <div class="fr">
+                    <?php
+                    echo $this->paginationControl($this->paginator, 'Sliding', 'shared/pager.phtml',array('position'=>'#comments'));
+                    ?> 
+                </div>
+                <div class="clear"></div>
             </div>
             <div class="post">
                 <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
@@ -106,6 +118,7 @@ EOF;
                     var edit = CKEDITOR.replace('content',{
                         toolbar: 'Basic',
                         height:'200px',
+                        language:'en',
                         filebrowserBrowseUrl: '/scripts/ckfinder/ckfinder.html',
                         filebrowserImageBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Images',
                         filebrowserFlashBrowseUrl: '/scripts/ckfinder/ckfinder.html?Type=Flash',
@@ -115,14 +128,13 @@ EOF;
                     });
                     CKEDITOR.editorConfig = function( config ) {
                             config.toolbarGroups = [
-                                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup'] },
+                                    { name: 'insert'},
                                     { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] }
 
                             ];
-                            config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript';
-                            config.removeDialogTabs = 'link:advanced';
-                            config.language = 'en';
-                            config.height = '400px';
+                            config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript,Flash,Iframe';
+                            config.removeDialogTabs = 'link:advanced;image:advanced;image:Link';
                     };
                 </script>
             </div>

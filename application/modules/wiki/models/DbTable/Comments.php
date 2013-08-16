@@ -47,12 +47,21 @@ class Wiki_Model_DbTable_Comments extends Wiki_Model_DbTable_Abstract{
      * @param string $topic_id
      * @return array
      */
-    public function GetComments($topic_id){
+    public function GetComments($topic_id,$page,$rowCount){
         $select = $this->_db->select();
         $select->from($this->_name.' AS c', array('uid','tid','content','create_time'))
                 ->joinLeft('users AS u', 'c.uid = u.id',array('realname'))
                 ->where('c.tid=:tid')
-                ->order('c.id ASC');
+                ->order('c.id ASC')
+                ->limit($rowCount, $page);
         return $this->_db->fetchAll($select,array('tid'=>$topic_id));
+    }
+
+    public function GetTotal($tid) {
+        $select = $this->select();
+        $select->from($this->_name, array(new Zend_Db_Expr('COUNT(*) AS total')))
+                ->where('tid = ? AND status = 1',array('tid'=>$tid));
+        $result = $this->fetchRow($select)->toArray();
+        return $result['total'];
     }
 }

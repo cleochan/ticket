@@ -32,6 +32,13 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $this->view->title = "Wiki";
         $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
+        $order = $this->_request->get('orederBy');
+        $sort= $this->_request->get('sortOrder');
+        if($sort==NULL||$sort==='DESC'){
+            $this->view->sort = 'ASC';
+        }else{
+            $this->view->sort = 'DESC';
+        }
         if($suc==1){
             $this->view->message = 'The topic is deleted successfully';
         }
@@ -41,7 +48,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator ; 
-        $this->view->data = $this->_detailModel->getTopicsPaging($page,$rowCount);
+        $this->view->data = $this->_detailModel->getTopicsPaging($page,$rowCount,$order,$sort);
     }
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {

@@ -40,17 +40,19 @@ class Wiki_Model_Detail {
     /**
      * Get the all version detail of Topic
      * @param string $id  The Topic Id
+     * @param type $orderBy
+     * @param type $sortOrder
      * @return array
      */
-    public function getDetails($id) {
+    public function getDetails($id,$orderBy='ID',$sortOrder='DESC') {
 
         $select = $this->db->select();
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
                 ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
                 ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
                 ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','is_default','create_time AS update_time', 'u.realname as update_name','id AS version_id','preversion_id'))
-                ->where('t.id=:id')
-                ->order('ct.id DESC');
+                ->where('t.id=:id');
+        $this->setOrder($select, $orderBy, $sortOrder);
         return $this->db->fetchAll($select, array('id' => $id));
     }
     
@@ -110,24 +112,80 @@ class Wiki_Model_Detail {
     public function getTopics() {
         $select = $this->db->select();
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
+                ->joinLeft('users AS u', 'u.id=t.uid', array('t.uid AS creator_uid','realname as creator_name'))
                 ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','create_time AS update_time', 'u.realname as update_name'))
+                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('ct.uid AS updator_uid','create_time AS update_time', 'u.realname as update_name'))
                 ->where('ct.is_default=1')
                 ->order('t.id DESC');
         return $this->db->fetchAll($select);
     }
-    public function getTopicsPaging($page,$rowCount) {
+    /**
+     * 
+     * @param int $page
+     * @param int $rowCount
+     * @param string $orderBy
+     * @param string $sortOrder
+     * @return array
+     */
+    public function getTopicsPaging($page,$rowCount,$orderBy='ID',$sortOrder='DESC') {
         $select = $this->db->select();
-        $limit_start = ($page-1)*$limit;
         $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
+                ->joinLeft('users AS u', 'u.id=t.uid', array('t.uid AS creator_uid','realname as creator_name'))
                 ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','create_time AS update_time', 'u.realname as update_name'))
-                ->where('ct.is_default=1')
-                ->order('t.id DESC')
-                ->limitPage($page, $rowCount);
+                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('ct.uid AS updator_uid','create_time AS update_time', 'u.realname as update_name'))
+                ->where('ct.is_default=1');
+        $this->setOrder($select, $orderBy, $sortOrder);
+        $select->limitPage($page, $rowCount);
         return $this->db->fetchAll($select);
+    }
+    
+    /**
+     * 
+     * @param Zend_Db_Select $select
+     * @param string $orderBy
+     * @param string $sortOrder
+     */
+    private function setOrder(&$select,$orderBy,$sortOrder){
+        if($sortOrder != 'ASC' && $sortOrder != 'DESC'){
+            $sortOrder = 'DESC';
+        }
+        if($sortOrder==='ASC' || $sortOrder==='DESC'){
+            switch ($orderBy) {
+                case 'id':
+                    $select->order('t.id '.$sortOrder);
+                    break;
+                case 'topic':
+                    $select->order('t.title '.$sortOrder);
+                    break;
+                case 'category':
+                    $select->order('cname '.$sortOrder);
+                    break;
+                case 'creator':
+                    $select->order('creator_name '.$sortOrder);
+                    break;
+                case 'create_time':
+                    $select->order('create_time '.$sortOrder);
+                    break;
+                case 'update_time':
+                    $select->order('update_time '.$sortOrder);
+                    break;
+                case 'update_name':
+                    $select->order('update_name '.$sortOrder);
+                    break;
+                case 'version_id':
+                    $select->order('version_id '.$sortOrder);
+                    break;
+                case 'preversion_id':
+                    $select->order('preversion_id '.$sortOrder);
+                    break;
+                default:
+                    $select->order('update_time '.$sortOrder);
+                    break;
+            }
+        }else{
+            $select->order('t.id '.$sortOrder);
+        }
+        
     }
 }
 

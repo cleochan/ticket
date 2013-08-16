@@ -1,11 +1,13 @@
+<?php/*@var $this Zend_View */
+?>
 <?php if ($this->pageCount): ?> 
     <div class="pages"> 
         <!-- Previous page link --> 
         <?php if (isset($this->previous)): ?> 
-            <span><a href="<?php echo $this->url(array('page' => 1)); ?>"> 
+            <span><a href="<?php echo $this->url(array('page' => 1))."/{$this->position}"; ?>"> 
                     &lt;&lt; 
                 </a></span>
-            <span><a href="<?php echo $this->url(array('page' => $this->previous)); ?>"> 
+            <span><a href="<?php echo $this->url(array('page' => $this->previous))."/{$this->position}"; ?>"> 
                     &lt; 
                 </a></span>
 
@@ -17,7 +19,7 @@
         <!-- Numbered page links --> 
         <?php foreach ($this->pagesInRange as $page): ?> 
             <?php if ($page != $this->current): ?> 
-                <span><a href="<?php echo $this->url(array('page' => $page)); ?>"> 
+                <span><a href="<?php echo $this->url(array('page' => $page))."/{$this->position}"; ?>"> 
                         <?php echo $page; ?> 
                     </a></span> 
             <?php else: ?> 
@@ -29,10 +31,10 @@
 
         <!-- Next page link --> 
         <?php if (isset($this->next)): ?> 
-            <span><a href="<?php echo $this->url(array('page' => $this->next)); ?>"> 
+            <span><a href="<?php echo $this->url(array('page' => $this->next))."/{$this->position}"; ?>"> 
                     &gt; 
                 </a></span> 
-            <span><a href="<?php echo $this->url(array('page' => $this->pageCount)); ?>"> 
+            <span><a href="<?php echo $this->url(array('page' => $this->pageCount))."/{$this->position}"; ?>"> 
                     &gt;&gt; 
                 </a></span> 
         <?php else: ?> 
