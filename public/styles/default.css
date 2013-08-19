@@ -582,3 +582,19 @@ html body div#view-content.wiki div#deleteMessage {
 .center_header {
 	text-align: center;
 }
+
+.wiki #edit_form_title{
+	margin: 0 0 0 5px;
+	height: auto;
+	min-width: 300px;
+}
+
+.wiki #deleteMessage h3, .wiki #deleteMessage p{
+	margin: 0;
+	height: auto;
+}
+
+/*--Search Panel--*/
+.wiki #search-result-panel {
+
+}
