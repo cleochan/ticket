@@ -24,21 +24,29 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
     public function init() {
         
     }
-    public function getOptions($parentId, &$separator, &$resultHtml) {
+    /**
+     * 
+     * @param string $parentId
+     * @return array
+     */
+    public function getOptions($parentId, $defaultOption,&$separator, &$return) {
         $select = $this->select();
+        if(is_string($defaultOption) &&  strlen($defaultOption)>0 && !isset($return[''])){
+            $return['']=$defaultOption;
+        }
         $select->from($this->_name, array('id', 'cname'))
                 ->where('parent_id=?', $parentId);
         $result = $this->fetchAll($select)->toArray();
         if ($result != NULL && count($result) > 0) {
             foreach ($result as $row) {
                 $key = $row['id'];
-                $resultHtml[$key] = $separator . ' ' . $row['cname'];
+                $return[$key] = $separator . ' ' . $row['cname'];
                 $separator.='- ';
-                $this->getOptions($row['id'], $separator, $resultHtml);
+                $this->getOptions($row['id'], $defaultOption, $separator, $return);
             }
             $separator = '';
         }
-        return $resultHtml;
+        return $return;
     }
     
     public function getChildrenHtml($parentId,&$separator,&$resultHtml){
@@ -56,16 +64,16 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         }
         return $resultHtml;
     }
-    public function getParentsHtml($parentId, &$return) {
+    public function getParents($parentId, &$return) {
         if ($parentId != NULL) {
             $select = $this->select();
-            $select->from($this->_name, array('id', 'cname', 'parent_id'))
+            $select->from($this->_name, array('id AS cid', 'cname', 'parent_id'))
                     ->where('id=?', $parentId);
             $row = $this->fetchRow($select);
             if ($row != NULL) {
                 $row = $row->toArray();
                 $return[] = $row;
-                $this->getParentsHtml($row['parent_id'], $return);
+                $this->getParents($row['parent_id'], $return);
             }
             return $return;
         }else{

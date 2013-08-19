@@ -3,35 +3,40 @@ $this->Css = <<<EOF
     <link type="text/css" rel="stylesheet" href="/scripts/ckeditor4.2/contents_view.css">        
 EOF;
 ?>
-<div class='wiki'>
+<div class='wiki limitWidth'>
     <?php if($this->data['content']):?>
     <div class="navigation">
         <?php $str = '' ?>
         <?php foreach($this->categorys as $item):?>
             <?php
-               $str =" <a href='#'>{$item['cname']}</a> > {$str}";
+               $url = $this->ActionUrl('index',array('cid'=>$item['cid']),'index');
+               $str =" <a href='$url'>{$item['cname']}</a> &gt; {$str}";
 
             ?>
         <?php endforeach;?>
-        <?php echo "{$str}<a href='#'>{$this->data['cname']}</a> > <a href='#'>{$this->data['title']}</a> > Version{$this->data['version_id']}";?>
+        <?php 
+            $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']),'index');
+            $topicUrl = $this->ActionUrl('detail',array('id'=>$this->data['tid']));
+        ?>
+        <?php echo "{$str}<a href='{$url}'>{$this->data['cname']}</a> &gt; <a href='{$topicUrl}'>{$this->data['title']}</a> > Version{$this->data['vid']}";?>
     </div>
     <div class="detail">
         <div class="tool-bar">
             <div class="fr">
                 <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
-                <a href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['id']));?>" style="line-height: 16px;">Back to history</a>
+                <a href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid']));?>" style="line-height: 16px;">Back to history</a>
                 <div class="clear"></div>
             </div>
             <div class="fl">
                 <?php if($this->data['prevId']!=NULL):?>
-                <div class="fl mr10" style="line-height: 16px;"><a href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['id'],'version'=>$this->data['prevId']));?>">←</a></div>
+                <div class="fl mr10" style="line-height: 16px;"><a href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['tid'],'version'=>$this->data['prevId']));?>">←</a></div>
                 <?php endif;?>
-                <div class="fl strong mr10" style="line-height: 16px;">Version ID:<?php echo  $this->data['version_id'];?> </div>
+                <div class="fl strong mr10" style="line-height: 16px;">Version ID:<?php echo  $this->data['vid'];?> </div>
                 <?php if($this->data['is_default']==TRUE): ?>
                 <div class="fl mr10"><span class="ui-icon ui-icon-circle-check" title="Current Version"></span></div>
                 <?php endif;?>
                 <?php if($this->data['nextId']!=NULL):?>
-                <div class="fl" style="line-height: 16px;"><a href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['id'],'version'=>$this->data['nextId']));?>">→</a></div>
+                <div class="fl" style="line-height: 16px;"><a href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['tid'],'version'=>$this->data['nextId']));?>">→</a></div>
                 <?php endif;?>
                 <div class="clear"></div>
             </div>
@@ -42,7 +47,7 @@ EOF;
         </h1>
         <h4 class="info">
             Author:<?php echo $this->data['creator_name'] ?>&nbsp;|&nbsp;
-            Create Time:<?php echo $this->data['create_time'] ?>&nbsp;|&nbsp;
+            Create Time:<?php echo $this->data['created_time'] ?>&nbsp;|&nbsp;
             Last Update Time:<?php echo $this->data['update_time'] ?>&nbsp;|&nbsp;
             Update By:<?php echo $this->data['update_name'] ?>
         </h4>
@@ -54,14 +59,14 @@ EOF;
                 <tbody>
                     <tr>
                         <?php if($this->data['prevId']!=NULL):?>
-                        <td><a class="button-style" href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['id'],'version'=>$this->data['prevId']));?>">Previous Version</a></td>
+                        <td><a class="button-style" href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['tid'],'version'=>$this->data['prevId']));?>">Previous Version</a></td>
                         <?php endif; ?>
                         <?php if($this->data['nextId']!=NULL):?>
-                        <td><a class="button-style" href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['id'],'version'=>$this->data['nextId']));?>">Next Version</a></td>
+                        <td><a class="button-style" href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['tid'],'version'=>$this->data['nextId']));?>">Next Version</a></td>
                         <?php endif; ?>
                         <?php if($this->data['is_default']!=TRUE):?>
                         <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id?>
-                        <?php if($this->data['creator_uid']===$uid):?><td><a id="revert" class="button-style btn-red" href="<?php echo $this->ActionUrl('set-default',array('id'=>$this->data['tid'],'version'=>$this->data['version_id']));?>">Revert to this version</a></td><?php endif;?>
+                        <?php if($this->data['creator_uid']===$uid):?><td><a id="revert" class="button-style btn-red" href="<?php echo $this->ActionUrl('set-default',array('id'=>$this->data['tid'],'version'=>$this->data['vid']));?>">Revert to this version</a></td><?php endif;?>
                         <script type="text/javascript">
                              $('#revert').click(function(){
                                  if(confirm("This handle will revert to this version and create a new history item,would you like to do that?")){
@@ -79,7 +84,7 @@ EOF;
         <div class="tool-bar">
             <div class="fr">
                 <span class="ui-icon ui-icon-arrowthick-1-w fl"></span>
-                <a href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['id']));?>" style="line-height: 16px;">Back to history</a>
+                <a href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid']));?>" style="line-height: 16px;">Back to history</a>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>

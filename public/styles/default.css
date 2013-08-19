@@ -220,10 +220,12 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 /*--Wiki Styles--*/
 
 .wiki{
-    width:1024px;
     min-height: 350px;
     margin: 0px auto 0px auto;
     position: relative;
+}
+.wiki.limitWidth{
+    width:1024px;
 }
 .wiki .strong{
     font-weight: bold;
@@ -272,6 +274,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .mt10{
    margin-top: 10px;
 }
+.wiki .mt5{
+   margin-top: 5px;
+}
 .wiki .mt15{
    margin-top: 15px;
 }
@@ -281,69 +286,73 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .mb30{
    margin-bottom: 30px;
 }
+.wiki .mb5{
+   margin-bottom: 5px;
+}
 .wiki .p15{
    padding: 15px;
 }
 .wiki .radius{
    border-radius:3px;
 }
-.wiki .tb-style table,.wiki .tb-style th,.wiki .tb-style td{
-    padding: 0px;
-    margin: 0px;
-    border: 0px;
-}
-.wiki .tb-style th,.wiki .tb-style td{
-    height: 34px;
-    border-right: 1px solid #D8D8D8;
-}
+
 /* Table Style Start*/
 .wiki .tb-style table{
-    padding: 0px;
-    border: 1px solid #D8D8D8;
+    border: 1px solid #000;
     background-color: #fff;
-    -webkit-box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);
-    box-shadow:  1px 1px 2px 0px rgba(0, 0, 0, 0.4);
-    behavior: url(/styles/PIE/PIE.htc);
 }
 .wiki .tb-style table th{
     color: rgb(85, 85, 85);
-    background-image: linear-gradient(#FAFAFA, #EAEAEA);
-    background-image: -webkit-linear-gradient(#FAFAFA, #EAEAEA);
-    -pie-background: linear-gradient(#FAFAFA,#EAEAEA);
-    background-repeat: repeat-x;
-    text-shadow: 0 1px 0 #FFF;
-    border-bottom: 1px solid #D8D8D8;
-    background-color: #EAEAEA;
-    behavior: url(/styles/PIE/PIE.htc);
+    background-color: #fff;
 }
 .wiki .tb-style table tr{
-    background-color: #FFF; 
+    background-color: #d8d8d8; 
 }
 .wiki .tb-style table tr:nth-child(2n+1){
-    background-color: #F7F7F7; 
+    background-color: #e8e8e8; 
 }
 .wiki .tb-style table td{
     text-align: center;
 }
-.wiki a:hover{
-	color:#BB0B0B;
-	text-decoration:none;
+.wiki .tb-style table,.wiki .tb-style th,.wiki .tb-style td{
+/*    padding: 0px;
+    margin: 0px;
+    border: 0px;*/
 }
-
+.wiki .tb-style th,.wiki .tb-style td{
+    padding: 7px;
+    /*border-right: 1px solid #D8D8D8;*/
+}
 /* Table Style End*/
+
+/* Paging Style*/
 .wiki .pages span{
     display: block;
     float: left;
-    padding: 5px 10px;
+    width: 30px;
+    height: 28px;
+    margin-right: 5px;
     background-color: #F7F7F7;
     border: solid 1px #E4E4E4;
-    margin-right: 5px;
+    font-size: 12px;
+    line-height: 28px;
+    text-align: center;
+    color: #8F8F8F;
 }
-
+.wiki .pages span a{
+    display: block;
+    font-size: 12px;
+    line-height: 28px;
+    text-align: center;
+    color: #000;
+}
+.wiki .pages span a:hover{
+    background-color: #BB0B0B;
+    color: #fff;
+}
 .wiki .pages span.pagesOn{
     color: #8F8F8F;
-    border: solid 1px #459455;
+    border: solid 1px #BB0B0B;
 }
 .wiki .message{
 /*    font-weight: bold;*/
@@ -420,9 +429,6 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 }
 .wiki .detail .info{
     text-align: center;
-}
-.wiki .index{
-    margin-top: 20px;
 }
 .wiki .history{
     margin-top: 20px;

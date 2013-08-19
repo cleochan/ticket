@@ -15,12 +15,22 @@ EOF;
 
 ?>
 <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id ?>
-<div class='wiki'>
+<div class='wiki limitWidth'>
     <?php if (isset($this->message)): ?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
     <?php endif; ?>
     <?php if($this->data['title']!=NULL&&strlen($this->data['title'])>0):?>
-
+     <div class="navigation">
+        <?php $str = '' ?>
+        <?php foreach($this->categorys as $item):?>
+            <?php
+               $url = $this->ActionUrl('index',array('cid'=>$item['cid']),'index');
+               $str = "<a href='$url'>{$item['cname']}</a> &gt; {$str}";
+            ?>
+        <?php endforeach;?>
+        <?php $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']),'index');?>
+        <?php echo "$str<a href='{$url}'>{$this->data['cname']}</a> &gt; {$this->data['title']}";?>
+    </div>
     <div class="detail">
         <div class="tool-bar" style="margin-right:6px;">
             <div class="fr">
@@ -36,7 +46,7 @@ EOF;
         </h1>
         <h4 class="info">
             Author:<?php echo $this->data['creator_name'] ?>&nbsp;|&nbsp;
-            Create Time:<?php echo $this->data['create_time'] ?>&nbsp;|&nbsp;
+            Create Time:<?php echo $this->data['created_time'] ?>&nbsp;|&nbsp;
             Last Update Time:<?php echo $this->data['update_time'] ?>&nbsp;|&nbsp;
             Update By:<?php echo $this->data['update_name'] ?>
         </h4>

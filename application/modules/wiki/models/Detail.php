@@ -21,20 +21,39 @@ class Wiki_Model_Detail {
     function __construct() {
         $this->db = Zend_Registry::get('db');
     }
-
+    public function getDetailSelect(array $fields){
+        $select = $this->db->select();
+        $select->from('wiki_topics AS t',$fields)
+                ->joinLeft('users AS u', 'u.id=t.uid')
+                ->joinLeft('wiki_category AS c', 'c.id=t.cid')
+                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid')
+                ->joinLeft('users as u2','u2.id=ct.uid');
+        return $select;
+    }
+    
     /**
      * Get the detail of Topic 
      * @param string $id The Topic Id
      * @return array
      */
     public function getDetail($id) {
-
-        $select = $this->db->select();
-        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time','uid AS creator_uid'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname','parent_id'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('content','create_time AS update_time', 'u.realname AS update_name','ct.id AS vid'))
-                ->where('t.id=:id AND ct.is_default=1');
+        $fields = array(
+                           't.title', 
+                           't.cid', 
+                           't.id', 
+                           't.status AS tstatus', 
+                           't.create_time AS created_time',
+                           't.uid AS creator_uid',
+                           'u.realname as creator_name',
+                           'c.cname',
+                           'c.parent_id',
+                           'ct.content',
+                           'ct.create_time AS update_time',
+                           'ct.id AS vid',
+                           'u2.realname AS update_name'
+                           );
+        $select = $this->getDetailSelect($fields);
+        $select->where('t.id=:id AND ct.is_default=1');
         return $this->db->fetchRow($select, array('id' => $id));
     }
     /**
@@ -45,13 +64,26 @@ class Wiki_Model_Detail {
      * @return array
      */
     public function getDetails($id,$orderBy='ID',$sortOrder='DESC') {
-
-        $select = $this->db->select();
-        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('uid','is_default','create_time AS update_time', 'u.realname as update_name','id AS version_id','preversion_id'))
-                ->where('t.id=:id');
+        $fields = array(
+                           't.title', 
+                           't.cid', 
+                           't.id AS tid', 
+                           't.status AS tstatus', 
+                           't.create_time AS created_time',
+                           't.uid AS creator_uid',
+                           'u.realname as creator_name',
+                           'c.cname',
+                           'c.parent_id',
+                           'ct.content',
+                           'ct.uid AS cuid',
+                           'ct.is_default',
+                           'ct.create_time AS update_time',
+                           'ct.id AS vid',
+                           'ct.preversion_id',
+                           'u2.realname AS update_name'
+                           );
+        $select = $this->getDetailSelect($fields);
+        $select->where('t.id=:id');
         $this->setOrder($select, $orderBy, $sortOrder);
         return $this->db->fetchAll($select, array('id' => $id));
     }
@@ -71,12 +103,26 @@ class Wiki_Model_Detail {
     }
 
     public function getDetailWithVersion($id, $vid) {
-        $select = $this->db->select();
-        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time','uid AS creator_uid'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname','parent_id'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('content','is_default','create_time AS update_time', 'u.realname as update_name','id AS version_id'))
-                ->where('t.id=:id AND ct.id=:vid');
+        $fields = array(
+                           't.title', 
+                           't.cid', 
+                           't.id AS tid',
+                           't.status AS tstatus', 
+                           't.create_time AS created_time',
+                           't.uid AS creator_uid',
+                           'u.realname as creator_name',
+                           'c.cname',
+                           'c.parent_id',
+                           'ct.content',
+                           'ct.uid AS cuid',
+                           'ct.is_default',
+                           'ct.create_time AS update_time',
+                           'ct.id AS vid',
+                           'ct.preversion_id',
+                           'u2.realname AS update_name'
+                           );
+        $select = $this->getDetailSelect($fields);
+        $select->where('t.id=:id AND ct.id=:vid');
         return $this->db->fetchRow($select, array('id' => $id,'vid'=>$vid));
     }
     
@@ -109,16 +155,6 @@ class Wiki_Model_Detail {
                ->limit('1');
         return $this->db->fetchOne($select, array('id' => $id,'tid'=>$tid));
     }
-    public function getTopics() {
-        $select = $this->db->select();
-        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('t.uid AS creator_uid','realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('ct.uid AS updator_uid','create_time AS update_time', 'u.realname as update_name'))
-                ->where('ct.is_default=1')
-                ->order('t.id DESC');
-        return $this->db->fetchAll($select);
-    }
     /**
      * 
      * @param int $page
@@ -127,13 +163,28 @@ class Wiki_Model_Detail {
      * @param string $sortOrder
      * @return array
      */
-    public function getTopicsPaging($page,$rowCount,$orderBy='ID',$sortOrder='DESC') {
-        $select = $this->db->select();
-        $select->from('wiki_topics AS t', array('title', 'cid', 'id', 'status', 'create_time'))
-                ->joinLeft('users AS u', 'u.id=t.uid', array('t.uid AS creator_uid','realname as creator_name'))
-                ->joinLeft('wiki_category AS c', 'c.id=t.cid', array('cname'))
-                ->joinLeft('wiki_contents AS ct', 't.id=ct.tid AND u.id=ct.uid', array('ct.uid AS updator_uid','create_time AS update_time', 'u.realname as update_name'))
-                ->where('ct.is_default=1');
+    public function getTopicsPaging($page,$rowCount,$orderBy='ID',$sortOrder='DESC',$categoryId=NULL) {
+        $fields = array(
+                           't.title', 
+                           't.cid', 
+                           't.id AS tid', 
+                           't.status AS tstatus', 
+                           't.create_time AS created_time',
+                           't.uid AS creator_uid',
+                           'u.realname as creator_name',
+                           'c.cname',
+                           'c.parent_id',
+                           'ct.content',
+                           'ct.create_time AS update_time',
+                           'ct.id AS vid',
+                           'ct.uid AS updator_uid',
+                           'u2.realname AS update_name'
+                           );
+        $select = $this->getDetailSelect($fields);
+        $select->where('ct.is_default=1');
+        if($categoryId!=NULL){
+            $select->where('cid = ?', $categoryId);
+        }
         $this->setOrder($select, $orderBy, $sortOrder);
         $select->limitPage($page, $rowCount);
         return $this->db->fetchAll($select);

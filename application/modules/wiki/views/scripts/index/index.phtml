@@ -1,32 +1,31 @@
-<?php
-//$this->Scripts = <<<EOF
-//    <!--[if lt IE 7]>
-//    <script style="text/javascript">
-//        location.href='http://windows.microsoft.com/zh-cn/windows/upgrade-your-browser';
-//    </script>
-//    <![endif]-->      
-//EOF;
-?>
-
 <div class="wiki">
     <?php if (isset($this->message)): ?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
     <?php endif; ?>
+
     <div class="index tb-style">
-<!--        <pre><? //=print_r($this->data) ?></pre>-->
-        <table width="100%" cellpadding="0" cellspacing="0">
+        <div class="mb5 mt5">
+            
+            <?php echo $this->formSelect('redirect', $this->cid!=''?$this->cid:0, array('id' => 'redirect'), $this->options); ?>
+            <script tyle="text/javascript">
+                $('#redirect').change(function() {
+                    location.href = '/wiki/index/index/cid/' + $(this).val();
+                });
+            </script>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
                 <tr>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'topic','sortOrder'=>$this->sort)) ?>">Topic</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'category','sortOrder'=>$this->sort)) ?>">Category</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'creator','sortOrder'=>$this->sort)) ?>">Creator</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'create_time','sortOrder'=>$this->sort)) ?>">Create Time</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'update_name','sortOrder'=>$this->sort)) ?>">Last Update By</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">Last Update Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Topic</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Category</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Creator</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Create Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Last Update By</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_time', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Last Update Time</a></th>
                 </tr>
                 <?php foreach ($this->data as $value): ?>
                     <tr>
-                        <td><a target="_blank" href="<?php echo $this->ActionUrl('detail', array('id' => $value['id']), 'topic') ?>"><?php echo $value['title'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('detail', array('id' => $value['tid']), 'topic') ?>"><?php echo $value['title'] ?></a></td>
                         <td><?php echo $value['cname'] ?></td>
                         <td><a href="<?php echo $this->ActionUrl('show-contributor', array('userid' => $value['creator_uid'])) ?>"><?php echo $value['creator_name'] ?></a></td>
                         <td><?php echo $value['create_time'] ?></td>

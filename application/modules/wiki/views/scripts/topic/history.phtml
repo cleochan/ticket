@@ -8,29 +8,29 @@
                 <div class="clear"></div>
             </div>
             <div class="fl">
-                <span class="strong">History Of "<a href="<?php echo $this->ActionUrl('detail',array('id'=>$this->data[0]['id']));?>"><?php echo $this->data[0]['title'] ?></a>"</span>
+                <span class="strong">History Of "<a href="<?php echo $this->ActionUrl('detail',array('id'=>$this->data[0]['tid']));?>"><?php echo $this->data[0]['title'] ?></a>"</span>
             </div>
             <div class="clear"></div>
         </div>
-        <table width="100%" cellpadding="0" cellspacing="0">
+        <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
                 <tr>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['id'],'orederBy' =>'version_id','sortOrder'=>$this->sort)) ?>">Version</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['id'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">Update Time</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['id'],'orederBy' =>'update_name','sortOrder'=>$this->sort)) ?>">Contributor</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'version_id','sortOrder'=>$this->sort)) ?>">Version</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">Update Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_name','sortOrder'=>$this->sort)) ?>">Contributor</a></th>
                     <th>Topic</th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['id'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">From</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">From</a></th>
                     <th>On Show</th>
                 </tr>
                 <?php foreach ($this->data as $value):?>
                 <tr>
-                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['version_id']));?>"><?php echo $value['version_id'] ?></a></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['vid']));?>"><?php echo $value['vid'] ?></a></td>
                     <td><?php echo $value['update_time'] ?></td>
                     <td><?php echo $value['update_name'] ?></td>
-                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['version_id']));?>"><?php echo $value['title'] ?></a></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['vid']));?>"><?php echo $value['title'] ?></a></td>
                     <td>
                         <?php if($value['preversion_id']): ?>
-                        <a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['id'],'version'=>$value['preversion_id']));?>">
+                        <a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['preversion_id']));?>">
                              <?php echo $value['preversion_id']?>
                         </a>
                         <?php else:?>

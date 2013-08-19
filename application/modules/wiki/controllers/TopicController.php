@@ -47,16 +47,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_categories = new Wiki_Model_DbTable_Category();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
     }
-
-    public function indexAction() {
-        $this->view->title = "Wiki";
-        $suc = $this->_request->get('msg');
-        if ($suc == 1) {
-            $this->view->message = 'The topic is deleted successfully';
-        }
-        $this->view->data = $this->_detailModel->getTopics();
-    }
-
+    
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
@@ -94,12 +85,14 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->form = $form;
         $tid = $this->_request->get('id');
         $suc = $this->_request->get('msg');
-//        if ($suc == 1) {
-//            $this->view->message = 'The topic is created as you see :)';
-//        }
+        if ($suc == 1) {
+            $this->view->message = 'The topic is created as you see :)';
+        }elseif($suc == 2){
+            $this->view->message = 'The data was saved';
+        }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] = $tid;
-        $this->view->categorys = $this->_categories->getParentsHtml($data['parent_id']);
+        $this->view->categorys = $this->_categories->getParents($data['parent_id']);
         $this->view->data = $data;
         
         $rowCount = 10;
@@ -134,7 +127,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $data['tid'] = $tid;
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
-        $this->view->categorys = $this->_categories->getParentsHtml($data['parent_id']);
+        $this->view->categorys = $this->_categories->getParents($data['parent_id']);
         $this->view->data = $data;
     }
 
@@ -151,7 +144,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $tid = $this->_request->get('id');
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
-//        $this->_forward('index', NULL, array('msg' => 1));
         $this->_redirect('/wiki/index/index/msg/1');
     }
 
@@ -200,7 +192,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $preversion_id = $this->_request->getPost('vid');
                     $this->_contentsModel->CreateContent($tid, $uid, $content, $preversion_id,TRUE);
                     $this->_contributorModel->UpdateRecord($tid,$uid);
-                    $this->view->message = 'The data was saved';
+                    $this->_redirect('/wiki/topic/detail/id/'.$tid.'/msg/2');
                 } else {
                     die('insert error');
                 }

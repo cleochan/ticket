@@ -11,7 +11,7 @@
  * Other settings may be left with their default values, or used to control
  * advanced features of CKFinder.
  */
-
+session_start();
 /**
  * This function must check the user session to be sure that he/she is
  * authorized to upload and access files in the File Browser.
@@ -20,16 +20,23 @@
  */
 function CheckAuthentication()
 {    
-        if(TRUE){
-            return true;
-        }
-	return false;
+//    ini_set('include_path', $_SERVER['DOCUMENT_ROOT'].'/../library/');
+//    require_once '/Zend/Auth.php';
+//    $auth = Zend_Auth::getInstance();
+//    $s = Zend_Auth::getInstance()->getStorage()->read();
+//    if ($auth->hasIdentity())
+//      return true;
+//    else 
+//      return false;
+    return TRUE;
 }
 
 // LicenseKey : Paste your license key here. If left blank, CKFinder will be
 // fully functional, in demo mode.
 $config['LicenseName'] = '';
 $config['LicenseKey'] = '';
+//$config['LicenseName'] = 'news.princeton.edu';
+//$config['LicenseKey'] = 'BNHY-MFK1-P111-X7B9-MVFK-UL5A-11XH';
 
 /*
  Uncomment lines below to enable PHP error reporting and displaying PHP errors.
