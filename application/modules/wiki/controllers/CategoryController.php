@@ -34,7 +34,8 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->view->system_version = $get_title->GetVal("system_version");
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
-        $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
+        $this->view->menu = $this->_menu->GetWikiMenu("category");
+		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
 	function indexAction(){
@@ -71,50 +72,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
 					}
 			}
 	}
-	
-	function addCategoryAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Add Category";
-		$this->view->categories = $categories =  $this->_categories->getCategories();
-		
-		$form = new Wiki_Form_Category();
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-						$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-                   		$this->_redirect('/wiki/category');
-					}
-			}
-	}
-	
-	function editCategoryAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Edit Category";
-		$form = new Wiki_Form_Category();
-		$this->view->categories = $categories =  $this->_categories->getCategories();
-		
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-						$this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-                   		$this->_redirect('/wiki/category');
-					}
-			}
-	}
 
-	function deleteCategoryAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Delete Category";
-		$this->view->categories = $categories =  $this->_categories->getCategories();
-		$form = new Wiki_Form_Category();
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-						$this->_categories->delete($this->_request->getPost('category_id'));
-                   		$this->_redirect('/wiki/category');
-					}
-			}
-	}
 
 }
 

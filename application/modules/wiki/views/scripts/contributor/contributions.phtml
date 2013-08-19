@@ -1,17 +1,17 @@
 	<br /><br />
-<div id="view-content">
+<div class="wiki">
         <h1 align="center">Contributor</h1>
-		<div align="center">
+		<div class="tb-style" align="center">
 			<?php if($this->contributor):?>
 				<?php foreach($this->contributor as $key => $val):?>
 					<h2>Topic Contributions by <?=$val['contributor_name']?></h1>
 				<?php endforeach;?>	
 			<?php endif;?>	
-				<table width="60%" align="center" cellspacing="1">
+				<table width="100%" align="center" cellspacing="1">
 					<tbody>
 							<tr>
-								<td class="form-title" width="60%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Topic</a></td>
-								<td class="form-title" width="20%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Date</a></td>
+								<th width="60%"><a href="<?php echo $this->page_urls["column_1"] ?>">Topic</a></th>
+								<th width="20%"><a href="<?php echo $this->page_urls["column_2"] ?>">Date</a></th>
 							</tr>
 							<?php if($this->all_topics):?>
 								<?php foreach($this->all_topics as $key => $val):?>

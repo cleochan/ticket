@@ -1,0 +1,36 @@
+<br /><br />
+<div class="wiki">
+        <h1 align="center">Contributor</h1>
+		<div class="tb-style">
+			<table width="35%" cellpadding="0" cellspacing="0">
+				<?php if($this->contributor):?>
+					<?php foreach($this->contributor as $key => $val):?>
+							<th><h3>Name:</h3></th>
+							<tr><td><?=$val['contributor_name']?></td></tr>
+							<th><h3>Department:</h3></th>
+							<tr><td><?=$val['department_name']?></td></tr>
+							<th><h3>Total Contributions:</h3></th>
+							<tr><td><?=$val['contributions']?></td></tr>
+					<?php endforeach;?>			
+				<?php endif;?>
+			</table>
+		</div>
+
+		<h2 class="center_header">Latest Topic Contributions</h2>
+		<div class="tb-style">
+				<table width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<th>Topic</td>
+							<th>Date</td>
+						</tr>
+							<?php if($this->latest_topics):?>
+								<?php foreach($this->latest_topics as $key => $val):?>
+								<tr>
+									<td><?=$val['topic_title']?></td>
+									<td><?=$val['date_created']?></td>
+								</tr>
+								<?php endforeach;?>			
+							<?php endif;?>	
+				</table>
+		</div>
+</div>

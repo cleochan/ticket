@@ -1,20 +1,20 @@
 <br /><br />
-<div id="view-content">
+<div class="wiki">
         <h1 align="center">Contributions</h1>
-	<div>
-		<table width="80%" align="center" cellspacing="1">
+	<div class="tb-style">
+		<table width="100%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_1"] ?>">Department</a></td>
-					<td class="form-title" width="40%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_2"] ?>">Name</a></td>
-					<td class="form-title" width="30%" style="text-align: left;"><a href="<?php echo $this->page_urls["column_3"] ?>">Contributions</a></td>
+					<th ><a href="<?php echo $this->page_urls["column_1"] ?>">Department</a></th>
+					<th ><a href="<?php echo $this->page_urls["column_2"] ?>">Name</a></th>
+					<th ><a href="<?php echo $this->page_urls["column_3"] ?>">Contributions</a></th>
 				</tr>
 				<?php if($this->contributor_array):?>
 					<?php foreach($this->contributor_array as $key => $val):?>
 						<tr class="row-1">
 							<td><?=$val['department_name']?></td>
-							<td><a href="/wiki/index/show-contributor/userid/<?=$val['contributor_id']?>"><?=$val['contributor_name']?></a></td>
-							<td><a href="/wiki/index/contributions/userid/<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
+							<td><a href="/wiki/contributor/show-contributor/userid/<?=$val['contributor_id']?>"><?=$val['contributor_name']?></a></td>
+							<td><a href="/wiki/contributor/contributions/userid/<?=$val['contributor_id']?>"><?=$val['contributions']?></a></td>
 						</tr>
 					<?php endforeach;?>			
 				<?php endif;?>

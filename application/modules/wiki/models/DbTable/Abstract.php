@@ -44,7 +44,7 @@ abstract class Wiki_Model_DbTable_Abstract extends Zend_Db_Table_Abstract {
      * @param string $propertieName
      * @param mix $value
      */
-    protected function __set($propertieName,$value){
+    public function __set($propertieName,$value){
         $prefix = substr($propertieName, 0, strlen($this->columnMarking));
         if ($prefix == $this->columnMarking) {
                 $columnName = substr($propertieName, strlen($this->columnMarking));
