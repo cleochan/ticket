@@ -12,6 +12,14 @@ class Wiki_Model_Search{
 
 	}
 	
+	public function getTableHeaders(){
+		return array("contributor_name"=>"Contributor",
+					 "last_updated"=>"Last Updated",
+					 "creation_time"=>"Date Created",
+					 "topic_title"=>"Topic",
+					 "category_name"=>"Category");
+	}
+	
 	private function _getSearchData($keyword){
 		
 		$select = $this->db->select();
@@ -32,10 +40,9 @@ class Wiki_Model_Search{
             $temp['last_updated'] = $val['updatetime'];
 			$temp['creation_time'] = $val['createtime'];
             $temp['topic_title'] = $val['title'];
- 			$temp['category_name'] = $val['catname'];
-			$temp['parent_name'] = $val['parent'];
-			$temp['content_id'] = $val['contentid'];
-			$temp['user_id'] = $val['userid'];
+ 			$temp['category_name'] = $val['parent'] . " > " . $val['catname'];
+			//$temp['content_id'] = $val['contentid'];
+		//	$temp['user_id'] = $val['userid'];
 			$result[] = $temp;
         }
 

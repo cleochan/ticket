@@ -61,6 +61,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
         /*Category id which is selected*/
         $this->view->cid = $cid;
         $this->view->options = $this->_categoryModel->getOptions(0,'All');
+		
     }
 
     public function preDispatch() {

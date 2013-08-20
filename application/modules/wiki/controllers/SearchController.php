@@ -66,19 +66,21 @@ class Wiki_SearchController extends Zend_Controller_Action {
         }else{
         	$searchCacheID = "";
         }
-		
+		$this->view->table_headers = $this->search->getTableHeaders();
 		if($searchCacheID != ""){
 			if ( !$this->cache->test( $searchCacheID ) ) {
-				$this->view->results = $this->search->search($searchCacheID);
-				$this->cache->save( $this->view->results, $searchCacheID );
+				$this->view->table_data = $this->search->search($searchCacheID);
+				$this->cache->save( $this->view->table_data, $searchCacheID );
 				echo "saved";
 					} else {
-					    $this->view->results = $this->cache->load( $searchCacheID );
+					    $this->view->table_data = $this->cache->load( $searchCacheID );
 						echo "loaded";
 			}
 		}
 		$_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;
 
+		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
+		echo $this->view->render('wiki_template.phtml');
 	}
 	
 }

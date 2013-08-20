@@ -88,7 +88,12 @@ class Wiki_ContributorController extends Zend_Controller_Action {
         }
 
         $this->view->page_urls = $page_urls;
-        $this->view->contributor_array = $contributor_array;
+		$this->view->table_headers = $this->_contributors->getTableHeaders();
+        $this->view->table_data = $contributor_array;
+		
+		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
+		echo $this->view->render('wiki_template.phtml');
+		
     }
 
     function contributionsAction() {
