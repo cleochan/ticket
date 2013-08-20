@@ -13,9 +13,28 @@ class Wiki_SearchController extends Zend_Controller_Action {
 	public function init() {
         $this->_menu = new Menu();
         $this->_db = Zend_Registry::get('db');
+		$this->search = new Wiki_Model_Search();
+		
+		$frontendOptions = new Zend_Cache_Core(
+	    array(
+	        'caching' => true,
+	        'cache_id_prefix' => 'wikiSearch',
+	        'logging' => false,
+	        'write_control' => true,
+	        'automatic_serialization' => true,
+	        'ignore_user_abort' => true
+	    ) );
+		 
+		$backendOptions = new Zend_Cache_Backend_File(array(
+		    'cache_dir' => APPLICATION_PATH.'/modules/wiki/cache') // Directory where to put the cache files
+		);
+		 
+		$this->cache = Zend_Cache::factory($frontendOptions, $backendOptions);
+		
     }
 
     public function preDispatch() {
+    	
         if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
             $users = new Users();
@@ -39,21 +58,26 @@ class Wiki_SearchController extends Zend_Controller_Action {
 	function indexAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Search Results";
-		$output = null;
+
 		if (isset($params['keyword'])) {
-			$output = Zend_Search_Lucene_Search_QueryParser::parse($params['keyword']);
+			$searchCacheID = $params['keyword'];
+        }else if(isset($_SESSION["Zend_Auth"]["storage"]->last_search_term)){
+        	$searchCacheID = $_SESSION["Zend_Auth"]["storage"]->last_search_term;
+        }else{
+        	$searchCacheID = "";
         }
-		var_dump($output);
 		
-		/*$pathTerm  = new Zend_Search_Lucene_Index_Term(
-                     '/data/doc_dir/' . $filename, 'path'
-                 );
-		$pathQuery = new Zend_Search_Lucene_Search_Query_Term($pathTerm);
-		 
-		$query = new Zend_Search_Lucene_Search_Query_Boolean();
-		$query->addSubquery($userQuery, true);
-		$query->addSubquery($pathQuery, true);
-		*/
+		if($searchCacheID != ""){
+			if ( !$this->cache->test( $searchCacheID ) ) {
+				$this->view->results = $this->search->search($searchCacheID);
+				$this->cache->save( $this->view->results, $searchCacheID );
+				echo "saved";
+					} else {
+					    $this->view->results = $this->cache->load( $searchCacheID );
+						echo "loaded";
+			}
+		}
+		$_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;
 
 	}
 	
