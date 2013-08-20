@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	var categoryName;
 	//Hide window and bind hide window to clicking on document
 	initWindow();
 	
@@ -10,20 +11,18 @@ $(document).ready(function() {
 	
 	$("#add_category_link").click(function(e) {
 		$('#edit_window').hide();
-		$('.select_action_form').hide();
 		$('#select_action_comment').hide();
+		$('#edit_form_title').text('Create New Category');
 		$('#deleteMessage').parent().parent().hide();
 		$("input#cname").parent().parent().show();
-		$("input#parent_id").parent().parent().show();
-		$("input#status").parent().parent().show();
 		displayWindow(true, e);
-		$('.select_action_form').val("add")
-		console.log($('.select_action_form').val())
+		$('.select_action_form').hide().val("edit");;
 		addNewCategoryWindowConfig(0);
 	});
 
 	$(".categoryLink").click(function(e) {
 		$('#current_working_id').attr('value', $(this).attr('value'));
+		categoryName = $(this).text().trim();
 		$('#edit_window').hide();
 		displayWindow(true, e);
 		optionWindowConfig();
@@ -43,14 +42,14 @@ $(document).ready(function() {
 		$('#edit_window').hide();
 		resetWindow(); 
 		$('#select_action').prepend('<tr class="category_table_static"><td><select class="select_action_form" name="select_action_menu">'+
-  									'<option value="add" selected="selected">Add</option>'+
-									'<option value="edit">Edit</option>'+
+  									'<option value="add">Add</option>'+
+									'<option value="edit" selected="selected">Edit</option>'+
 									'<option value="delete">Delete</option>'+
-									'</select></td></tr>'
-		);
+									'</select></td></tr>')
+						   .prepend('<tr class="category_table_static" id="select_action_comment"><td>Select Action to Perform: </td></tr>')
+						   .prepend('<h2 id="edit_form_title"></h2>');	
 		
-		$('#select_action').prepend('<tr class="category_table_static" id="select_action_comment"><td>Select Action to Perform: </td></tr>');	     
-		$('#editWindow_buttons').before('<tr class="zend_row"><td><span id="deleteMessage"><h3>Category to be Deleted: </h3><p id="outputID"></p></span></td> </tr>'); 
+		//$('#editWindow_buttons').before('<tr class="zend_row"><td><span id="deleteMessage"><h3>Category to be Deleted: </h3><p></p></span></td> </tr>'); 
 		$('body').append('<input type="hidden" id="current_working_id" value="" />');
 		
 		$("body").append("<div id='overlay'></div>");
@@ -100,17 +99,14 @@ $(document).ready(function() {
 		var id = $('#current_working_id').attr('value')
 		var action = $(".select_action_form :selected").val();
 		resetWindow();
+		$('#edit_form_title').text(categoryName);
 		switch(action){
 			case "add":
 				$("input#cname").parent().parent().show();
-				$("input#parent_id").parent().parent().show();
-				$("input#status").parent().parent().show();
 				addCategoryWindowConfig(id);
 			break;
 			case "edit":
 				$("input#cname").parent().parent().show();
-				$("input#parent_id").parent().parent().show();
-				$("input#status").parent().parent().show();
 				editCategoryWindowConfig(id);
 			break;
 			case "delete":
@@ -153,7 +149,6 @@ $(document).ready(function() {
 		$("input#status").val(inputs[1]);
 		$("input#parent_id").val(inputs[2]);
 		$("input#category_id").val(inputs[3]);
-				console.log($("input#category_id"));
 	}
 
 	function deleteCategoryWindowConfig(id) {
@@ -161,7 +156,7 @@ $(document).ready(function() {
 		inputs = $("input." + id).map(function() {
 			return $(this).val();
 		}).get();
-		$("#outputID").text(inputs[0]);
+		//$("#deleteMessage p").text("").append(inputs[0]);
 		$("input#category_id").val(inputs[3]);
 	}
 

@@ -14,6 +14,12 @@ class Wiki_Model_Contributor{
 	function _init(){
 
 	}
+	
+	public function getTableHeaders(){
+		return array("department_name"=>"Department Name",
+					 "contributor_name"=>"Contributor",
+					 "contributions"=>"Contributions");
+	}
     
 	function getContributors($current_page, $sortBy="dptname", $order="ASC"){
 		
@@ -34,7 +40,7 @@ class Wiki_Model_Contributor{
         foreach($data as $key => $val)
         {
             $temp = array();
-            $temp['contributor_id'] = $val['userid'];
+           // $temp['contributor_id'] = $val['userid'];
             $temp['department_name'] = $val['dptname'];
             $temp['contributor_name'] = $val['name'];
  			$temp['contributions'] = $val['contribution'];
@@ -57,7 +63,7 @@ class Wiki_Model_Contributor{
         foreach($data as $key => $val)
         {
             $temp = array();
-            $temp['contributor_id'] = $val['userid'];
+           // $temp['contributor_id'] = $val['userid'];
             $temp['department_name'] = $val['dptname'];
             $temp['contributor_name'] = $val['name'];
  			$temp['contributions'] = $val['contribution'];
