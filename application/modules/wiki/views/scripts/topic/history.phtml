@@ -24,7 +24,7 @@
                 </tr>
                 <?php foreach ($this->data as $value):?>
                 <tr>
-                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['vid']));?>"><?php echo $value['vid'] ?></a></td>
+                    <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['vid']));?>"><?php echo $value['version_id'] ?></a></td>
                     <td><?php echo $value['update_time'] ?></td>
                     <td><?php echo $value['update_name'] ?></td>
                     <td><a  title="Click to view this version" href="<?php echo $this->ActionUrl('revert',array('id'=>$value['tid'],'version'=>$value['vid']));?>"><?php echo $value['title'] ?></a></td>

@@ -48,6 +48,7 @@ class Wiki_Model_Detail {
                            'c.cname',
                            'c.parent_id',
                            'ct.content',
+                           'ct.version_id',
                            'ct.create_time AS update_time',
                            'ct.id AS vid',
                            'u2.realname AS update_name'
@@ -63,7 +64,7 @@ class Wiki_Model_Detail {
      * @param type $sortOrder
      * @return array
      */
-    public function getDetails($id,$orderBy='ID',$sortOrder='DESC') {
+    public function getHistoryList($id,$orderBy='ID',$sortOrder='DESC') {
         $fields = array(
                            't.title', 
                            't.cid', 
@@ -74,11 +75,11 @@ class Wiki_Model_Detail {
                            'u.realname as creator_name',
                            'c.cname',
                            'c.parent_id',
-                           'ct.content',
                            'ct.uid AS cuid',
                            'ct.is_default',
                            'ct.create_time AS update_time',
                            'ct.id AS vid',
+                           'ct.version_id',
                            'ct.preversion_id',
                            'u2.realname AS update_name'
                            );
@@ -102,7 +103,7 @@ class Wiki_Model_Detail {
         return FALSE;
     }
 
-    public function getDetailWithVersion($id, $vid) {
+    public function getDetailWithVersion($id, $vid,$version_id) {
         $fields = array(
                            't.title', 
                            't.cid', 
@@ -118,12 +119,19 @@ class Wiki_Model_Detail {
                            'ct.is_default',
                            'ct.create_time AS update_time',
                            'ct.id AS vid',
+                           'ct.version_id',
                            'ct.preversion_id',
                            'u2.realname AS update_name'
                            );
         $select = $this->getDetailSelect($fields);
-        $select->where('t.id=:id AND ct.id=:vid');
-        return $this->db->fetchRow($select, array('id' => $id,'vid'=>$vid));
+        $select->where('t.id=:id');
+        if($vid !=NULL){
+            $select->where('ct.id = ?', $vid);
+        }
+        if($version_id != NULL){
+            $select->where('ct.version_id',$version_id);
+        }
+        return $this->db->fetchRow($select, array('id' => $id));
     }
     
     public function getParentVersionId($tid,$id){
@@ -163,7 +171,7 @@ class Wiki_Model_Detail {
      * @param string $sortOrder
      * @return array
      */
-    public function getTopicsPaging($page,$rowCount,$orderBy='ID',$sortOrder='DESC',$categoryId=NULL) {
+    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',$categoryId=NULL) {
         $fields = array(
                            't.title', 
                            't.cid', 
@@ -230,7 +238,7 @@ class Wiki_Model_Detail {
                     $select->order('preversion_id '.$sortOrder);
                     break;
                 default:
-                    $select->order('update_time '.$sortOrder);
+                    $select->order('t.id '.$sortOrder);
                     break;
             }
         }else{

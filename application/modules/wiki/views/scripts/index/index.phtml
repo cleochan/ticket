@@ -27,9 +27,9 @@
                     <tr>
                         <td><a href="<?php echo $this->ActionUrl('detail', array('id' => $value['tid']), 'topic') ?>"><?php echo $value['title'] ?></a></td>
                         <td><?php echo $value['cname'] ?></td>
-                        <td><a href="<?php echo $this->ActionUrl('show-contributor', array('userid' => $value['creator_uid'])) ?>"><?php echo $value['creator_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('show-contributor', array('userid' => $value['creator_uid']),'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
                         <td><?php echo $value['create_time'] ?></td>
-                        <td><a href="<?php echo $this->ActionUrl('show-contributor', array('userid' => $value['updator_uid'])) ?>"><?php echo $value['update_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('show-contributor', array('userid' => $value['updator_uid']),'contributor') ?>"><?php echo $value['update_name'] ?></a></td>
                         <td><?php echo $value['update_time'] ?></td>
                     </tr>
                 <?php endforeach; ?>

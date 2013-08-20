@@ -27,6 +27,7 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     protected $__preversion_id;
     protected $__attachment;
     protected $__is_default;
+    protected $__version_id;
     protected $__status;
     
     public function init(){
@@ -48,13 +49,14 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
     public function Revert($contentId,$uid) {
         $row = $this->GetOneById($contentId);
         $tid = $row->tid;
-        $preversion_id = $contentId;
+        $preversion_id = $row->version_id;
         $content = $row->content;
         $insertId = $this->CreateContent($tid, $uid, $content, $preversion_id, TRUE);
         return $insertId;
     }
     
     public function CreateContent($tid,$uid,$content,$preversion_id,$is_set_default){
+        $count = $this->GetVersionCount($tid);
         $this->__tid = $tid;
         $this->__content = $content;
         $this->__uid = $uid;
@@ -62,6 +64,7 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
         $this->__status = 1;
         $this->__preversion_id = $preversion_id;
         $this->__create_time = date('Y-m-d H:i:s');
+        $this->__version_id = $this->GetMaxId($tid)+1;
         $this->create();
         if($is_set_default){
             $insertId = $this->_db->lastInsertId();
@@ -81,6 +84,22 @@ class Wiki_Model_DbTable_Contents extends Wiki_Model_DbTable_Abstract{
             $this->delete($where);
         }
 
+    }
+    
+    public function GetVersionCount($topicId) {
+        $select = $this->select()
+                        ->from($this->_name,array(new Zend_Db_Expr('COUNT(*) AS total')))
+                        ->where('tid = ?',array($topicId));
+        $result = $this->fetchRow($select);
+        return $result['total'];
+    }
+
+    public function GetMaxId($topicId) {
+         $select = $this->select()
+                        ->from($this->_name,array(new Zend_Db_Expr('MAX(version_id) AS max')))
+                        ->where('tid = ?',array($topicId));
+        $result = $this->fetchRow($select);
+        return $result['max'];
     }
     
 }
