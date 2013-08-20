@@ -81,8 +81,7 @@ class Wiki_IndexController extends Zend_Controller_Action {
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
-    }
-		$this->view->layout()->setLayout('wiki_layout'); 
+        $this->view->layout()->setLayout('wiki_layout'); 
     }
 
 
