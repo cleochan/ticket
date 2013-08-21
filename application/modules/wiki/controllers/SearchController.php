@@ -71,10 +71,8 @@ class Wiki_SearchController extends Zend_Controller_Action {
 			if ( !$this->cache->test( $searchCacheID ) ) {
 				$this->view->table_data = $this->search->search($searchCacheID);
 				$this->cache->save( $this->view->table_data, $searchCacheID );
-				echo "saved";
 					} else {
 					    $this->view->table_data = $this->cache->load( $searchCacheID );
-						echo "loaded";
 			}
 		}
 		$_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;

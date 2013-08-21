@@ -15,6 +15,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
    		$this->_contributors = new Wiki_Model_Contributor();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
+		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
     }
 
     public function preDispatch() {
@@ -38,22 +39,6 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
-	function showContributorAction() {
-        $params = $this->_request->getParams();
-        $this->view->title = "Contributor";
-        $this->view->menu = $this->_menu->GetWikiMenu($params['action']);
-
-        if (isset($params['userid'])) {
-            $uid = $params['userid'];
-            $contributor = $this->_contributors->getContributorByID($uid);
-            $this->view->contributor = $contributor;
-
-            $this->view->latest_topics = $this->_contributors->getLimitedContributedTopicsByID($uid);
-        }
-
-        $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
-    }
-
     function indexAction() {
         $params = $this->_request->getParams();
         $this->view->title = "Contributions";
@@ -66,32 +51,30 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 
         if (!isset($params['sortBy'])) {
             $this->getRequest()->setParam('sortBy', "dptname");
-        }
+        }	
 
         if (!isset($params['sortOrder'])) {
             $this->getRequest()->setParam('sortOrder', "ASC");
         }
+		
+		if(isset($params['contributions'])){
+				$contributor_array = $this->_contributors->getContributionsByID($params['user']);
+				$this->view->table_headers = $this->_contributors->getTableHeaders("contributions");
+		}else{
+			if (isset($params['user'])) {
+	            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], $this->getRequest()->getParam('page'));
+				$this->view->table_headers = $this->_contributors->getTableHeaders("topics");
+	        }else{
+				$contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'), $this->getRequest()->getParam('sortBy'), $this->getRequest()->getParam('sortOrder'));
+				$this->view->table_headers = $this->_contributors->getTableHeaders("contributors");
+	        }
+		}
 
-        $params = $this->_request->getParams();
-        $page_urls = array();
-        for ($i = 1; $i < count($tableKeys) + 1; $i++) {
-            $page_urls["column_" . $i] = $this->_contributors->navHelper->writeURL($params, $tableKeys[$i], $params['page']);
-        }
+		
+       // $this->view->page_urls = $page_urls;
 
-        $contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'), $this->getRequest()->getParam('sortBy'), $this->getRequest()->getParam('sortOrder'));
-
-        $this->view->current_page = $this->getRequest()->getParam('page');
-        $this->view->pages = $this->_contributors->getPageCount("wiki_contributors", "uid");
-
-        for ($p = 1; $p < $this->view->pages + 1; $p++) {
-            $page_urls["page_" . $p] = $this->_contributors->navHelper->writeURL($params, $params['sortBy'], $p);
-        }
-
-        $this->view->page_urls = $page_urls;
-		$this->view->table_headers = $this->_contributors->getTableHeaders();
         $this->view->table_data = $contributor_array;
 		
-		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
 		echo $this->view->render('wiki_template.phtml');
 		
     }
