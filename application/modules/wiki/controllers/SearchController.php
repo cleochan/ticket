@@ -26,7 +26,7 @@ class Wiki_SearchController extends Zend_Controller_Action {
 	    ) );
 		 
 		$backendOptions = new Zend_Cache_Backend_File(array(
-		    'cache_dir' => APPLICATION_PATH.'/modules/wiki/cache') // Directory where to put the cache files
+		    'cache_dir' => sys_get_temp_dir()) // Directory where to put the cache files
 		);
 		 
 		$this->cache = Zend_Cache::factory($frontendOptions, $backendOptions);
@@ -58,7 +58,7 @@ class Wiki_SearchController extends Zend_Controller_Action {
 	function indexAction(){
 		$params = $this->_request->getParams();
 	    $this->view->title = "Search Results";
-
+		$this->cache->clean(Zend_Cache::CLEANING_MODE_OLD);
 		if (isset($params['keyword'])) {
 			$searchCacheID = $params['keyword'];
         }else if(isset($_SESSION["Zend_Auth"]["storage"]->last_search_term)){

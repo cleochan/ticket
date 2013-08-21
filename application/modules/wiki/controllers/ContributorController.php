@@ -59,7 +59,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 		
 		if(isset($params['contributions'])){
 				$contributor_array = $this->_contributors->getContributionsByID($params['user']);
-				$this->view->table_headers = $this->_contributors->getTableHeaders("contributions");
+				$this->view->table_headers = $this->_contributors->getTableHeaders("topics");
 		}else{
 			if (isset($params['user'])) {
 	            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], $this->getRequest()->getParam('page'));

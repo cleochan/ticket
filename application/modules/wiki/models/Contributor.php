@@ -14,7 +14,7 @@ class Wiki_Model_Contributor{
 	function _init(){
 
 	}
-	
+
 	public function getTableHeaders($type){
 		switch($type){
 		case "contributors":
@@ -23,7 +23,7 @@ class Wiki_Model_Contributor{
 					 "contributions"=>"Contributions");
 		case "topics":
 		return array("contributor_name"=>"Contributor",
-					 "last_updated"=>"Last Updated",
+					 "last_updated"=>"Date Updated",
 					 "creation_time"=>"Date Created",
 					 "topic_title"=>"Topic",
 					 "category_name"=>"Category");	 
@@ -140,7 +140,7 @@ class Wiki_Model_Contributor{
 		function getContributionsByID($id){
 		
 		$select = $this->db->select();
-		$select->from("wiki_contents as c", array("create_time as updatetime"));
+		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
 		$select->joinLeft("wiki_topics as t", "t.id=c.tid", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
 		$select->joinLeft("users as u", "u.id=t.uid", array("u.realname as name"));
 		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
