@@ -18,7 +18,7 @@ EOF;
             $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']),'index');
             $topicUrl = $this->ActionUrl('detail',array('id'=>$this->data['tid']));
         ?>
-        <?php echo "{$str}<a href='{$url}'>{$this->data['cname']}</a> &gt; <a href='{$topicUrl}'>{$this->data['title']}</a> > Version{$this->data['vid']}";?>
+        <?php echo "{$str}<a href='{$url}'>{$this->data['cname']}</a> &gt; <a href='{$topicUrl}'>{$this->data['title']}</a> > Version{$this->data['version_id']}";?>
     </div>
     <div class="detail">
         <div class="tool-bar">
@@ -31,7 +31,7 @@ EOF;
                 <?php if($this->data['prevId']!=NULL):?>
                 <div class="fl mr10" style="line-height: 16px;"><a href="<?php echo $this->ActionUrl('revert',array('id'=>$this->data['tid'],'version'=>$this->data['prevId']));?>">←</a></div>
                 <?php endif;?>
-                <div class="fl strong mr10" style="line-height: 16px;">Version ID:<?php echo  $this->data['vid'];?> </div>
+                <div class="fl strong mr10" style="line-height: 16px;">Version ID:<?php echo  $this->data['version_id'];?> </div>
                 <?php if($this->data['is_default']==TRUE): ?>
                 <div class="fl mr10"><span class="ui-icon ui-icon-circle-check" title="Current Version"></span></div>
                 <?php endif;?>

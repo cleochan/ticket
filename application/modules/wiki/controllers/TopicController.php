@@ -43,7 +43,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-		$this->_categories = new Wiki_Model_DbTable_Category();
+	$this->_categories = new Wiki_Model_DbTable_Category();
+        $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
     }
     
     public function preDispatch() {
@@ -113,17 +114,17 @@ class Wiki_TopicController extends Zend_Controller_Action {
         }else{
             $this->view->sort = 'DESC';
         }
-        $this->view->data = $this->_detailModel->getDetails($tid,$order,$sort);
+        $this->view->data = $this->_detailModel->getHistoryList($tid,$order,$sort);
         $this->view->tid = $tid;
     }
 
     public function revertAction() {
         $tid = $this->_request->get('id');
         $vid = $this->_request->get('version');
-        $data = $this->_detailModel->getDetailWithVersion($tid, $vid);
-        $prevId = $this->_detailModel->getPreviousVersionId($tid, $vid);
-        $nextId = $this->_detailModel->getNextVersionId($tid, $vid);
-        $data['tid'] = $tid;
+        $version_id = $this->_request->get('version_id');
+        $data = $this->_detailModel->getDetailWithVersion($tid, $vid,$version_id);
+        $prevId = $this->_detailModel->getPreviousVersionId($tid, $data['vid']);
+        $nextId = $this->_detailModel->getNextVersionId($tid, $data['vid']);
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
         $this->view->categorys = $this->_categories->getParents($data['parent_id']);
@@ -159,7 +160,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
 
         /* saved the version id to post */
         $hiddenv = new Zend_Form_Element_Hidden('vid');
-        $hiddenv->setValue($detail['vid'])->setName('vid');
+        $hiddenv->setValue($detail['version_id'])->setName('vid');
         $form->addElement($hiddenv);
 
         /* set value to form */
@@ -205,7 +206,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
     public function createAction() {
         $form = new Wiki_Form_Create();
         $this->view->form = $form;
-        /*@var $categoryEle Zend_Form_Element_Select*/
         $options = $this->_categories->getOptions(0);
         $title = $form->getElement('title');
         $title->setAttrib('placeholder', 'Please Enter Your Title');
@@ -224,7 +224,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $uid = $userinfo->id;
                     $this->_contentsModel->CreateContent($insertId, $uid, $content, NULL, TRUE);
                     $this->_contributorModel->UpdateRecord($insertId,$uid);
-//                    $this->_forward('detail', NULL, NULL, array('id' => $insertId, 'msg' => 1));
                     $this->_redirect('/wiki/topic/detail/id/'.$insertId.'/msg/1');
                 } else {
                     die('insert error');
@@ -237,7 +236,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
 
     public function autoClearAction(){
         if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
-            $this->_contentsModel->Clear();
+            //$this->_contentsModel->Clear();
         }
         exit();
     }
