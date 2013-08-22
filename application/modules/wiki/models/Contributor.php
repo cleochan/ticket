@@ -14,11 +14,21 @@ class Wiki_Model_Contributor{
 	function _init(){
 
 	}
-	
-	public function getTableHeaders(){
+
+	public function getTableHeaders($type){
+		switch($type){
+		case "contributors":
 		return array("department_name"=>"Department Name",
 					 "contributor_name"=>"Contributor",
 					 "contributions"=>"Contributions");
+		case "topics":
+		return array("contributor_name"=>"Contributor",
+					 "last_updated"=>"Date Updated",
+					 "creation_time"=>"Date Created",
+					 "topic_title"=>"Topic",
+					 "category_name"=>"Category");	 
+		}
+		
 	}
     
 	function getContributors($current_page, $sortBy="dptname", $order="ASC"){
@@ -42,8 +52,8 @@ class Wiki_Model_Contributor{
             $temp = array();
            // $temp['contributor_id'] = $val['userid'];
             $temp['department_name'] = $val['dptname'];
-            $temp['contributor_name'] = $val['name'];
- 			$temp['contributions'] = $val['contribution'];
+            $temp['contributor_name'] = '<a href="/wiki/contributor/index/user/' . $val['userid'] . '">' . $val['name'] . '</a>';
+ 			$temp['contributions'] = '<a href="/wiki/contributor/index/user/' . $val['userid'] . '/contributions/' . $val['contribution'] . '">' . $val['contribution'] . '</a>';
 			$result[] = $temp;
         }
 
@@ -65,8 +75,8 @@ class Wiki_Model_Contributor{
             $temp = array();
            // $temp['contributor_id'] = $val['userid'];
             $temp['department_name'] = $val['dptname'];
-            $temp['contributor_name'] = $val['name'];
- 			$temp['contributions'] = $val['contribution'];
+            $temp['contributor_name'] = '<a href="/wiki/contributor/index/user/' . $val['userid'] . '">' . $val['name'] . '</a>';
+ 			$temp['contributions'] = '<a href="/wiki/contributor/index/user/' . $val['userid'] . '/contributions/' . $val['contribution'] . '">' . $val['contribution'] . '</a>';
 			$result[] = $temp;
         }
 		return $result;
@@ -82,13 +92,16 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */
-	function getAllContributedTopicsByID($id, $current_page, $sortBy="datecreated", $order="ASC"){
+	function getAllContributedTopicsByID($id, $current_page, $sortBy="updatetime", $order="ASC"){
 		
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		
 		$select = $this->db->select();
-		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
-		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as datecreated"));
+		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
+		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as updatetime"));
+		$select->joinLeft("users as u", "u.id=t.uid", array("u.realname as name"));
+		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
+		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("t.uid = ?", $id);
 		if($sortBy!=""){
 			$select->order($sortBy . " " . $order);
@@ -101,10 +114,12 @@ class Wiki_Model_Contributor{
         foreach($data as $key => $val)
         {
             $temp = array();
+			$temp['contributor_name'] = $val['name'];
+			$temp['last_updated'] = $val['updatetime'];
+			$temp['creation_time'] = $val['createtime'];
             $temp['topic_title'] = $val['title'];
-            $temp['topic_id'] = $val['topicid'];
-			$temp['user_id'] = $val['userid'];
-            $temp['date_created'] = $val['datecreated'];
+			$temp['category_name'] = $val['parent'] . " > " . $val['catname'];
+			
 			$result[] = $temp;
         }
 
@@ -122,25 +137,28 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */	
-		function getLimitedContributedTopicsByID($id){
+		function getContributionsByID($id){
 		
 		$select = $this->db->select();
-		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid"));
-		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as datecreated"));
-		$select->where("t.uid = ?", $id);
-		$select->order("datecreated DESC");
-		$select->limit(LATEST_TOPICS, 0);
+		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
+		$select->joinLeft("wiki_topics as t", "t.id=c.tid", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
+		$select->joinLeft("users as u", "u.id=t.uid", array("u.realname as name"));
+		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
+		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
+		$select->where("c.uid = ?", $id);
 		$data = $this->db->fetchAll($select);
-		
+
 		$result = array();
 		
         foreach($data as $key => $val)
         {
             $temp = array();
+			$temp['contributor_name'] = $val['name'];
+			$temp['last_updated'] = $val['updatetime'];
+			$temp['creation_time'] = $val['createtime'];
             $temp['topic_title'] = $val['title'];
-            $temp['topic_id'] = $val['topicid'];
-			$temp['user_id'] = $val['userid'];
-            $temp['date_created'] = $val['datecreated'];
+			$temp['category_name'] = $val['parent'] . " > " . $val['catname'];
+			
 			$result[] = $temp;
         }
 
