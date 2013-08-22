@@ -46,7 +46,36 @@ class Wiki_TopicController extends Zend_Controller_Action {
 	$this->_categories = new Wiki_Model_DbTable_Category();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
     }
-    
+    public function indexAction() {
+        $this->view->title = "Wiki";
+        $suc = $this->_request->get('msg');
+        $page = $this->_request->get('page');
+        $order = $this->_request->get('orederBy');
+        $sort = $this->_request->get('sortOrder');
+        $cid = $this->_request->get('cid');
+        if ($sort == NULL || $sort === 'DESC') {
+            $this->view->sort = 'ASC';
+        } else {
+            $this->view->sort = 'DESC';
+        }
+        if ($suc == 1) {
+            $this->view->message = 'The topic is deleted successfully';
+        }
+        $rowCount = 10;
+        $count = $this->_topicsModel->GetTotal();
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($page);
+        $this->view->paginator = $paginator;
+        $cids = $this->_categories->getChildrenIds($cid);
+        if($cid!=NULL)  $cids[] = $cid;
+        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids);
+
+        /*Category id which is selected*/
+        $this->view->cid = $cid;
+        $this->view->options = $this->_categories->getSelectOptions(0,'All');
+		
+    }
     public function preDispatch() {
         if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
@@ -170,7 +199,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $content->setValue($detail['content']);
         $title->setValue($detail['title'])->setAttrib('disabled', 'ture');
         /* @var $categoryEle Zend_Form_Element_Select*/
-        $options = $this->_categories->getOptions(0);
+        $options = $this->_categories->getSelectOptions(0);
         $categoryEle = $form->getElement('category');
         $categoryEle->addMultiOptions($options);
         $category->setValue($detail['cid']);
@@ -206,7 +235,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     public function createAction() {
         $form = new Wiki_Form_Create();
         $this->view->form = $form;
-        $options = $this->_categories->getOptions(0);
+        $options = $this->_categories->getSelectOptions(0);
         $title = $form->getElement('title');
         $title->setAttrib('placeholder', 'Please Enter Your Title');
         $categoryEle = $form->getElement('category');

@@ -24,47 +24,55 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
     public function init() {
         
     }
-    /**
-     * 
-     * @param string $parentId
-     * @return array
-     */
-    public function getOptions($parentId, $defaultOption,&$separator, &$return) {
-        $select = $this->select();
+    public function getSelectOptions($parentId, $defaultOption,&$count, &$return,&$data) {
+        if(!isset($data)){
+            $data = $this->fetchAll()->toArray();
+        }
+        if(!isset($count)){
+            $count = 0;
+        }
         if(is_string($defaultOption) &&  strlen($defaultOption)>0 && !isset($return[''])){
             $return['']=$defaultOption;
         }
-        $select->from($this->_name, array('id', 'cname'))
-                ->where('parent_id=?', $parentId);
-        $result = $this->fetchAll($select)->toArray();
+        $result = $this->getChildenById($data, $parentId);
         if ($result != NULL && count($result) > 0) {
             foreach ($result as $row) {
                 $key = $row['id'];
-                $return[$key] = $separator . ' ' . $row['cname'];
-                $separator.='- ';
-                $this->getOptions($row['id'], $defaultOption, $separator, $return);
+                $return[$key] = str_repeat('- ', $count) . ' ' . $row['cname'];
+                $count++;
+                $this->getSelectOptions($row['id'], $defaultOption, $count, $return,$data);
+                $count--;
             }
-            $separator = '';
+            
         }
         return $return;
     }
-    
-    public function getChildrenHtml($parentId,&$separator,&$resultHtml){
-        $select = $this->select();
-        $select->from($this->_name, array('id','cname'))
-                ->where('parent_id=?', $parentId);
-        $result= $this->fetchAll($select)->toArray();
-        if($result!=NULL && count($result)>0){
-            foreach ($result as $row) {
-                $resultHtml .= $separator.$row['cname'].'</br>';
-                $separator.='-';
-                $this->getChildrenHtml($row['id'],$separator,$resultHtml);
-            }
-            $separator='';
+    public function getChildrenIds($parentId,&$return,&$data){
+        if(!isset($data)){
+            $data = $this->fetchAll()->toArray();
         }
-        return $resultHtml;
+        $result = $this->getChildenById($data, $parentId);
+        if ($result != NULL && count($result) > 0) {
+            foreach ($result as $row) {
+                $return[] = $row['id'];
+                $this->getChildrenIds($row['id'],$return,$data);
+            }
+            
+        }
+        return $return;
     }
-    public function getParents($parentId, &$return) {
+
+    private function getChildenById(array $array,$parentId){
+        $result = array();
+        foreach ($array as $key => $value) {
+            if($value['parent_id']==$parentId){
+                $result[] = $value; 
+            }
+        }
+        return $result;
+    }
+     
+   public function getParents($parentId, &$return) {
         if ($parentId != NULL) {
             $select = $this->select();
             $select->from($this->_name, array('id AS cid', 'cname', 'parent_id'))

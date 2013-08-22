@@ -165,13 +165,14 @@ class Wiki_Model_Detail {
     }
     /**
      * 
-     * @param int $page
-     * @param int $rowCount
-     * @param string $orderBy
-     * @param string $sortOrder
-     * @return array
+     * @param type $page
+     * @param type $rowCount
+     * @param type $orderBy
+     * @param type $sortOrder
+     * @param array $categoryIds
+     * @return type
      */
-    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',$categoryId=NULL) {
+    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL) {
         $fields = array(
                            't.title', 
                            't.cid', 
@@ -190,8 +191,8 @@ class Wiki_Model_Detail {
                            );
         $select = $this->getDetailSelect($fields);
         $select->where('ct.is_default=1');
-        if($categoryId!=NULL){
-            $select->where('cid = ?', $categoryId);
+        if(is_array($categoryIds) && count($categoryIds)>0){
+            $select->where('cid IN(?)',$categoryIds);
         }
         $this->setOrder($select, $orderBy, $sortOrder);
         $select->limitPage($page, $rowCount);
