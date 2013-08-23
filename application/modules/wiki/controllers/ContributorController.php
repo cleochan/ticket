@@ -45,33 +45,81 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 
         $tableKeys = array(1 => "dptname", 2 => "name", 3 => "contribution");
 
-        if (!isset($params['page'])) {
+        if (!$this->getRequest()->getParam('page')) {
             $this->getRequest()->setParam('page', 1);
         }
-
-        if (!isset($params['sortBy'])) {
-            $this->getRequest()->setParam('sortBy', "dptname");
-        }	
-
-        if (!isset($params['sortOrder'])) {
-            $this->getRequest()->setParam('sortOrder', "ASC");
+        if (!$this->getRequest()->getParam('sortorder')) {
+			$this->getRequest()->setParam('sortorder', "DESC");
+        } elseif ($this->getRequest()->getParam('sortorder') === 'ASC') {
+			$this->getRequest()->setParam('sortorder', "DESC");
+        } else {
+			$this->getRequest()->setParam('sortorder', "ASC");
         }
 		
+		$params = $this->_request->getParams();
+		
+		$flag = "";
 		if(isset($params['contributions'])){
-				$contributor_array = $this->_contributors->getContributionsByID($params['user']);
-				$this->view->table_headers = $this->_contributors->getTableHeaders("topics");
-		}else{
-			if (isset($params['user'])) {
-	            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], $this->getRequest()->getParam('page'));
-				$this->view->table_headers = $this->_contributors->getTableHeaders("topics");
-	        }else{
-				$contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'), $this->getRequest()->getParam('sortBy'), $this->getRequest()->getParam('sortOrder'));
-				$this->view->table_headers = $this->_contributors->getTableHeaders("contributors");
-	        }
+			$flag = "topics";
+			$contributor_array = $this->_contributors->getContributionsByID($params['user'],    
+			       															$this->getRequest()->getParam('sortby'),
+            																$this->getRequest()->getParam('sortorder'));
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalTopicsById($params['user']);
+		}elseif (isset($params['user'])){
+			$flag = "user";
+            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], 
+            																	   $this->getRequest()->getParam('page'), 
+            																	   $this->getRequest()->getParam('sortby'),
+            																	   $this->getRequest()->getParam('sortorder'));
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalTopicsById($params['user']);
+	    }else{
+	    	$flag = "contributors";
+			$contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'),
+																	   $this->getRequest()->getParam('sortby'),
+																	   $this->getRequest()->getParam('sortorder'));
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalContributors();
+	    }
+echo $count;
+		foreach($table_headers as $key=>$val){
+			$headerLink = '<a href="/wiki/contributor/index/';
+			
+			if (isset($params['user'])){
+				$headerLink .= 'user/' . $params['user'] .'/';
+			}
+			
+			if (isset($params['contributions'])){
+				$headerLink .= 'contributions/' . $params['contributions'] .'/';
+			}
+			
+			$headerLink .= 'sortby/' . $key . '/sortorder/' . $params['sortorder'] .  '">' . $val . '</a>';
+			$table_headers[$key] = $headerLink;
 		}
 
+		$this->view->table_headers = $table_headers;
+			
+		switch($flag){
+			case "topics":
+					foreach($contributor_array as $key=>$val){
+						$val['topic_title'] = '<a href="/wiki/topic/detail/id/' . $val['topic_id'] . '">' . $val['topic_title'] . '</a>';
+						$contributor_array[$key]['topic_title'] = $val['topic_title'];
+						unset($contributor_array[$key]['topic_id']);
+					}
+				break;
+			default:
+		}		
 		
-       // $this->view->page_urls = $page_urls;
+		if(!$this->getRequest()->getParam('type')){
+			$this->getRequest()->setParam('type', $flag);
+		}
+		
+        $rowCount = 10;
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($params['page']);
+        $this->view->paginator = $paginator;
 
         $this->view->table_data = $contributor_array;
 		

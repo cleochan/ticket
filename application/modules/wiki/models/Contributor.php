@@ -18,15 +18,16 @@ class Wiki_Model_Contributor{
 	public function getTableHeaders($type){
 		switch($type){
 		case "contributors":
-		return array("department_name"=>"Department Name",
-					 "contributor_name"=>"Contributor",
-					 "contributions"=>"Contributions");
+		return array("dptname"=>"Department Name",
+					 "name"=>"Contributor",
+					 "contribution"=>"Contributions");
 		case "topics":
-		return array("contributor_name"=>"Contributor",
-					 "last_updated"=>"Date Updated",
-					 "creation_time"=>"Date Created",
-					 "topic_title"=>"Topic",
-					 "category_name"=>"Category");	 
+		case "user":
+		return array("name"=>"Contributor",
+					 "updatetime"=>"Date Updated",
+					 "createtime"=>"Date Created",
+					 "title"=>"Topic",
+					 "catname"=>"Category");	 
 		}
 		
 	}
@@ -117,8 +118,13 @@ class Wiki_Model_Contributor{
 			$temp['contributor_name'] = $val['name'];
 			$temp['last_updated'] = $val['updatetime'];
 			$temp['creation_time'] = $val['createtime'];
-            $temp['topic_title'] = $val['title'];
-			$temp['category_name'] = $val['parent'] . " > " . $val['catname'];
+            $temp['topic_title'] =  $val['title'];
+			$temp['category_name'] = $val['catname'];
+			$temp['topic_id'] = $val['topicid'];
+			
+			if($val['parent']){
+				$temp['category_name'] = $val['parent'] . " > " . $temp['category_name'];	
+			}
 			
 			$result[] = $temp;
         }
@@ -137,7 +143,7 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */	
-		function getContributionsByID($id){
+		function getContributionsByID($id, $sortBy="updatetime", $order="ASC"){
 		
 		$select = $this->db->select();
 		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
@@ -146,6 +152,9 @@ class Wiki_Model_Contributor{
 		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
 		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("c.uid = ?", $id);
+		if($sortBy!=""){
+			$select->order($sortBy . " " . $order);
+		}
 		$data = $this->db->fetchAll($select);
 
 		$result = array();
@@ -157,7 +166,12 @@ class Wiki_Model_Contributor{
 			$temp['last_updated'] = $val['updatetime'];
 			$temp['creation_time'] = $val['createtime'];
             $temp['topic_title'] = $val['title'];
-			$temp['category_name'] = $val['parent'] . " > " . $val['catname'];
+			$temp['category_name'] = $val['catname'];
+			$temp['topic_id'] = $val['topicid'];
+			
+			if($val['parent']){
+				$temp['category_name'] = $val['parent'] . " > " . $temp['category_name'];	
+			}
 			
 			$result[] = $temp;
         }
@@ -198,7 +212,16 @@ class Wiki_Model_Contributor{
 
 		return $result;
 	}
-	
+
+	public function GetTotalTopicsById($id) {
+        return $this->db->fetchOne('SELECT count(*) FROM wiki_topics WHERE uid = '. $id);
+    }
+		
+	public function GetTotalContributors() {
+        $select = $this->db->select();
+		$select->from("wiki_contributors as w", array("uid as userid", "tid as ticketid", "SUM(count) as contribution"));
+    }
+
 	/**
 	 * Get Page CountFunction
 	 * 

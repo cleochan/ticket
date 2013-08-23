@@ -44,6 +44,7 @@ class Wiki_Model_DbTable_Contributor extends Wiki_Model_DbTable_Abstract {
        }
        return NULL;
     }
+	
 }
 
 ?>

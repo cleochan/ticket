@@ -1,25 +1,37 @@
 <br /><br />
 <div class="wiki">
-    <div class="tb-style">
-        <table width="100%" align="center" cellspacing="1">
-            <tbody>
-                <tr>
-                    <?php if ($this->table_headers): ?>
-                        <?php foreach ($this->table_headers as $key => $val): ?>
-                            <th><a href=""><?= $val ?></a></th>
-                        <?php endforeach; ?>			
-                    <?php endif; ?>
-                </tr>
-                <?php if ($this->table_data): ?>
-                    <?php foreach ($this->table_data as $key => $val): ?>
-                        <tr class="row-1">
-                            <?php foreach ($val as $th => $td): ?>
-                                <td><?= $td ?></td>
-                            <?php endforeach; ?>	
-                        </tr>
-                    <?php endforeach; ?>			
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+	<div class="tb-style">
+		<table width="100%" align="center" cellspacing="1">
+			<tbody>
+				<tr>
+					<?php if($this->table_headers):?>
+						<?php foreach($this->table_headers as $key => $val):?>
+								<th><a href=""><?=$val?></a></th>
+						<?php endforeach;?>			
+					<?php endif;?>
+				</tr>
+					<?php if($this->table_data):?>
+						<?php foreach($this->table_data as $key => $val):?>
+							<tr class="row-1">
+							<?php foreach($val as $th=>$td):?>
+									<td><?=$td?></td>
+							<?php endforeach;?>	
+							</tr>
+						<?php endforeach;?>			
+					<?php endif;?>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="mt30">
+	    <div class="fr">
+	    	<?php if($this->paginator):?>
+	            <?php
+	            echo $this->paginationControl($this->paginator, 'Sliding', 'shared/pager.phtml');
+	            ?> 
+	        <?php endif;?>
+	    </div>
+	    <div class="clear"></div>
+	</div>
+	
 </div>
