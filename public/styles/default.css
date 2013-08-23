@@ -544,9 +544,9 @@ html body div#view-content.wiki div#deleteMessage {
     border: 1px solid #D8D8D8;
 	position: fixed;
 	min-width: 35%;
-	height: auto;
-	left: 30%;
-	top: 50%;
+	height: 200px;
+	left: 32%;
+	top: 40%;
 	z-index: 100;
 }
 
@@ -555,12 +555,11 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 .wiki #editWindow_buttons {
-	position: relative;
+	position: absolute;
+	bottom:0;
+	left:0;
 }
 
-.wiki div#edit_window.editWindow form#category_form table#select_action.category_table {
-	min-width: 750px;
-}
 /*--Category Styling--*/
 .wiki div.content div#category_list h3 {
     color: rgb(85, 85, 85);
@@ -569,7 +568,7 @@ html body div#view-content.wiki div#deleteMessage {
     -pie-background: linear-gradient(#FAFAFA,#EAEAEA);
     background-repeat: repeat-x;
     text-shadow: 0 1px 0 #FFF;
-       border: 1px solid #D8D8D8;
+    border: 1px solid #D8D8D8;
     background-color: #EAEAEA;
     behavior: url(/styles/PIE/PIE.htc);
 }
@@ -595,6 +594,32 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 /*--Search Panel--*/
-.wiki #search-result-panel {
+.wiki div#edit_window.editWindow a.ui-dialog-titlebar-close span.ui-icon{
+	position: fixed;
+	top: 51%;
+}
 
+.wiki div#edit_window.editWindow form#category_form table#select_action.category_table div.ui-dialog-titlebar{
+	min-width: 32%;
+}
+
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form{
+	height: 200px;
+	width: 660px;
+}
+
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form table#select_action.category_table{
+	float: left;
+}
+
+html body div#view-content.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form table#select_action.category_table tbody tr.zend_row{
+	position: absolute;
+
+	width: 300px;
+}
+
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form{
+	position: absolute;
+	top:0;
+	left:0;
 }

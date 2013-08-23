@@ -11,7 +11,11 @@
 		</div>
 	</div>
 	
-   <div id="edit_window" class="editWindow" tabindex="0">
+   <div id="edit_window" class="editWindow ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="0">
+   	<a class="ui-dialog-titlebar-close ui-corner-all" href="#" role="button" unselectable="on" style="-moz-user-select: none;">
+		<span class="ui-icon ui-icon-closethick" unselectable="on" style="-moz-user-select: none;">close</span>
+	</a>
+   	<div id="dialog-modal-43" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; height: 200px">
     	<form valign="top" align="center" id="category_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
           method="<?php echo $this->escape($this->form->getMethod()) ?>"
           enctype="multipart/form-data">
@@ -25,6 +29,7 @@
 	                </tr>
 	        </table>
 		 </form>
+	 </div>
 	 </div> 
 </div>
 

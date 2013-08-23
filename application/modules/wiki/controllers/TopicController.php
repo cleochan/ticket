@@ -85,7 +85,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         if ($suc == 1) {
             $this->view->message = 'The topic is deleted successfully';
         }
-        $rowCount = 2;
+        $rowCount = 10;
         $cids = $this->_categories->getChildrenIds($cid);
         if($cid!=NULL)  $cids[] = $cid;
         $count = $this->_detailModel->getCount($cids, $keyword);
