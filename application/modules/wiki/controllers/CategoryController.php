@@ -35,44 +35,41 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu("category");
-		$this->view->layout()->setLayout('wiki_layout'); 
+        $this->view->layout()->setLayout('wiki_layout');
     }
 
-	function indexAction(){
-		$params = $this->_request->getParams();
-	    $this->view->title = "Category";
-		
-		$this->view->categories = $categories =  $this->_categories->getCategories();
+    function indexAction() {
+        $params = $this->_request->getParams();
+        $this->view->title = "Category";
 
-		$form = new Wiki_Form_Category();
-		$this->view->form = $form;
-		    if ($this->_request->isPost()) {
-            	if ($form->isValidPartial($_POST)) {
-					if(isset($_POST['select_action_menu'])){
-						switch($_POST['select_action_menu']){
-							case "add":
-								$this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
-	                   			$this->_redirect('/wiki/category');
-							break;
-							case "edit":
-								$this->_categories->edit($this->_request->getPost('category_id'), 
-														 $this->_request->getPost('parent_id'), 
-														 $this->_request->getPost('cname'), 
-														 $this->_request->getPost('status'));
-		                   		$this->_redirect('/wiki/category');
-							break;
-							case "delete":
-								$this->_categories->delete($this->_request->getPost('category_id'));
-		                   		$this->_redirect('/wiki/category');
-							break;	
-							default:
-							break;
-						}
-					}
-					}
-			}
-	}
+        $this->view->categories = $categories = $this->_categories->getCategories();
 
+        $form = new Wiki_Form_Category();
+        $this->view->form = $form;
+        if ($this->_request->isPost()) {
+            if ($form->isValidPartial($_POST)) {
+                if (isset($_POST['select_action_menu'])) {
+                    switch ($_POST['select_action_menu']) {
+                        case "add":
+                            $this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                            $this->_redirect('/wiki/category');
+                            break;
+                        case "edit":
+                            $this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                            $this->_redirect('/wiki/category');
+                            break;
+                        case "delete":
+                            $this->_categories->delete($this->_request->getPost('category_id'));
+                            $this->_redirect('/wiki/category');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            $this->_cache->clean('all', array('topic_list_cache'));
+        }
+    }
 
 }
 

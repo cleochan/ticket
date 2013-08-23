@@ -37,6 +37,12 @@ class Wiki_TopicController extends Zend_Controller_Action {
      */
     private $_db;
 
+    /**
+     *
+     * @var Zend_Cache_Core
+     */
+    private $_cache;
+    
     public function init() {
         $this->_menu = new Menu();
         $this->_topicsModel = new Wiki_Model_DbTable_Topics();
@@ -45,6 +51,21 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
 	$this->_categories = new Wiki_Model_DbTable_Category();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
+        $frontendOptions = new Zend_Cache_Core(
+                array(
+                    'caching' => true,
+                    'cache_id_prefix' => 'wikiSearch',
+                    'logging' => false,
+                    'write_control' => true,
+                    'automatic_serialization' => true,
+                    'ignore_user_abort' => true
+                ));
+
+        $backendOptions = new Zend_Cache_Backend_File(array(
+            'cache_dir' => sys_get_temp_dir()) // Directory where to put the cache files
+        );
+
+        $this->_cache = Zend_Cache::factory($frontendOptions, $backendOptions);
     }
     public function indexAction() {
         $this->view->title = "Wiki";
@@ -53,6 +74,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $order = $this->_request->get('orederBy');
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
+        $keyword = $this->_request->get('keyword');
         if ($sort == NULL || $sort === 'DESC') {
             $this->view->sort = 'ASC';
         } else {
@@ -61,18 +83,53 @@ class Wiki_TopicController extends Zend_Controller_Action {
         if ($suc == 1) {
             $this->view->message = 'The topic is deleted successfully';
         }
-        $rowCount = 10;
-        $count = $this->_topicsModel->GetTotal();
+        $rowCount = 2;
+        $cids = $this->_categories->getChildrenIds($cid);
+        if($cid!=NULL)  $cids[] = $cid;
+        $count = $this->_detailModel->getCount($cids, $keyword);
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-        $cids = $this->_categories->getChildrenIds($cid);
-        if($cid!=NULL)  $cids[] = $cid;
-        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids);
-
+        
+        /*Cache data*/
+        var_dump($this->_cache->getIds());
+        $cacheId = md5("{$page}{$order}{$sort}{$cid}{$keyword}");
+        var_dump('current id:'.$cacheId);
+        //$this->_cache->clean('all',array('topic_list_cache'));
+        //$session = new Zend_Session_Namespace('Wiki');
+        if(($data = $this->_cache->load($cacheId)) === FALSE){
+            $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids,$keyword);
+            $this->_cache->save($this->view->data,$cacheId,array('topic_list_cache'));
+            var_dump('this is new!');
+        }else {
+            $this->view->data = $data;
+            var_dump('this is cache!');
+        }
+        
+//        if($this->_getParam('from')=='searched'){
+//            $this->view->menu = $this->_menu->GetWikiMenu('searched');
+//            if ($keyword == NULL) {
+//                if($session->last_search){
+//                    $this->view->data = $this->_cache->load($session->last_search);
+//                }
+//                var_dump('last search:'.$session->last_search);
+//            }else{
+//                $session->last_search = $cacheId;
+//            }
+//        }
+        
+        /* Category paths */
+        $categoryPaths = array();
+        foreach ($this->view->data as $key => $value) {
+            $categoryPaths[$value['cid']] = $this->_categories->getCategoryPath($value['parent_id']);
+        }
+        $this->view->categoryPaths = $categoryPaths;
+        
+        var_dump($categoryPaths);
         /*Category id which is selected*/
         $this->view->cid = $cid;
+        $this->view->keyword = $keyword;
         $this->view->options = $this->_categories->getSelectOptions(0,'All');
 		
     }
@@ -157,6 +214,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
         $this->view->categorys = $this->_categories->getParents($data['parent_id']);
+        $this->_cache->clean('all', array('topic_list_cache'));
         $this->view->data = $data;
     }
 
@@ -173,7 +231,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $tid = $this->_request->get('id');
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
-        $this->_redirect('/wiki/index/index/msg/1');
+        $this->_cache->clean('all', array('topic_list_cache'));
+        $this->_redirect('/wiki/topic/index/msg/1');
     }
 
     public function editAction() {
@@ -221,6 +280,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $preversion_id = $this->_request->getPost('vid');
                     $this->_contentsModel->CreateContent($tid, $uid, $content, $preversion_id,TRUE);
                     $this->_contributorModel->UpdateRecord($tid,$uid);
+                    $this->_cache->clean('all', array('topic_list_cache'));
                     $this->_redirect('/wiki/topic/detail/id/'.$tid.'/msg/2');
                 } else {
                     die('insert error');
@@ -253,6 +313,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $uid = $userinfo->id;
                     $this->_contentsModel->CreateContent($insertId, $uid, $content, NULL, TRUE);
                     $this->_contributorModel->UpdateRecord($insertId,$uid);
+                    $this->_cache->clean('all', array('topic_list_cache'));
                     $this->_redirect('/wiki/topic/detail/id/'.$insertId.'/msg/1');
                 } else {
                     die('insert error');

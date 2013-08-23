@@ -71,7 +71,27 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         }
         return $result;
     }
-     
+    private function getParentById(array $array,$parentId){
+        foreach ($array as $key => $value) {
+            if($value['id']==$parentId){
+                return $value; 
+            }
+        }
+        return NULL;
+    }
+    
+    public function getCategoryPath($parentId,&$return,&$data){
+        if(!isset($data)){
+            $data = $this->fetchAll()->toArray();
+        }
+        $result = $this->getParentById($data, $parentId);
+        if ($result != NULL && count($result) > 0) {
+            $return[] = $result;
+            $this->getCategoryPath($result['parent_id'],$return,$data);
+        }
+        return $return;
+    }
+    
    public function getParents($parentId, &$return) {
         if ($parentId != NULL) {
             $select = $this->select();

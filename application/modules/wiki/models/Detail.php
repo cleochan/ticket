@@ -172,7 +172,7 @@ class Wiki_Model_Detail {
      * @param array $categoryIds
      * @return type
      */
-    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL) {
+    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL,$keyword=NULL) {
         $fields = array(
                            't.title', 
                            't.cid', 
@@ -181,6 +181,7 @@ class Wiki_Model_Detail {
                            't.create_time AS created_time',
                            't.uid AS creator_uid',
                            'u.realname as creator_name',
+                           'c.id AS cid',
                            'c.cname',
                            'c.parent_id',
                            'ct.content',
@@ -194,11 +195,26 @@ class Wiki_Model_Detail {
         if(is_array($categoryIds) && count($categoryIds)>0){
             $select->where('cid IN(?)',$categoryIds);
         }
+        if($keyword!=NULL){
+            $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+        }
         $this->setOrder($select, $orderBy, $sortOrder);
         $select->limitPage($page, $rowCount);
         return $this->db->fetchAll($select);
     }
-    
+    public function getCount(array $categoryIds=NULL,$keyword=NULL) {
+            $fields = array(new Zend_Db_Expr('COUNT(*) AS total'));
+            $select = $this->getDetailSelect($fields);
+            $select->where('ct.is_default=1');
+            if(is_array($categoryIds) && count($categoryIds)>0){
+                $select->where('cid IN(?)',$categoryIds);
+            }
+            if($keyword!=NULL){
+                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE)', $keyword)
+                        ->orWhere('MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+            }
+        return $this->db->fetchOne($select);
+    }
     /**
      * 
      * @param Zend_Db_Select $select
@@ -239,11 +255,11 @@ class Wiki_Model_Detail {
                     $select->order('preversion_id '.$sortOrder);
                     break;
                 default:
-                    $select->order('t.id '.$sortOrder);
+                    $select->order('update_time '.$sortOrder);
                     break;
             }
         }else{
-            $select->order('t.id '.$sortOrder);
+            $select->order('update_time '.$sortOrder);
         }
         
     }

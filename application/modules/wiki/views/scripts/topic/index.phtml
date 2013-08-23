@@ -9,24 +9,39 @@
             <?php echo $this->formSelect('redirect', $this->cid!=''?$this->cid:0, array('id' => 'redirect'), $this->options); ?>
             <script tyle="text/javascript">
                 $('#redirect').change(function() {
-                    location.href = '/wiki/index/index/cid/' + $(this).val();
+                    location.href = '<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'keyword'=>$this->keyword)) ?>/cid/' + $(this).val();
                 });
             </script>
         </div>
         <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
                 <tr>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Topic</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Category</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Creator</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Create Time</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Last Update By</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_time', 'sortOrder' => $this->sort,'cid'=>$this->cid)) ?>">Last Update Time</a></th>
+                    <th width="30%" ><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Topic</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Category</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Creator</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Create Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update By</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update Time</a></th>
                 </tr>
                 <?php foreach ($this->data as $value): ?>
                     <tr>
                         <td><a href="<?php echo $this->ActionUrl('detail', array('id' => $value['tid']), 'topic') ?>"><?php echo $value['title'] ?></a></td>
-                        <td><?php echo $value['cname'] ?></td>
+                        <td>
+                            <?php $pathString = '';?>
+                            <?php foreach ($this->categoryPaths as $key => $path): ?>
+                                <?php if ($value['cid'] == $key): ?>
+                                    <?php if ($path != NULL && is_array($path)): ?>
+                                        <?php foreach ($path as $parent): ?>
+                                            <?php $pathString ="{$parent['cname']} &gt; {$pathString}" ?>
+                                        <?php endforeach; ?>
+                                        <?php echo $pathString.$value['cname'];?>
+                                    <?php else: ?>
+                                        <?php echo $value['cname'];?>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        
+                        </td>
                         <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['creator_uid']),'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
                         <td><?php echo $value['create_time'] ?></td>
                         <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['updator_uid']),'contributor') ?>"><?php echo $value['update_name'] ?></a></td>

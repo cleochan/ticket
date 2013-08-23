@@ -24,11 +24,11 @@ EOF;
         <?php $str = '' ?>
         <?php foreach($this->categorys as $item):?>
             <?php
-               $url = $this->ActionUrl('index',array('cid'=>$item['cid']),'index');
+               $url = $this->ActionUrl('index',array('cid'=>$item['cid']));
                $str = "<a href='$url'>{$item['cname']}</a> &gt; {$str}";
             ?>
         <?php endforeach;?>
-        <?php $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']),'index');?>
+        <?php $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']));?>
         <?php echo "$str<a href='{$url}'>{$this->data['cname']}</a> &gt; {$this->data['title']}";?>
     </div>
     <div class="detail">
