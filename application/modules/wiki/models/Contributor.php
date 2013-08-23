@@ -6,13 +6,20 @@ class Wiki_Model_Contributor{
 	
 	function __construct(){
         $this->db = Zend_Registry::get("db");
-		defined('RECORDS_PER_PAGE') || define("RECORDS_PER_PAGE", 20);
-		defined('LATEST_TOPICS') || define("LATEST_TOPICS", 10);
+		defined('RECORDS_PER_PAGE') || define("RECORDS_PER_PAGE", 10);
 		$this->navHelper = $this->getNavHelper();
     }
 	
 	function _init(){
 
+	}
+
+	public function getNumberRecordsPerPage(){
+		$records = 0;
+		if(defined('RECORDS_PER_PAGE')){
+			return $records = RECORDS_PER_PAGE;
+		}
+		return 0;
 	}
 
 	public function getTableHeaders($type){
@@ -33,7 +40,7 @@ class Wiki_Model_Contributor{
 	}
     
 	function getContributors($current_page, $sortBy="dptname", $order="ASC"){
-		
+
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
 		$select->from("wiki_contributors as w", array("uid as userid", "tid as ticketid", "SUM(count) as contribution"));
@@ -61,13 +68,15 @@ class Wiki_Model_Contributor{
 		return $result;
 	}
 	
-	function getContributorByID($id){
+	function getContributorByID($id, $current_page="1"){
 		
+		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
 		$select->from("wiki_contributors as w", array("uid as userid", "tid as ticketid", "SUM(count) as contribution"));
 		$select->joinLeft("users as u", "u.id=w.uid", array("u.realname as name"));
 		$select->joinLeft("departments as d", "d.id=u.department", array("d.name as dptname"));
 		$select->where("w.uid = ?", $id);
+		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
 
 		$result = array();
@@ -96,7 +105,6 @@ class Wiki_Model_Contributor{
 	function getAllContributedTopicsByID($id, $current_page, $sortBy="updatetime", $order="ASC"){
 		
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
-		
 		$select = $this->db->select();
 		$select->from("wiki_topics as t", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
 		$select->joinLeft("wiki_contents as c", "t.id=c.tid", array("create_time as updatetime"));
@@ -104,6 +112,7 @@ class Wiki_Model_Contributor{
 		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
 		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("t.uid = ?", $id);
+		$select->group("t.id");
 		if($sortBy!=""){
 			$select->order($sortBy . " " . $order);
 		}
@@ -143,8 +152,9 @@ class Wiki_Model_Contributor{
 	 * @return array $result
 	 * @author Jonathan Coupe
 	 */	
-		function getContributionsByID($id, $sortBy="updatetime", $order="ASC"){
-		
+		function getContributionsByID($id, $current_page="1", $sortBy="updatetime", $order="ASC"){
+			
+		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
 		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
 		$select->joinLeft("wiki_topics as t", "t.id=c.tid", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
@@ -155,6 +165,7 @@ class Wiki_Model_Contributor{
 		if($sortBy!=""){
 			$select->order($sortBy . " " . $order);
 		}
+		$select->limit(RECORDS_PER_PAGE, $row_position);
 		$data = $this->db->fetchAll($select);
 
 		$result = array();
@@ -219,9 +230,14 @@ class Wiki_Model_Contributor{
 		
 	public function GetTotalContributors() {
         $select = $this->db->select();
-		$select->from("wiki_contributors as w", array("uid as userid", "tid as ticketid", "SUM(count) as contribution"));
+		$select->from("wiki_contributors as w", array("uid as usercount"));
+		$select->distinct("w.uid");
+		$select->group("w.uid");
+		$data = $this->db->fetchAll($select);
+		$output = count($data);
+		return $output;
     }
-
+	
 	/**
 	 * Get Page CountFunction
 	 * 
@@ -252,7 +268,6 @@ class Wiki_Model_Contributor{
 		{
 			$pagesFound++;
 		}
-
 		return $pagesFound;
 	}
 	

@@ -15,6 +15,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
    		$this->_contributors = new Wiki_Model_Contributor();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
+		$this->_detailModel = new Wiki_Model_Detail();
 		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
     }
 
@@ -43,10 +44,8 @@ class Wiki_ContributorController extends Zend_Controller_Action {
         $params = $this->_request->getParams();
         $this->view->title = "Contributions";
 
-        $tableKeys = array(1 => "dptname", 2 => "name", 3 => "contribution");
-
         if (!$this->getRequest()->getParam('page')) {
-            $this->getRequest()->setParam('page', 1);
+            $this->getRequest()->setParam('page', '1');
         }
         if (!$this->getRequest()->getParam('sortorder')) {
 			$this->getRequest()->setParam('sortorder', "DESC");
@@ -61,9 +60,10 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 		$flag = "";
 		if(isset($params['contributions'])){
 			$flag = "topics";
-			$contributor_array = $this->_contributors->getContributionsByID($params['user'],    
+			$contributor_array = $this->_contributors->getContributionsByID($params['user'],
+																			$this->getRequest()->getParam('page'),    
 			       															$this->getRequest()->getParam('sortby'),
-            																$this->getRequest()->getParam('sortorder'));
+            																$this->getRequest()->getParam('sortorder'));																										
 			$table_headers = $this->_contributors->getTableHeaders($flag);
 			$count = $this->_contributors->GetTotalTopicsById($params['user']);
 		}elseif (isset($params['user'])){
@@ -82,7 +82,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 			$table_headers = $this->_contributors->getTableHeaders($flag);
 			$count = $this->_contributors->GetTotalContributors();
 	    }
-echo $count;
+
 		foreach($table_headers as $key=>$val){
 			$headerLink = '<a href="/wiki/contributor/index/';
 			
@@ -101,6 +101,7 @@ echo $count;
 		$this->view->table_headers = $table_headers;
 			
 		switch($flag){
+			case "user":
 			case "topics":
 					foreach($contributor_array as $key=>$val){
 						$val['topic_title'] = '<a href="/wiki/topic/detail/id/' . $val['topic_id'] . '">' . $val['topic_title'] . '</a>';
@@ -114,10 +115,9 @@ echo $count;
 		if(!$this->getRequest()->getParam('type')){
 			$this->getRequest()->setParam('type', $flag);
 		}
-		
-        $rowCount = 10;
+
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
-        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setItemCountPerPage($this->_contributors->getNumberRecordsPerPage());
         $paginator->setCurrentPageNumber($params['page']);
         $this->view->paginator = $paginator;
 

@@ -642,42 +642,42 @@ class Menu {
                 $str .= " <a href='/wiki/topic/index/'><strong>All Topics</strong></a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
-                $str .= " | <a href='/wiki/search/index/'>Searched</a>";
+                $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "category":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
                 $str .= " | <a href='/wiki/category/'><strong>Category</strong></a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
-                $str .= " | <a href='/wiki/search/index/'>Searched</a>";
+                $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "contributor":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'><strong>Contributor</strong></a>";
-                $str .= " | <a href='/wiki/search/index/'>Searched</a>";
+                $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "searched":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
-                $str .= " | <a href='/wiki/search/index/'><strong>Searched</strong></a>";
+                $str .= " | <a href='/wiki/topic/searched/'><strong>Searched</strong></a>";
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "create":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
-                $str .= " | <a href='/wiki/search/index/'>Searched</a>";
+                $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/topic/create/'><strong>Create Topic</strong></a>";
                 break;
             default:
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
-                $str .= " | <a href='/wiki/search/index/'>Searched</a>";
+                $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
         }
