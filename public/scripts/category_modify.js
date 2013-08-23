@@ -47,12 +47,12 @@ $(document).ready(function() {
 									'<option value="delete">Delete</option>'+
 									'</select></td></tr>')
 						   .prepend('<tr class="category_table_static" id="select_action_comment"><td>Select Action to Perform: </td></tr>')
-						   .prepend('<h2 id="edit_form_title"></h2>');	
+						   .prepend('<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><h2 id="edit_form_title" class="ui-dialog-title"></h2></div>');	
 		
 		//$('#editWindow_buttons').before('<tr class="zend_row"><td><span id="deleteMessage"><h3>Category to be Deleted: </h3><p></p></span></td> </tr>'); 
 		$('body').append('<input type="hidden" id="current_working_id" value="" />');
 		
-		$("body").append("<div id='overlay'></div>");
+		$("body").append("<div id='overlay' class='ui-widget-overlay' ></div>");
 	    $("#overlay")
 	      .height($(document).height())
 	      .css({
@@ -65,8 +65,7 @@ $(document).ready(function() {
 	         'z-index': 99
 	      })
 	      .hide();
-	      ;
-		
+
 	}
 	
 	function resetWindow(){
