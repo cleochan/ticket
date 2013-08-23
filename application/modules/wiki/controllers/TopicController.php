@@ -49,8 +49,10 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-	$this->_categories = new Wiki_Model_DbTable_Category();
+		$this->_categories = new Wiki_Model_DbTable_Category();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
+		$this->_search = new Wiki_Model_Search();
+		
         $frontendOptions = new Zend_Cache_Core(
                 array(
                     'caching' => true,
@@ -299,14 +301,32 @@ class Wiki_TopicController extends Zend_Controller_Action {
             }
         }
     }
-    public function clearCacheAction() {
-        if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
-            $this->_cache->clean('all');
+
+    function searchedAction() {
+        $params = $this->_request->getParams();
+        $this->view->title = "Search Results";
+
+        if (isset($params['keyword'])) {
+            $searchCacheID = $params['keyword'];
+        } else if (isset($_SESSION["Zend_Auth"]["storage"]->last_search_term)) {
+            $searchCacheID = $_SESSION["Zend_Auth"]["storage"]->last_search_term;
+        } else {
+            $searchCacheID = "";
         }
-        exit();
-    }
-    
-    public function searchedAction(){
+        $this->view->table_headers = $this->_search->getTableHeaders();
+        if ($searchCacheID != "") {
+            if (!$this->_cache->test($searchCacheID)) {
+                $this->view->table_data = $this->_search->search($searchCacheID);
+                $this->_cache->save($this->view->table_data, $searchCacheID);
+            } else {
+                $this->view->table_data = $this->_cache->load($searchCacheID);
+            }
+        }
+        $_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;
+
+        $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
+        echo $this->view->render('wiki_template.phtml');
+
     }
 
     public function autoClearAction(){
