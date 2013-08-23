@@ -27,24 +27,11 @@
                     <tr>
                         <td><a href="<?php echo $this->ActionUrl('detail', array('id' => $value['tid']), 'topic') ?>"><?php echo $value['title'] ?></a></td>
                         <td>
-                            <?php $pathString = '';?>
-                            <?php foreach ($this->categoryPaths as $key => $path): ?>
-                                <?php if ($value['cid'] == $key): ?>
-                                    <?php if ($path != NULL && is_array($path)): ?>
-                                        <?php foreach ($path as $parent): ?>
-                                            <?php $pathString ="{$parent['cname']} &gt; {$pathString}" ?>
-                                        <?php endforeach; ?>
-                                        <?php echo $pathString.$value['cname'];?>
-                                    <?php else: ?>
-                                        <?php echo $value['cname'];?>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        
+                           <?php echo $value['category_path'];?>
                         </td>
-                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['creator_uid']),'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['creator_uid']), 'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
                         <td><?php echo $value['create_time'] ?></td>
-                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['updator_uid']),'contributor') ?>"><?php echo $value['update_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['updator_uid']), 'contributor') ?>"><?php echo $value['update_name'] ?></a></td>
                         <td><?php echo $value['update_time'] ?></td>
                     </tr>
                 <?php endforeach; ?>

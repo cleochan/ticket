@@ -6,19 +6,10 @@ EOF;
 <div class='wiki limitWidth'>
     <?php if($this->data['content']):?>
     <div class="navigation">
-        <?php $str = '' ?>
-        <?php foreach($this->categorys as $item):?>
-            <?php
-               $url = $this->ActionUrl('index',array('cid'=>$item['cid']),'index');
-               $str =" <a href='$url'>{$item['cname']}</a> &gt; {$str}";
-
-            ?>
-        <?php endforeach;?>
         <?php 
-            $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']),'index');
             $topicUrl = $this->ActionUrl('detail',array('id'=>$this->data['tid']));
         ?>
-        <?php echo "{$str}<a href='{$url}'>{$this->data['cname']}</a> &gt; <a href='{$topicUrl}'>{$this->data['title']}</a> > Version{$this->data['version_id']}";?>
+        <?php echo "{$this->categoryPath} &gt; <a href='{$topicUrl}'>{$this->data['title']}</a> > Version{$this->data['version_id']}";?>
     </div>
     <div class="detail">
         <div class="tool-bar">

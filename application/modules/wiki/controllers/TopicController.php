@@ -77,15 +77,14 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');
-        if ($sort == NULL || $sort === 'DESC') {
-            $this->view->sort = 'ASC';
-        } else {
-            $this->view->sort = 'DESC';
-        }
+        
+        /*For message*/
         if ($suc == 1) {
             $this->view->message = 'The topic is deleted successfully';
         }
-        $rowCount = 10;
+        
+        /*For paging*/
+        $rowCount = 3;
         $cids = $this->_categories->getChildrenIds($cid);
         if($cid!=NULL)  $cids[] = $cid;
         $count = $this->_detailModel->getCount($cids, $keyword);
@@ -94,44 +93,23 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
         
-        /*Cache data*/
-        var_dump($this->_cache->getIds());
-        $cacheId = md5("{$page}{$order}{$sort}{$cid}{$keyword}");
-        var_dump('current id:'.$cacheId);
-        //$this->_cache->clean('all',array('topic_list_cache'));
-        //$session = new Zend_Session_Namespace('Wiki');
-        if(($data = $this->_cache->load($cacheId)) === FALSE){
-            $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids,$keyword);
-            $this->_cache->save($this->view->data,$cacheId,array('topic_list_cache'));
-            var_dump('this is new!');
-        }else {
-            $this->view->data = $data;
-            var_dump('this is cache!');
-        }
-        
-//        if($this->_getParam('from')=='searched'){
-//            $this->view->menu = $this->_menu->GetWikiMenu('searched');
-//            if ($keyword == NULL) {
-//                if($session->last_search){
-//                    $this->view->data = $this->_cache->load($session->last_search);
-//                }
-//                var_dump('last search:'.$session->last_search);
-//            }else{
-//                $session->last_search = $cacheId;
-//            }
-//        }
+        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids,$keyword);
         
         /* Category paths */
-        $categoryPaths = array();
         foreach ($this->view->data as $key => $value) {
-            $categoryPaths[$value['cid']] = $this->_categories->getCategoryPath($value['parent_id']);
+            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'],$value['cname'],$value['parent_id']);
         }
-        $this->view->categoryPaths = $categoryPaths;
-        
-        var_dump($categoryPaths);
+            
+        /*For sort,toggle ASC and DESC when click*/
+        if ($sort == NULL || $sort === 'DESC') {
+            $this->view->sort = 'ASC';
+        } else {
+            $this->view->sort = 'DESC';
+        }
         /*Category id which is selected*/
         $this->view->cid = $cid;
         $this->view->keyword = $keyword;
+        $this->view->orderBy = $order;
         $this->view->options = $this->_categories->getSelectOptions(0,'All');
 		
     }
@@ -180,7 +158,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] = $tid;
-        $this->view->categorys = $this->_categories->getParents($data['parent_id']);
+        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
         $this->view->data = $data;
         
         $rowCount = 10;
@@ -215,7 +193,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $nextId = $this->_detailModel->getNextVersionId($tid, $data['vid']);
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
-        $this->view->categorys = $this->_categories->getParents($data['parent_id']);
+        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
         $this->_cache->clean('all', array('topic_list_cache'));
         $this->view->data = $data;
     }

@@ -17,9 +17,24 @@ class Wiki_Model_Detail {
      * @var Zend_Db_Adapter_Abstract
      */
     protected $db;
-
-    function __construct() {
+    private $_cache;
+    public function __construct() {
         $this->db = Zend_Registry::get('db');
+                $frontendOptions = new Zend_Cache_Core(
+                array(
+                    'caching' => true,
+                    'cache_id_prefix' => 'wikiSearch',
+                    'logging' => false,
+                    'write_control' => true,
+                    'automatic_serialization' => true,
+                    'ignore_user_abort' => true
+                ));
+
+        $backendOptions = new Zend_Cache_Backend_File(array(
+            'cache_dir' => sys_get_temp_dir()) // Directory where to put the cache files
+        );
+
+        $this->_cache = Zend_Cache::factory($frontendOptions, $backendOptions);
     }
     public function getDetailSelect(array $fields){
         $select = $this->db->select();
@@ -45,6 +60,7 @@ class Wiki_Model_Detail {
                            't.create_time AS created_time',
                            't.uid AS creator_uid',
                            'u.realname as creator_name',
+                           'c.id',
                            'c.cname',
                            'c.parent_id',
                            'ct.content',
@@ -173,7 +189,10 @@ class Wiki_Model_Detail {
      * @return type
      */
     public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL,$keyword=NULL) {
-        $fields = array(
+        $cid = end($categoryIds);
+        $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|");
+        if(($data = $this->_cache->load($cacheId)) === FALSE){
+            $fields = array(
                            't.title', 
                            't.cid', 
                            't.id AS tid', 
@@ -190,17 +209,22 @@ class Wiki_Model_Detail {
                            'ct.uid AS updator_uid',
                            'u2.realname AS update_name'
                            );
-        $select = $this->getDetailSelect($fields);
-        $select->where('ct.is_default=1');
-        if(is_array($categoryIds) && count($categoryIds)>0){
-            $select->where('cid IN(?)',$categoryIds);
+            $select = $this->getDetailSelect($fields);
+            $select->where('ct.is_default=1');
+            if(is_array($categoryIds) && count($categoryIds)>0){
+                $select->where('cid IN(?)',$categoryIds);
+            }
+            if($keyword!=NULL){
+                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+            }
+            $this->setOrder($select, $orderBy, $sortOrder);
+            $select->limitPage($page, $rowCount);
+            $data = $this->db->fetchAll($select);
+            $this->_cache->save($data,$cacheId,array('topic_list_cache'));
+            return $data;
+        }else{
+            return $data;
         }
-        if($keyword!=NULL){
-            $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
-        }
-        $this->setOrder($select, $orderBy, $sortOrder);
-        $select->limitPage($page, $rowCount);
-        return $this->db->fetchAll($select);
     }
     public function getCount(array $categoryIds=NULL,$keyword=NULL) {
             $fields = array(new Zend_Db_Expr('COUNT(*) AS total'));
