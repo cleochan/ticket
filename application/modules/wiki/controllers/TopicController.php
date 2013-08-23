@@ -324,6 +324,14 @@ class Wiki_TopicController extends Zend_Controller_Action {
         }
         $_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;
 
+        $rowCount = 10;
+        $page = $this->_request->get('page');
+        $count = $commentModel->GetTotal($tid);
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->getView()->assign(array('position'=>'#comments'));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($page);
+
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_template.phtml');
 

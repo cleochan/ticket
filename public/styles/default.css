@@ -544,7 +544,7 @@ html body div#view-content.wiki div#deleteMessage {
     border: 1px solid #D8D8D8;
 	position: fixed;
 	min-width: 35%;
-	height: 200px;
+	height: 195px;
 	left: 32%;
 	top: 40%;
 	z-index: 100;
@@ -572,6 +572,10 @@ html body div#view-content.wiki div#deleteMessage {
     background-color: #EAEAEA;
     behavior: url(/styles/PIE/PIE.htc);
 }
+.wiki div.content div#category_list{
+	margin-left: 10%;
+	width:80%;
+}
 .wiki div.content div#category_list ul{
     background-color: #FFF; 
 }
@@ -596,7 +600,7 @@ html body div#view-content.wiki div#deleteMessage {
 /*--Search Panel--*/
 .wiki div#edit_window.editWindow a.ui-dialog-titlebar-close span.ui-icon{
 	position: fixed;
-	top: 51%;
+	top: 41%;
 }
 
 .wiki div#edit_window.editWindow form#category_form table#select_action.category_table div.ui-dialog-titlebar{
@@ -604,8 +608,8 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 .wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form{
-	height: 200px;
-	width: 660px;
+	height: 199px;
+	width: 659px;
 }
 
 .wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form table#select_action.category_table{
