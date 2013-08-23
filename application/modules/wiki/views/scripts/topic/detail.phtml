@@ -21,15 +21,7 @@ EOF;
     <?php endif; ?>
     <?php if($this->data['title']!=NULL&&strlen($this->data['title'])>0):?>
      <div class="navigation">
-        <?php $str = '' ?>
-        <?php foreach($this->categorys as $item):?>
-            <?php
-               $url = $this->ActionUrl('index',array('cid'=>$item['cid']));
-               $str = "<a href='$url'>{$item['cname']}</a> &gt; {$str}";
-            ?>
-        <?php endforeach;?>
-        <?php $url = $this->ActionUrl('index',array('cid'=>$this->data['cid']));?>
-        <?php echo "$str<a href='{$url}'>{$this->data['cname']}</a> &gt; {$this->data['title']}";?>
+        <?php echo "{$this->categoryPath} &gt; {$this->data['title']}";?>
     </div>
     <div class="detail">
         <div class="tool-bar" style="margin-right:6px;">

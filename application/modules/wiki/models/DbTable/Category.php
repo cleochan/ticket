@@ -16,14 +16,30 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
             'refColumns' => 'parent_id'
         )
     );
-
+    /**
+     *
+     * @var Zend_Cache_Core 
+     */
+    private $_cache;
     public function __construct() {
         $this->_db = Zend_Registry::get("db");
+                $frontendOptions = new Zend_Cache_Core(
+                array(
+                    'caching' => true,
+                    'cache_id_prefix' => 'wikiSearch',
+                    'logging' => false,
+                    'write_control' => true,
+                    'automatic_serialization' => true,
+                    'ignore_user_abort' => true
+                ));
+
+        $backendOptions = new Zend_Cache_Backend_File(array(
+            'cache_dir' => sys_get_temp_dir()) // Directory where to put the cache files
+        );
+
+        $this->_cache = Zend_Cache::factory($frontendOptions, $backendOptions);
     }
 
-    public function init() {
-        
-    }
     public function getSelectOptions($parentId, $defaultOption,&$count, &$return,&$data) {
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
@@ -80,18 +96,39 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         return NULL;
     }
     
-    public function getCategoryPath($parentId,&$return,&$data){
+    public function getParentsRows($parentId,&$return,&$data){
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }
         $result = $this->getParentById($data, $parentId);
         if ($result != NULL && count($result) > 0) {
             $return[] = $result;
-            $this->getCategoryPath($result['parent_id'],$return,$data);
+            $this->getParentsRows($result['parent_id'],$return,$data);
         }
         return $return;
     }
     
+    public function getCategoryPath($cid,$cname,$parentId) {
+        $cacheId = md5("wiki_category_path|{$cid}|");
+        if(($data = $this->_cache->load($cacheId)) === FALSE){
+            $parents = $this->getParentsRows($parentId);
+            $returnStr = '';
+            $limiter = ' &gt; ';
+            if ($parents != NULL && is_array($parents) && count($parents) > 0) {
+                foreach ($parents as $key => $value) {
+                    $returnStr = "<a href='/wiki/topic/index/cid/{$value['id']}'>{$value['cname']}</a>{$limiter}{$returnStr}";
+                }
+                $returnStr .= "<a href='/wiki/topic/index/cid/{$cid}'>{$cname}</a>";
+            }else{
+                $returnStr = "<a href='/wiki/topic/index/cid/{$cid}'>{$cname}</a>";
+            }
+            $this->_cache->save($returnStr,$cacheId,array('topic_list_cache'));
+            return $returnStr;
+        }else{
+            return $data;
+        }
+
+    }
    public function getParents($parentId, &$return) {
         if ($parentId != NULL) {
             $select = $this->select();

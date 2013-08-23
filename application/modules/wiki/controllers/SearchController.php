@@ -78,6 +78,7 @@ class Wiki_SearchController extends Zend_Controller_Action {
 
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_template.phtml');
+        echo $this->view->render();
 //        $isSearched = TRUE;
 //        $this->_forward('index', 'topic','wiki',array('from'=>'searched'));
     }
