@@ -604,10 +604,12 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 /*--Search Panel--*/
-.wiki div#edit_window.editWindow a.ui-dialog-titlebar-close span.ui-icon{
-	position: fixed;
-	top: 41%;
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content a#close_btn.ui-dialog-titlebar-close,
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content a#close_btn.ui-dialog-titlebar-close span.ui-icon{
+top: 10px;
+right: 0px;
 }
+
 
 .wiki div#edit_window.editWindow form#category_form table#select_action.category_table div.ui-dialog-titlebar{
 	min-width: 32%;

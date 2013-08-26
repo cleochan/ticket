@@ -19,7 +19,12 @@ $(document).ready(function() {
 		$('.select_action_form').hide().val("edit");;
 		addNewCategoryWindowConfig(0);
 	});
-
+	
+	$('#close_btn').click(function(e){
+		displayWindow(false, e);
+		resetWindow();
+	});
+	
 	$(".categoryLink").click(function(e) {
 		$('#current_working_id').attr('value', $(this).attr('value'));
 		categoryName = $(this).text().trim();

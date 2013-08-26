@@ -189,8 +189,12 @@ class Wiki_Model_Detail {
      * @return type
      */
     public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL,$keyword=NULL,$contributorId = NULL) {
-        $cid = end($categoryIds);
-        $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|{$contributor_id}|");
+    	if(isset($categoryIds)){
+    		$cid = end($categoryIds);
+    	}else{
+    		return NULL;
+    	}
+        $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|{$contributorId}|");
         if($keyword!=NULL){
             $session = new Zend_Session_Namespace('wiki');
             $session->last_search_cache_id = $cacheId;
@@ -218,7 +222,7 @@ class Wiki_Model_Detail {
             if(is_array($categoryIds) && count($categoryIds)>0){
                 $select->where('cid IN(?)',$categoryIds);
             }
-            if($contributor_id != NULL){
+            if($contributorId != NULL){
                 $select->where('ct.uid = ?',$contributorId);
             }
             if($keyword!=NULL){
