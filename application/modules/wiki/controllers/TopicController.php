@@ -112,7 +112,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->options = $this->_categories->getSelectOptions(0, 'All');
         
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
-        echo $this->view->render('wiki_template.phtml');
+        echo $this->view->render('wiki_topic_table.phtml');
 		
     }
     public function preDispatch() {
@@ -354,7 +354,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->options = $this->_categories->getSelectOptions(0, 'All');
 
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
-        echo $this->view->render('wiki_template.phtml');
+        echo $this->view->render('wiki_topic_table.phtml');
 
     }
     

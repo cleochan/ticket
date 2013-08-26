@@ -10,14 +10,13 @@ class Wiki_ContributorController extends Zend_Controller_Action {
      */
     private $_db;
 	
-    public function init() {
+	public function init() {
         $this->_menu = new Menu();
         $this->_db = Zend_Registry::get('db');
-        $this->_contributors = new Wiki_Model_Contributor();
+   		$this->_contributors = new Wiki_Model_Contributor();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
-        $this->_detailModel = new Wiki_Model_Detail();
-        $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
-        $this->_categories = new Wiki_Model_DbTable_Category();
+		$this->_detailModel = new Wiki_Model_Detail();
+		$this->view->addScriptPath(APPLICATION_PATH.'/modules/wiki/views/scripts/shared');
     }
 
     public function preDispatch() {
@@ -42,50 +41,89 @@ class Wiki_ContributorController extends Zend_Controller_Action {
     }
 
     function indexAction() {
-        $this->view->title = "Wiki";
-        $suc = $this->_request->get('msg');
-        $page = $this->_request->get('page');
-        $order = $this->_request->get('orederBy');
-        $sort = $this->_request->get('sortOrder');
-        $cid = $this->_request->get('cid');
-        $contributorId = $this->_request->get('userid');
-        $keyword = $this->_request->get('keyword');
+        $params = $this->_request->getParams();
+        $this->view->title = "Contributions";
 
-        /* For paging */
-        $rowCount = 3;
-        $cids = $this->_categories->getChildrenIds($cid);
-        if ($cid != NULL)
-            $cids[] = $cid;
-        $count = $this->_detailModel->getCount($cids, $keyword);
+        if (!$this->getRequest()->getParam('page')) {
+            $this->getRequest()->setParam('page', '1');
+        }
+        if (!$this->getRequest()->getParam('sortorder')) {
+			$this->getRequest()->setParam('sortorder', "DESC");
+        } elseif ($this->getRequest()->getParam('sortorder') === 'ASC') {
+			$this->getRequest()->setParam('sortorder', "DESC");
+        } else {
+			$this->getRequest()->setParam('sortorder', "ASC");
+        }
+		
+		$params = $this->_request->getParams();
+		
+		$flag = "";
+		if(isset($params['contributions'])){
+			$flag = "topics";
+			$contributor_array = $this->_contributors->getContributionsByID($params['user'],
+																			$this->getRequest()->getParam('page'),    
+			       															$this->getRequest()->getParam('sortby'),
+            																$this->getRequest()->getParam('sortorder'));																										
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalTopicsById($params['user']);
+		}elseif (isset($params['user'])){
+			$flag = "user";
+            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], 
+            																	   $this->getRequest()->getParam('page'), 
+            																	   $this->getRequest()->getParam('sortby'),
+            																	   $this->getRequest()->getParam('sortorder'));
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalTopicsById($params['user']);
+	    }else{
+	    	$flag = "contributors";
+			$contributor_array = $this->_contributors->getContributors($this->getRequest()->getParam('page'),
+																	   $this->getRequest()->getParam('sortby'),
+																	   $this->getRequest()->getParam('sortorder'));
+			$table_headers = $this->_contributors->getTableHeaders($flag);
+			$count = $this->_contributors->GetTotalContributors();
+	    }
+
+		foreach($table_headers as $key=>$val){
+			$headerLink = '<a href="/wiki/contributor/index/';
+			
+			if (isset($params['user'])){
+				$headerLink .= 'user/' . $params['user'] .'/';
+			}
+			
+			if (isset($params['contributions'])){
+				$headerLink .= 'contributions/' . $params['contributions'] .'/';
+			}
+			
+			$headerLink .= 'sortby/' . $key . '/sortorder/' . $params['sortorder'] .  '">' . $val . '</a>';
+			$table_headers[$key] = $headerLink;
+		}
+
+		$this->view->table_headers = $table_headers;
+			
+		switch($flag){
+			case "user":
+			case "topics":
+					foreach($contributor_array as $key=>$val){
+						$val['topic_title'] = '<a href="/wiki/topic/detail/id/' . $val['topic_id'] . '">' . $val['topic_title'] . '</a>';
+						$contributor_array[$key]['topic_title'] = $val['topic_title'];
+						unset($contributor_array[$key]['topic_id']);
+					}
+				break;
+			default:
+		}		
+		
+		if(!$this->getRequest()->getParam('type')){
+			$this->getRequest()->setParam('type', $flag);
+		}
+
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
-        $paginator->setItemCountPerPage($rowCount);
-        $paginator->setCurrentPageNumber($page);
+        $paginator->setItemCountPerPage($this->_contributors->getNumberRecordsPerPage());
+        $paginator->setCurrentPageNumber($params['page']);
         $this->view->paginator = $paginator;
 
-        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword,$contributorId);
-
-        /* Category paths */
-        foreach ($this->view->data as $key => $value) {
-            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
-        }
-        /* For message */
-        if ($suc == 1) {
-            $this->view->message = 'The topic is deleted successfully';
-        }
-        /* For sort,toggle ASC and DESC when click */
-        if ($sort == NULL || $sort === 'DESC') {
-            $this->view->sort = 'ASC';
-        } else {
-            $this->view->sort = 'DESC';
-        }
-        /* Category id which is selected */
-        $this->view->cid = $cid;
-        $this->view->keyword = $keyword;
-        $this->view->orderBy = $order;
-        $this->view->options = $this->_categories->getSelectOptions(0, 'All');
-        
-        $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
-        echo $this->view->render('wiki_template.phtml');
+        $this->view->table_data = $contributor_array;
+		
+		echo $this->view->render('wiki_template.phtml');
 		
     }
 
