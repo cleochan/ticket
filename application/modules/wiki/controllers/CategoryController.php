@@ -15,6 +15,7 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->_db = Zend_Registry::get('db');
         $this->_contributors = new Wiki_Model_Contributor();
         $this->_categories = new Wiki_Model_DbTable_Category();
+		$this->_form = new Wiki_Form_Category();
     }
 
     public function preDispatch() {
@@ -43,11 +44,10 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->view->title = "Category";
 
         $this->view->categories = $categories = $this->_categories->getCategories();
-
-        $form = new Wiki_Form_Category();
-        $this->view->form = $form;
+        $this->view->form = $this->_form;
+		
         if ($this->_request->isPost()) {
-            if ($form->isValidPartial($_POST)) {
+            if ($this->_form->isValidPartial($_POST)) {
                 if (isset($_POST['select_action_menu'])) {
                     switch ($_POST['select_action_menu']) {
                         case "add":
@@ -67,7 +67,9 @@ class Wiki_CategoryController extends Zend_Controller_Action {
                     }
                 }
             }
-            $this->_cache->clean('all', array('topic_list_cache'));
+			if(isset($this->_cache)){
+				$this->_cache->clean('all', array('topic_list_cache'));
+			}
         }
     }
 
