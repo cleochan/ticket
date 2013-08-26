@@ -8,7 +8,7 @@
             <?php echo $this->formSelect('redirect', $this->cid!=''?$this->cid:0, array('id' => 'redirect'), $this->options); ?>
             <script tyle="text/javascript">
                 $('#redirect').change(function() {
-                    location.href = '<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'keyword'=>$this->keyword)) ?>/cid/' + $(this).val();
+                    location.href = '<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orederBy' => $this->orderBy, 'sortOrder' => $this->sort,'keyword'=>$this->keyword)) ?>/cid/' + $(this).val();
                 });
             </script>
         </div>

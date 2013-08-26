@@ -109,7 +109,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->cid = $cid;
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
-        $this->view->options = $this->_categories->getSelectOptions(0, 'All');
+        $this->view->options = $this->_categories->getSelectOptions(0, 'All Category');
         
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_topic_table.phtml');
@@ -312,19 +312,18 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');
-
+        $this->view->actionName = 'searched';
         /* For paging */
         $rowCount = 3;
         $cids = $this->_categories->getChildrenIds($cid);
         if ($cid != NULL)
             $cids[] = $cid;
-        $count = $this->_detailModel->getCount($cids, $keyword);
         
         $session = new Zend_Session_Namespace('wiki');
-        if($session->last_search_cache_id != NULL && $keyword == NULL){
-            $this->view->data = $this->_cache->load($session->last_search_cache_id);
-            $count = count($this->view->data);
-        }else{
+        if($session->last_search_keyword !=NULL && $keyword == NULL && $cid == NULL){
+            $this->_redirect('/wiki/topic/searched/keyword/'.$session->last_search_keyword);
+        }elseif($keyword!=NULL){
+            $count = $this->_detailModel->getCount($cids, $keyword);
             $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
         }
         
@@ -351,7 +350,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->cid = $cid;
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
-        $this->view->options = $this->_categories->getSelectOptions(0, 'All');
+        $this->view->options = $this->_categories->getSelectOptions(0, 'All Category');
 
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_topic_table.phtml');
@@ -361,6 +360,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     public function clearCacheAction() {
         if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
             $this->_cache->clean('all');
+            Zend_Session::namespaceUnset('wiki');
         }
         exit();
     }

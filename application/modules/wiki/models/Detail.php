@@ -194,6 +194,8 @@ class Wiki_Model_Detail {
         if($keyword!=NULL){
             $session = new Zend_Session_Namespace('wiki');
             $session->last_search_cache_id = $cacheId;
+            $session->last_search_keyword = $keyword;
+            $session->last_search_cids = $categoryIds;
         }
         if(($data = $this->_cache->load($cacheId)) === FALSE){
             $fields = array(
@@ -241,8 +243,7 @@ class Wiki_Model_Detail {
                 $select->where('cid IN(?)',$categoryIds);
             }
             if($keyword!=NULL){
-                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE)', $keyword)
-                        ->orWhere('MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
             }
         return $this->db->fetchOne($select);
     }
