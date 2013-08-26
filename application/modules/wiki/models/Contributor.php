@@ -30,11 +30,11 @@ class Wiki_Model_Contributor{
 					 "contribution"=>"Contributions");
 		case "topics":
 		case "user":
-		return array("name"=>"Contributor",
+		return array("title"=>"Topic",
+					 "catname"=>"Category",
+					 "name"=>"Contributor",
 					 "updatetime"=>"Date Updated",
-					 "createtime"=>"Date Created",
-					 "title"=>"Topic",
-					 "catname"=>"Category");	 
+					 "createtime"=>"Date Created");	
 		}
 		
 	}
@@ -124,11 +124,11 @@ class Wiki_Model_Contributor{
         foreach($data as $key => $val)
         {
             $temp = array();
+			$temp['topic_title'] =  $val['title'];
+			$temp['category_name'] = $val['catname'];
 			$temp['contributor_name'] = $val['name'];
 			$temp['last_updated'] = $val['updatetime'];
 			$temp['creation_time'] = $val['createtime'];
-            $temp['topic_title'] =  $val['title'];
-			$temp['category_name'] = $val['catname'];
 			$temp['topic_id'] = $val['topicid'];
 			
 			if($val['parent']){
@@ -154,6 +154,8 @@ class Wiki_Model_Contributor{
 	 */	
 		function getContributionsByID($id, $current_page="1", $sortBy="updatetime", $order="ASC"){
 			
+			
+			var_dump($id);
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
 		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
@@ -173,11 +175,11 @@ class Wiki_Model_Contributor{
         foreach($data as $key => $val)
         {
             $temp = array();
+			$temp['topic_title'] = $val['title'];
+			$temp['category_name'] = $val['catname'];
 			$temp['contributor_name'] = $val['name'];
 			$temp['last_updated'] = $val['updatetime'];
 			$temp['creation_time'] = $val['createtime'];
-            $temp['topic_title'] = $val['title'];
-			$temp['category_name'] = $val['catname'];
 			$temp['topic_id'] = $val['topicid'];
 			
 			if($val['parent']){

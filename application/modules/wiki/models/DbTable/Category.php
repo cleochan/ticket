@@ -40,7 +40,7 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         $this->_cache = Zend_Cache::factory($frontendOptions, $backendOptions);
     }
 
-    public function getSelectOptions($parentId, $defaultOption,&$count, &$return,&$data) {
+    public function getSelectOptions($parentId, $defaultOption,&$count=0, &$return=null,&$data=null) {
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }
@@ -63,7 +63,8 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         }
         return $return;
     }
-    public function getChildrenIds($parentId,&$return,&$data){
+    public function getChildrenIds($parentId,&$return=null,&$data=null){
+    	$return = array();
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }
@@ -96,7 +97,8 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         return NULL;
     }
     
-    public function getParentsRows($parentId,&$return,&$data){
+    public function getParentsRows($parentId,&$return=null,&$data=null){
+    	$return = array();
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }

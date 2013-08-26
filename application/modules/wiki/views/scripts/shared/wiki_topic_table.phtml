@@ -15,12 +15,12 @@
         <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
                 <tr>
-                    <th width="30%" ><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Topic</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Category</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Creator</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Create Time</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update By</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('index', array('orederBy' => 'update_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update Time</a></th>
+                    <th width="30%" ><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Topic</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Category</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Creator</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Create Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update By</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('index', array('orderBy' => 'update_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update Time</a></th>
                 </tr>
                 <?php foreach ($this->data as $value): ?>
                     <tr>
@@ -28,9 +28,9 @@
                         <td>
                            <?php echo $value['category_path'];?>
                         </td>
-                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['creator_uid']), 'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('index', array('user' => $value['creator_uid']), 'contributor') ?>"><?php echo $value['creator_name'] ?></a></td>
                         <td><?php echo $value['create_time'] ?></td>
-                        <td><a href="<?php echo $this->ActionUrl('index', array('userid' => $value['updator_uid']), 'contributor') ?>"><?php echo $value['update_name'] ?></a></td>
+                        <td><a href="<?php echo $this->ActionUrl('index', array('user' => $value['updator_uid']), 'contributor') ?>"><?php echo $value['update_name'] ?></a></td>
                         <td><?php echo $value['update_time'] ?></td>
                     </tr>
                 <?php endforeach; ?>

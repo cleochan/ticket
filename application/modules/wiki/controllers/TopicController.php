@@ -73,7 +73,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->title = "Wiki";
         $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
-        $order = $this->_request->get('orederBy');
+        $order = $this->_request->get('orderBy');
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');
@@ -175,7 +175,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
     public function historyAction() {
         $tid = $this->_request->get('id');
-        $order = $this->_request->get('orederBy');
+        $order = $this->_request->get('orderBy');
         $sort= $this->_request->get('sortOrder');
         if($sort==NULL||$sort==='DESC'){
             $this->view->sort = 'ASC';
@@ -308,7 +308,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->title = "Wiki";
         $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
-        $order = $this->_request->get('orederBy');
+        $order = $this->_request->get('orderBy');
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');

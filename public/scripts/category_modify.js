@@ -19,7 +19,12 @@ $(document).ready(function() {
 		$('.select_action_form').hide().val("edit");;
 		addNewCategoryWindowConfig(0);
 	});
-
+	
+	$('#close_btn').click(function(e){
+		displayWindow(false, e);
+		resetWindow();
+	});
+	
 	$(".categoryLink").click(function(e) {
 		$('#current_working_id').attr('value', $(this).attr('value'));
 		categoryName = $(this).text().trim();
@@ -38,6 +43,10 @@ $(document).ready(function() {
 		optionWindowConfig();
 	});
 	
+	$('input#cname').focus(function(e){
+		$('input#cname').val("");
+	});
+	
 	function initWindow(){
 		$('#edit_window').hide();
 		resetWindow(); 
@@ -49,7 +58,6 @@ $(document).ready(function() {
 						   .prepend('<tr class="category_table_static" id="select_action_comment"><td>Select Action to Perform: </td></tr>')
 						   .prepend('<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><h2 id="edit_form_title" class="ui-dialog-title"></h2></div>');	
 		
-		//$('#editWindow_buttons').before('<tr class="zend_row"><td><span id="deleteMessage"><h3>Category to be Deleted: </h3><p></p></span></td> </tr>'); 
 		$('body').append('<input type="hidden" id="current_working_id" value="" />');
 		
 		$("body").append("<div id='overlay' class='ui-widget-overlay' ></div>");
