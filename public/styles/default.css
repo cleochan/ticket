@@ -514,14 +514,12 @@ html body div#view-content.wiki div#deleteMessage {
 	height: auto;
 }
 
-.wiki div#category_list h3 a.categoryLink{
-	cursor: pointer;
-}
-.wiki div#category_list ul li a.categoryLink{
+.wiki div#category_list a{
 	cursor: pointer;
 }
 
-.wiki div#category_list h3 a.categoryLink:hover
+
+.wiki div#category_list a:hover
 { 
 	color:red;
 	text-decoration:none;
@@ -626,7 +624,6 @@ right: 0px;
 
 html body div#view-content.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form table#select_action.category_table tbody tr.zend_row{
 	position: absolute;
-
 	width: 300px;
 }
 

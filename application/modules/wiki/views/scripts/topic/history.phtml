@@ -15,11 +15,11 @@
         <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
                 <tr>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'version_id','sortOrder'=>$this->sort)) ?>">Version</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">Update Time</a></th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_name','sortOrder'=>$this->sort)) ?>">Contributor</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orderBy' =>'version_id','sortOrder'=>$this->sort)) ?>">Version</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orderBy' =>'update_time','sortOrder'=>$this->sort)) ?>">Update Time</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orderBy' =>'update_name','sortOrder'=>$this->sort)) ?>">Contributor</a></th>
                     <th>Topic</th>
-                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orederBy' =>'update_time','sortOrder'=>$this->sort)) ?>">From</a></th>
+                    <th><a href="<?php echo $this->ActionUrl('history', array('id'=>$this->data[0]['tid'],'orderBy' =>'update_time','sortOrder'=>$this->sort)) ?>">From</a></th>
                     <th>On Show</th>
                 </tr>
                 <?php foreach ($this->data as $value):?>
