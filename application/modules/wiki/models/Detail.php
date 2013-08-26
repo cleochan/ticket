@@ -188,9 +188,13 @@ class Wiki_Model_Detail {
      * @param array $categoryIds
      * @return type
      */
-    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL,$keyword=NULL) {
+    public function getTopicsPaging($page,$rowCount,$orderBy='id',$sortOrder='DESC',array $categoryIds=NULL,$keyword=NULL,$contributorId = NULL) {
         $cid = end($categoryIds);
-        $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|");
+        $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|{$contributor_id}|");
+        if($keyword!=NULL){
+            $session = new Zend_Session_Namespace('wiki');
+            $session->last_search_cache_id = $cacheId;
+        }
         if(($data = $this->_cache->load($cacheId)) === FALSE){
             $fields = array(
                            't.title', 
@@ -213,6 +217,9 @@ class Wiki_Model_Detail {
             $select->where('ct.is_default=1');
             if(is_array($categoryIds) && count($categoryIds)>0){
                 $select->where('cid IN(?)',$categoryIds);
+            }
+            if($contributor_id != NULL){
+                $select->where('ct.uid = ?',$contributorId);
             }
             if($keyword!=NULL){
                 $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);

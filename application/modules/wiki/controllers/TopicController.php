@@ -77,40 +77,42 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');
-        
-        /*For message*/
-        if ($suc == 1) {
-            $this->view->message = 'The topic is deleted successfully';
-        }
-        
-        /*For paging*/
+
+        /* For paging */
         $rowCount = 3;
         $cids = $this->_categories->getChildrenIds($cid);
-        if($cid!=NULL)  $cids[] = $cid;
+        if ($cid != NULL)
+            $cids[] = $cid;
         $count = $this->_detailModel->getCount($cids, $keyword);
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-        
-        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort,$cids,$keyword);
-        
+
+        $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
+
         /* Category paths */
         foreach ($this->view->data as $key => $value) {
-            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'],$value['cname'],$value['parent_id']);
+            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
         }
-            
-        /*For sort,toggle ASC and DESC when click*/
+        /* For message */
+        if ($suc == 1) {
+            $this->view->message = 'The topic is deleted successfully';
+        }
+        /* For sort,toggle ASC and DESC when click */
         if ($sort == NULL || $sort === 'DESC') {
             $this->view->sort = 'ASC';
         } else {
             $this->view->sort = 'DESC';
         }
-        /*Category id which is selected*/
+        /* Category id which is selected */
         $this->view->cid = $cid;
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
-        $this->view->options = $this->_categories->getSelectOptions(0,'All');
+        $this->view->options = $this->_categories->getSelectOptions(0, 'All');
+        
+        $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
+        echo $this->view->render('wiki_template.phtml');
 		
     }
     public function preDispatch() {
@@ -303,27 +305,35 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     function searchedAction() {
-        $params = $this->_request->getParams();
-        $this->view->title = "Search Results";
+        $this->view->title = "Wiki";
+        $suc = $this->_request->get('msg');
+        $page = $this->_request->get('page');
+        $order = $this->_request->get('orederBy');
+        $sort = $this->_request->get('sortOrder');
+        $cid = $this->_request->get('cid');
+        $keyword = $this->_request->get('keyword');
 
-        if (isset($params['keyword'])) {
-            $searchCacheID = $params['keyword'];
-        } else if (isset($_SESSION["Zend_Auth"]["storage"]->last_search_term)) {
-            $searchCacheID = $_SESSION["Zend_Auth"]["storage"]->last_search_term;
-        } else {
-            $searchCacheID = "";
+        /* For paging */
+        $rowCount = 3;
+        $cids = $this->_categories->getChildrenIds($cid);
+        if ($cid != NULL)
+            $cids[] = $cid;
+        $count = $this->_detailModel->getCount($cids, $keyword);
+        
+        $session = new Zend_Session_Namespace('wiki');
+        if($session->last_search_cache_id != NULL && $keyword == NULL){
+            $this->view->data = $this->_cache->load($session->last_search_cache_id);
+            $count = count($this->view->data);
+        }else{
+            $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
         }
-        $this->view->table_headers = $this->_search->getTableHeaders();
-        if ($searchCacheID != "") {
-            if (!$this->_cache->test($searchCacheID)) {
-                $this->view->table_data = $this->_search->search($searchCacheID);
-                $this->_cache->save($this->view->table_data, $searchCacheID);
-            } else {
-                $this->view->table_data = $this->_cache->load($searchCacheID);
-            }
-        }
-        $_SESSION["Zend_Auth"]["storage"]->last_search_term = $searchCacheID;
+        
+        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
+        $paginator->setItemCountPerPage($rowCount);
+        $paginator->setCurrentPageNumber($page);
+        $this->view->paginator = $paginator;
 
+<<<<<<< HEAD
         $rowCount = 10;
         $page = $this->_request->get('page');
         $count = $commentModel->GetTotal($tid);
@@ -332,11 +342,41 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
 
+=======
+        /* Category paths */
+        foreach ($this->view->data as $key => $value) {
+            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
+        }
+        /* For message */
+        if ($suc == 1) {
+            $this->view->message = 'The topic is deleted successfully';
+        }
+        /* For sort,toggle ASC and DESC when click */
+        if ($sort == NULL || $sort === 'DESC') {
+            $this->view->sort = 'ASC';
+        } else {
+            $this->view->sort = 'DESC';
+        }
+        /* Category id which is selected */
+        $this->view->cid = $cid;
+        $this->view->keyword = $keyword;
+        $this->view->orderBy = $order;
+        $this->view->options = $this->_categories->getSelectOptions(0, 'All');
+        
+>>>>>>> 8c7196e5b9057bfca3f1c9408a8c4adcc01137aa
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_template.phtml');
 
     }
+    
+    public function clearCacheAction() {
+        if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
+            $this->_cache->clean('all');
+        }
+        exit();
+    }
 
+    
     public function autoClearAction(){
         if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
             //$this->_contentsModel->Clear();
