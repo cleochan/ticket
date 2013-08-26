@@ -333,16 +333,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
 
-<<<<<<< HEAD
-        $rowCount = 10;
-        $page = $this->_request->get('page');
-        $count = $commentModel->GetTotal($tid);
-        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
-        $paginator->getView()->assign(array('position'=>'#comments'));
-        $paginator->setItemCountPerPage($rowCount);
-        $paginator->setCurrentPageNumber($page);
-
-=======
         /* Category paths */
         foreach ($this->view->data as $key => $value) {
             $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
@@ -362,8 +352,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
         $this->view->options = $this->_categories->getSelectOptions(0, 'All');
-        
->>>>>>> 8c7196e5b9057bfca3f1c9408a8c4adcc01137aa
+
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_template.phtml');
 
