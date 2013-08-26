@@ -49,7 +49,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->_contentsModel = new Wiki_Model_DbTable_Contents();
         $this->_detailModel = new Wiki_Model_Detail();
         $this->_db = Zend_Registry::get('db');
-		$this->_categories = new Wiki_Model_DbTable_Category();
+	$this->_categories = new Wiki_Model_DbTable_Category();
         $this->_contributorModel = new Wiki_Model_DbTable_Contributor();
 		$this->_search = new Wiki_Model_Search();
 		
