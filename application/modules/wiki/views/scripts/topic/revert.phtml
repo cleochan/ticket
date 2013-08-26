@@ -57,7 +57,7 @@ EOF;
                         <?php endif; ?>
                         <?php if($this->data['is_default']!=TRUE):?>
                         <?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id?>
-                        <?php if($this->data['creator_uid']===$uid):?><td><a id="revert" class="button-style btn-red" href="<?php echo $this->ActionUrl('set-default',array('id'=>$this->data['tid'],'version'=>$this->data['vid']));?>">Revert to this version</a></td><?php endif;?>
+                        <td><a id="revert" class="button-style btn-red" href="<?php echo $this->ActionUrl('set-default',array('id'=>$this->data['tid'],'version'=>$this->data['vid']));?>">Revert to this version</a></td>
                         <script type="text/javascript">
                              $('#revert').click(function(){
                                  if(confirm("This handle will revert to this version and create a new history item,would you like to do that?")){

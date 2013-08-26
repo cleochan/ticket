@@ -64,7 +64,9 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         return $return;
     }
     public function getChildrenIds($parentId,&$return=null,&$data=null){
-    	$return = array();
+        if(!isset($return)){
+            $return = array();
+        }
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }
@@ -98,7 +100,9 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
     }
     
     public function getParentsRows($parentId,&$return=null,&$data=null){
-    	$return = array();
+        if(!isset($return)){
+            $return = array();
+        }
         if(!isset($data)){
             $data = $this->fetchAll()->toArray();
         }

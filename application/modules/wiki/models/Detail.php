@@ -228,7 +228,8 @@ class Wiki_Model_Detail {
                 $select->where('ct.uid = ?',$contributorId);
             }
             if($keyword!=NULL){
-                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+                //$select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+                $select->where('t.title LIKE ? OR ct.content LIKE ?',"%$keyword%");
             }
             $this->setOrder($select, $orderBy, $sortOrder);
             $select->limitPage($page, $rowCount);
