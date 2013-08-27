@@ -114,25 +114,20 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
         return $return;
     }
     
-    public function getCategoryPath($cid,$cname,$parentId) {
-        $cacheId = md5("wiki_category_path|{$cid}|");
-        if(($data = $this->_cache->load($cacheId)) === FALSE){
+    public function getCategoryPath($cid,$cname,$parentId,$uri="/wiki/topic/index") {
             $parents = $this->getParentsRows($parentId);
             $returnStr = '';
             $limiter = ' &gt; ';
             if ($parents != NULL && is_array($parents) && count($parents) > 0) {
                 foreach ($parents as $key => $value) {
-                    $returnStr = "<a href='/wiki/topic/index/cid/{$value['id']}'>{$value['cname']}</a>{$limiter}{$returnStr}";
+                    $returnStr = "<a href='{$uri}/cid/{$value['id']}'>{$value['cname']}</a>{$limiter}{$returnStr}";
                 }
-                $returnStr .= "<a href='/wiki/topic/index/cid/{$cid}'>{$cname}</a>";
+                $returnStr .= "<a href='{$uri}/cid/{$cid}'>{$cname}</a>";
             }else{
-                $returnStr = "<a href='/wiki/topic/index/cid/{$cid}'>{$cname}</a>";
-            }
-            $this->_cache->save($returnStr,$cacheId,array('topic_list_cache'));
+                $returnStr = "<a href='{$uri}/cid/{$cid}'>{$cname}</a>";
+            }	
+            //$this->_cache->save($returnStr,$cacheId,array('topic_list_cache'));
             return $returnStr;
-        }else{
-            return $data;
-        }
 
     }
    public function getParents($parentId, &$return) {

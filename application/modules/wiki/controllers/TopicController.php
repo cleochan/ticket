@@ -133,6 +133,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
+		$this->view->action = $this->getRequest()->getActionName();
 		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
@@ -195,7 +196,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $nextId = $this->_detailModel->getNextVersionId($tid, $data['vid']);
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
-        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
+        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id'], $this->getRequest()->getActionName());
         $this->_cache->clean('all', array('topic_list_cache'));
         $this->view->data = $data;
     }
@@ -325,17 +326,21 @@ class Wiki_TopicController extends Zend_Controller_Action {
         }elseif($keyword!=NULL){
             $count = $this->_detailModel->getCount($cids, $keyword);
             $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
+        }else{
+        	$count = 0;
         }
         
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-
         /* Category paths */
-        foreach ($this->view->data as $key => $value) {
-            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
-        }
+        if($this->view->data){
+	        foreach ($this->view->data as $key => $value) {
+	            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id'], 
+	           																				   $this->getRequest()->getRequestUri());
+	        }
+		}
         /* For message */
         if ($suc == 1) {
             $this->view->message = 'The topic is deleted successfully';
