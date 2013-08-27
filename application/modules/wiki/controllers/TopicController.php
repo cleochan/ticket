@@ -253,11 +253,11 @@ class Wiki_TopicController extends Zend_Controller_Action {
                 if ($tid !== NULL) {
                     /* if the category change,save it */
                     $where = $this->_db->quoteInto('id=?', $tid);
-                    $this->_topicsModel->__cid = $this->_request->getPost('category');
+                    $this->_topicsModel->__cid = $form->category->getValue();
                     $this->_topicsModel->change($where);
 
                     /* create a new version */
-                    $content = $this->_request->getPost('content');
+                    $content = $form->content->getValue();
                     $uid = $userinfo->id;
                     $preversion_id = $this->_request->getPost('vid');
                     $this->_contentsModel->CreateContent($tid, $uid, $content, $preversion_id,TRUE);
@@ -286,12 +286,12 @@ class Wiki_TopicController extends Zend_Controller_Action {
         if ($this->_request->isPost()) {
             if ($form->isValidPartial($_POST)) {
                 $userinfo = Zend_Auth::getInstance()->getStorage()->read();
-                $title = $this->_request->getPost('title');
+                $title = $form->title->getValue();
                 $uid = $userinfo->id;
-                $cid = $this->_request->getPost('category');
+                $cid = $form->category->getValue();
                 $insertId = $this->_topicsModel->CreateTopic($title,$uid,$cid);
                 if ($insertId !== NULL) {
-                    $content = $this->_request->getPost('content');
+                    $content = $form->content->getValue();
                     $uid = $userinfo->id;
                     $this->_contentsModel->CreateContent($insertId, $uid, $content, NULL, TRUE);
                     $this->_contributorModel->UpdateRecord($insertId,$uid);
@@ -321,10 +321,15 @@ class Wiki_TopicController extends Zend_Controller_Action {
         
         $session = new Zend_Session_Namespace('wiki');
         if($session->last_search_keyword !=NULL && $keyword == NULL && $cid == NULL){
-            $this->_redirect('/wiki/topic/searched/keyword/'.$session->last_search_keyword);
+            if($session->last_search_cid !=NULL){
+                $cidParm = "/cid/{$session->last_search_cid}";
+            }
+            $this->_redirect("/wiki/topic/searched{$cidParm}/keyword/{$session->last_search_keyword}");
         }elseif($keyword!=NULL){
             $count = $this->_detailModel->getCount($cids, $keyword);
             $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
+            $session->last_search_keyword = $keyword;
+            $session->last_search_cid = $cid;
         }
         
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));

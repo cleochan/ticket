@@ -312,7 +312,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     background-color: #e8e8e8; 
 }
 .wiki .tb-style table td{
-    text-align: center;
+    text-align: center; 
 }
 .wiki .tb-style table,.wiki .tb-style th,.wiki .tb-style td{
 /*    padding: 0px;

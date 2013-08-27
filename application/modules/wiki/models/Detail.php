@@ -195,12 +195,6 @@ class Wiki_Model_Detail {
     		return NULL;
     	}
         $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|{$contributorId}|");
-        if($keyword!=NULL){
-            $session = new Zend_Session_Namespace('wiki');
-            $session->last_search_cache_id = $cacheId;
-            $session->last_search_keyword = $keyword;
-            $session->last_search_cids = $categoryIds;
-        }
         if(($data = $this->_cache->load($cacheId)) === FALSE){
             $fields = array(
                            't.title', 
@@ -229,7 +223,7 @@ class Wiki_Model_Detail {
             }
             if($keyword!=NULL){
                 //$select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
-                $select->where('t.title LIKE ? OR ct.content LIKE ?',"%$keyword%");
+                $select->where('t.title LIKE ? OR ct.content LIKE ?',"%{$keyword}%");
             }
             $this->setOrder($select, $orderBy, $sortOrder);
             $select->limitPage($page, $rowCount);

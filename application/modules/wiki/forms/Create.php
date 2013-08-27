@@ -24,6 +24,7 @@ class Wiki_Form_Create extends Zend_Form
         $this->addElement('text', 'title', array(
             //'label' => 'Title:',
             'required' => TRUE,
+            'filters' => array('StripTags'),
             'decorators' => $this->ElementDecorators,
             'validators' => array(
                 Custom_Tools_Validators::NotEmpty(),
