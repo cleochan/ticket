@@ -46,6 +46,8 @@ class Wiki_CategoryController extends Zend_Controller_Action {
         $this->view->categories = $categories = $this->_categories->getCategories();
         $this->view->form = $this->_form;
 		
+		echo $this->_categories->hasNoChildren($this->_request->getPost('category_id'));
+		
         if ($this->_request->isPost()) {
             if ($this->_form->isValidPartial($_POST)) {
                 if (isset($_POST['select_action_menu'])) {
@@ -59,8 +61,10 @@ class Wiki_CategoryController extends Zend_Controller_Action {
                             $this->_redirect('/wiki/category');
                             break;
                         case "delete":
-                            $this->_categories->delete($this->_request->getPost('category_id'));
-                            $this->_redirect('/wiki/category');
+							if($this->_categories->hasNoChildren($this->_request->getPost('category_id'))){
+								$this->_categories->delete($this->_request->getPost('category_id'));
+		                        $this->_redirect('/wiki/category');
+							}
                             break;
                         default:
                             break;
