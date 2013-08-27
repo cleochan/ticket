@@ -314,22 +314,30 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $cid = $this->_request->get('cid');
         $keyword = $this->_request->get('keyword');
         $this->view->actionName = 'searched';
+		
+		if(!isset($page)){
+			$page = 1;
+		}
+		if(!isset($order)){
+			$order = 'topic';
+		}
+		
         /* For paging */
-        $rowCount = 3;
+        $rowCount = 10;
         $cids = $this->_categories->getChildrenIds($cid);
-        if ($cid != NULL)
+        if ($cid != NULL){
             $cids[] = $cid;
-        
+		}
         $session = new Zend_Session_Namespace('wiki');
-        if($session->last_search_keyword !=NULL && $keyword == NULL && $cid == NULL){
-            $this->_redirect('/wiki/topic/searched/keyword/'.$session->last_search_keyword);
+		$count = 0;
+        if($session->last_search_keyword !=NULL && $keyword == NULL){
+            $this->_redirect('/wiki/topic/searched/keyword/'.$session->last_search_keyword.'/page/'.$page);
         }elseif($keyword!=NULL){
             $count = $this->_detailModel->getCount($cids, $keyword);
             $this->view->data = $this->_detailModel->getTopicsPaging($page, $rowCount, $order, $sort, $cids, $keyword);
-        }else{
-        	$count = 0;
         }
         
+		echo $count;
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
@@ -356,7 +364,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
         $this->view->options = $this->_categories->getSelectOptions(0, 'All Category');
-
+		$this->view->page = $page;
+		
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_topic_table.phtml');
 
