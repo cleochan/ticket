@@ -192,7 +192,7 @@ class Wiki_Model_Detail {
     	if(isset($categoryIds)){
     		$cid = end($categoryIds);
     	}else{
-    		return NULL;
+    		$cid = NULL;
     	}
         $cacheId = md5("wiki_topic_list|{$page}|{$orderBy}|{$sortOrder}|{$cid}|{$keyword}|{$contributorId}|");
         if(($data = $this->_cache->load($cacheId)) === FALSE){
@@ -242,7 +242,7 @@ class Wiki_Model_Detail {
                 $select->where('cid IN(?)',$categoryIds);
             }
             if($keyword!=NULL){
-                $select->where('MATCH(t.title) AGAINST(? IN BOOLEAN MODE) OR MATCH(ct.content) AGAINST(? IN BOOLEAN MODE)', $keyword);
+                $select->where("t.title like '%" . $keyword . "%' or ct.content like '%" . $keyword . "%' ");
             }
         return $this->db->fetchOne($select);
     }

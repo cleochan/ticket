@@ -359,7 +359,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
         $this->view->options = $this->_categories->getSelectOptions(0, 'All Category');
-
+		$this->view->page = $page;
+		
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_topic_table.phtml');
 
