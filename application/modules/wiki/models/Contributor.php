@@ -43,7 +43,7 @@ class Wiki_Model_Contributor{
 
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
-		$select->from("wiki_contributors as w", array("uid as userid", "tid as ticketid", "SUM(count) as contribution"));
+		$select->from("wiki_topics as w", array("w.uid as userid", "w.id as ticketid", "COUNT(w.id) as contribution"));
 		$select->joinLeft("users as u", "u.id=w.uid", array("u.realname as name"));
 		$select->joinLeft("departments as d", "d.id=u.department", array("d.name as dptname"));
 		$select->group("w.uid");
@@ -154,13 +154,11 @@ class Wiki_Model_Contributor{
 	 */	
 		function getContributionsByID($id, $current_page="1", $sortBy="updatetime", $order="ASC"){
 			
-			
-			var_dump($id);
 		$row_position = ($current_page-1) * RECORDS_PER_PAGE;
 		$select = $this->db->select();
-		$select->from("wiki_contents as c", array("id","create_time as updatetime"));
+		$select->from("wiki_contents as c", array("id","create_time as updatetime", "c.uid"));
 		$select->joinLeft("wiki_topics as t", "t.id=c.tid", array("title", "id as topicid", "uid as userid", "create_time as createtime"));
-		$select->joinLeft("users as u", "u.id=t.uid", array("u.realname as name"));
+		$select->joinLeft("users as u", "u.id=c.uid", array("u.realname as name"));
 		$select->joinLeft("wiki_category as ct", "ct.id=t.cid", array("ct.cname as catname"));
 		$select->joinLeft("wiki_category as ct2", "ct.parent_id=ct2.id", array("ct2.cname as parent"));
 		$select->where("c.uid = ?", $id);

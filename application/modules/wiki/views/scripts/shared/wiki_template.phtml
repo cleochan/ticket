@@ -1,12 +1,12 @@
 <br /><br />
 <div class="wiki">
 	<div class="tb-style">
-		<table width="100%" align="center" cellspacing="1">
+		<table class="topic_table" width="100%" align="center" cellspacing="1">
 			<tbody>
 				<tr>
 					<?php if($this->table_headers):?>
 						<?php foreach($this->table_headers as $key => $val):?>
-								<th><a href=""><?=$val?></a></th>
+								<th class='topic_table_header_<?=$key?>'><a href=""><?=$val?></a></th>
 						<?php endforeach;?>			
 					<?php endif;?>
 				</tr>

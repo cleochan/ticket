@@ -2,21 +2,22 @@
     <?php if (isset($this->message)): ?>
         <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
     <?php endif; ?>
-	<?php echo $this->table ?>
+    <?php echo $this->table ?>
     <div class="index tb-style">
         <div class="mb5 mt5">
             <?php echo $this->formSelect('redirect', $this->cid!=''?$this->cid:0, array('id' => 'redirect'), $this->options); ?>
             <script tyle="text/javascript">
                 $('#redirect').change(function() {
-                    location.href = '<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orederBy' => $this->orderBy, 'sortOrder' => $this->sort,'keyword'=>$this->keyword)) ?>/cid/' + $(this).val();
+                    location.href = '<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => $this->orderBy, 'sortOrder' => $this->sort,'keyword'=>$this->keyword)) ?>/cid/' + $(this).val();
                 });
             </script>
         </div>
         <table width="100%" cellpadding="0" cellspacing="1">
             <tbody>
+                <?php if(isset($this->data) && !empty($this->data)):?>
                 <tr>
                     <th width="30%" ><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'topic', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Topic</a></th>
-                    <th><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Category</a></th>
+                    <th width="25%" ><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'category', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Category</a></th>
                     <th><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'creator', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Creator</a></th>
                     <th><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'create_time', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Create Time</a></th>
                     <th><a href="<?php echo $this->ActionUrl(isset($this->actionName)?$this->actionName:'index', array('orderBy' => 'update_name', 'sortOrder' => $this->sort,'cid'=>$this->cid,'keyword'=>$this->keyword)) ?>">Last Update By</a></th>
@@ -34,6 +35,17 @@
                         <td><?php echo $value['update_time'] ?></td>
                     </tr>
                 <?php endforeach; ?>
+                <?php else:?>
+                    <tr>
+                    <th width="30%" >Topic</th>
+                    <th>Category</th>
+                    <th>Creator</th>
+                    <th>Create Time</th>
+                    <th>Last Update By</th>
+                    <th>Last Update Time</th>
+                </tr>
+                    <tr><td colspan="6"> No topic</td></tr>
+                <?php endif;?>
             </tbody>
         </table>
     </div>
@@ -45,5 +57,4 @@
         </div>
         <div class="clear"></div>
     </div>
-
 </div>
