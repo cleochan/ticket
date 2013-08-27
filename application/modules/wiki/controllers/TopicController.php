@@ -321,6 +321,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
             $cids[] = $cid;
         
         $session = new Zend_Session_Namespace('wiki');
+		$count = 0;
         if($session->last_search_keyword !=NULL && $keyword == NULL && $cid == NULL){
             if($session->last_search_cid !=NULL){
                 $cidParm = "/cid/{$session->last_search_cid}";
@@ -339,8 +340,10 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->paginator = $paginator;
 
         /* Category paths */
-        foreach ($this->view->data as $key => $value) {
-            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
+        if(isset($this->view->data)){
+	        foreach ($this->view->data as $key => $value) {
+	            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
+	        }
         }
         /* For message */
         if ($suc == 1) {
