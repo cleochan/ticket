@@ -16,7 +16,7 @@
 			console.log("WIKI LAYOUT");
 		function search(){
 			var a = document.sform.keyword.value;
-			window.location.href = '<?php echo $this->ActionUrl('searched', array('cid'=>$this->cid)) ?>/keyword/' + escape(a);
+			window.location.href = '<?php echo $this->ActionUrl('searched', array('cid'=>$this->cid),'topic') ?>/keyword/' + escape(a);
 		}
 		
 		is_read = 0;

@@ -306,12 +306,13 @@ class Wiki_TopicController extends Zend_Controller_Action {
 
     function searchedAction() {
         $this->view->title = "Wiki";
+        $filter = new Zend_Filter_Alnum();
         $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
         $order = $this->_request->get('orderBy');
         $sort = $this->_request->get('sortOrder');
         $cid = $this->_request->get('cid');
-        $keyword = $this->_request->get('keyword');
+        $keyword = $filter->filter($this->_request->get('keyword'));
         $this->view->actionName = 'searched';
         /* For paging */
         $rowCount = 3;
@@ -366,6 +367,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         if($_SERVER['REMOTE_ADDR']=='127.0.0.1'){
             $this->_cache->clean('all');
             Zend_Session::namespaceUnset('wiki');
+            echo 'cache is clear';
         }
         exit();
     }
