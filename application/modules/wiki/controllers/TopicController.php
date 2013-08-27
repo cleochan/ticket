@@ -133,7 +133,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
         //make top menu
         $this->view->top_menu = $this->_menu->GetTopMenu($this->getRequest()->getModuleName());
         $this->view->menu = $this->_menu->GetWikiMenu($this->getRequest()->getActionName());
-		$this->view->action = $this->getRequest()->getActionName();
 		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
@@ -196,7 +195,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $nextId = $this->_detailModel->getNextVersionId($tid, $data['vid']);
         $data['prevId'] = $prevId;
         $data['nextId'] = $nextId;
-        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id'], $this->getRequest()->getActionName());
+        $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
         $this->_cache->clean('all', array('topic_list_cache'));
         $this->view->data = $data;
     }
@@ -337,13 +336,11 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $paginator->setItemCountPerPage($rowCount);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
+
         /* Category paths */
-        if($this->view->data){
-	        foreach ($this->view->data as $key => $value) {
-	            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id'], 
-	           																				   $this->getRequest()->getRequestUri());
-	        }
-		}
+        foreach ($this->view->data as $key => $value) {
+            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
+        }
         /* For message */
         if ($suc == 1) {
             $this->view->message = 'The topic is deleted successfully';
@@ -359,8 +356,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->keyword = $keyword;
         $this->view->orderBy = $order;
         $this->view->options = $this->_categories->getSelectOptions(0, 'All Category');
-		$this->view->page = $page;
-		
+
         $this->view->addScriptPath(APPLICATION_PATH . '/modules/wiki/views/scripts/shared');
         echo $this->view->render('wiki_topic_table.phtml');
 
