@@ -245,6 +245,23 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract {
 		return $output . $hiddenValues;
 	}
 
+	public function hasNoChildren($id){
+		$data = $this->fetchAll()->toArray();
+		$iterator = new RecursiveArrayIterator($data);
+		while($iterator->valid()){
+				if($iterator->hasChildren()){
+					foreach ($iterator->getChildren() as $key => $val) {
+			            if($key === 'parent_id'){
+			            	if($val == $id){
+			            		return false;
+			            	}
+			            }
+			        }
+				}
+			$iterator->next();
+		}
+		return true;
+	}
 
 	public function create($parent_id, $cname, $status){
 		$this->__parent_id = $parent_id;
