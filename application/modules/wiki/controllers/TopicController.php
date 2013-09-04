@@ -79,7 +79,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $keyword = $this->_request->get('keyword');
 
         /* For paging */
-        $rowCount = 3;
+        $rowCount = 20;
         $cids = $this->_categories->getChildrenIds($cid);
         if ($cid != NULL)
             $cids[] = $cid;
@@ -163,7 +163,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
         $this->view->data = $data;
         
-        $rowCount = 10;
+        $rowCount = 20;
         $page = $this->_request->get('page');
         $count = $commentModel->GetTotal($tid);
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
@@ -315,7 +315,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $keyword = $filter->filter($this->_request->get('keyword'));
         $this->view->actionName = 'searched';
         /* For paging */
-        $rowCount = 3;
+        $rowCount = 20;
         $cids = $this->_categories->getChildrenIds($cid);
         if ($cid != NULL)
             $cids[] = $cid;
