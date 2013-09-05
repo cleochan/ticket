@@ -2,70 +2,40 @@
 
 class Wiki_Form_Category extends Zend_Form {
 
-	public $ElementDecorators = array(
+  public $ElementDecorators = array(
         'ViewHelper',
         array('Errors', array('class' => 'error')),
-        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-	    array('Label', array('tag' => 'td')),
-	    array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'zend_row'))
     );
     public $EmptyDecorators = array(
         'ViewHelper',
     );
 
-	public function init(){
-		parent::init();
-		$this->setDisableLoadDefaultDecorators(TRUE);
-		$this->setDecorators(array(
+    public function init() {
+        parent::init();
+        //$this->addPrefixPath('Mark_Form_Element_', 'Mark/Form/Element/', 'element'); //设置搜索Element的路径
+        //$this->setConfig($config->form);
+        $this->setDisableLoadDefaultDecorators(TRUE);
+        $this->setDecorators(array(
             'FormElements',
-            array('HtmlTag', array('tag' => 'table')),
-            'Form',
+            'Form'
         ));
-		$this->addElement('text', 'cname', array(
-            'label' => 'Category Name:',
-            'value' =>'Please Enter Category Name',
+        $this->addElement('select', 'category', array(
+            //'label' => 'Content:',
+            'decorators' => $this->ElementDecorators
+        ));
+        $this->addElement('text', 'cname', array(
+            //'label' => 'Content:',
             'required' => TRUE,
             'decorators' => $this->ElementDecorators,
-            'attribs' => array ('style' => 'width: 100%; position: relative'),
             'validators' => array(
                 Custom_Tools_Validators::NotEmpty()
             )
         ));
-		$this->addElement('text', 'status', array(
-            'label' => 'Status:',
-            'value' =>'Please Enter Category Status',
-            'required' => TRUE,
-            'decorators' => $this->ElementDecorators,
-            'attribs' => array ('style' => 'width: 100%; position: relative'),
-            'validators' => array(
-                Custom_Tools_Validators::NotEmpty()
-            )
-        ));
-		$this->addElement('text', 'parent_id', array(
-            'label' => 'Parent ID:',
-            'value' =>'Please Enter Parent ID',
-            'required' => TRUE,
-            'decorators' => $this->ElementDecorators,
-            'attribs' => array ('style' => 'width: 100%; position: relative'),
-            'validators' => array(
-                Custom_Tools_Validators::NotEmpty()
-            )
-        ));
-		
-		$this->addElement('hidden', 'category_id', array(
-				'value' =>'Please Enter Parent ID',
-				'decorators' => $this->ElementDecorators,
-				 'validators' => array(
-                Custom_Tools_Validators::NotEmpty()
-          	)
-		));
-		
-		$this->addElement('submit', 'submit', array(
-			'label' => 'Submit',
+         $this->addElement('submit', 'submit', array(
+             'label' => 'Add',
             'decorators' => $this->EmptyDecorators
         ));
-
-	}
+    }
 
 }
 

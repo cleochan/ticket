@@ -271,6 +271,15 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 .wiki .mr10{
    margin-right: 10px;
 }
+.wiki .ml30{
+   margin-left: 30px;
+}
+.wiki .pl10{
+   padding-left: 10px;
+}
+.wiki .pl20{
+   padding-left: 20px;
+}
 .wiki .mt10{
    margin-top: 10px;
 }
@@ -278,7 +287,7 @@ background:url(/images/star/withoutstar.png) no-repeat left center
    margin-top: 5px;
 }
 .wiki .mt15{
-   margin-top: 15px;
+   margin-top: 15px!important;
 }
 .wiki .mt30{
    margin-top: 30px;
@@ -454,6 +463,9 @@ background:url(/images/star/withoutstar.png) no-repeat left center
     border-right: #EEE 1px solid;
     border-bottom: #EEE 1px solid;
 }
+.wiki input[type="text"]{
+    padding-left: 5px;
+}
 .wiki input:focus,.wiki select:focus,.wiki textArea:focus
 {
     outline: none;
@@ -488,7 +500,10 @@ background:url(/images/star/withoutstar.png) no-repeat left center
 {
     background-color:#66cc00;
 }
-
+.wiki .category li{
+    height: 25px;
+    line-height: 25px;
+}
 html body div#view-content.wiki form#category_form table.category_table tbody tr td.element{
 	width: 75%;
 }
@@ -565,6 +580,43 @@ html body div#view-content.wiki div#deleteMessage {
 }
 
 /*--Category Styling--*/
+.wiki.category #submit{
+    height: 25px;
+    width: 50px;
+}
+
+.wiki.category #category{
+    height: 25px;
+}
+
+.wiki.category #cname{
+    height: 21px;
+    width:161px;
+}
+.wiki.category #tree ul{
+    border: none;
+}
+.wiki.category .category-content{
+    border: dashed 1px #e4e4e4;
+    padding: 15px;
+    margin-left: 7px;
+    margin-top: 8px;
+    background-color: #FFFDFD;
+}
+.wiki.category .tree button{
+    box-shadow: none;
+}
+.wiki.category .tree li{
+    padding: 3px;
+}
+.wiki.category .tree a{
+    padding: 3px;
+    margin-right: 3px;
+}
+.wiki.category .tree a span{
+    margin-right: 3px;
+}
+/*-----*/
 .wiki div.content div#category_list h3 {
     color: rgb(85, 85, 85);
     background-image: linear-gradient(#FAFAFA, #EAEAEA);

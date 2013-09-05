@@ -1,36 +1,109 @@
-<script type="text/javascript" src="/scripts/category_modify.js"></script>
-<br /><br />
-<div id="view-content" class='wiki'>
-	<div class='content'>
-		<div id="category_list">
-					<h4><a id="add_category_link">Add a New Category >></a></h4>
-					<?php if($this->categories):?>
-						<?php echo $this->categories; ?>
-					<?php endif;?>	
-		</div>
-	</div>
-	
-	
-   <div id="edit_window" class="editWindow ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="0">
-   	<div id="dialog-modal-43" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; height: 200px">
-		<a class="ui-dialog-titlebar-close ui-corner-all" id="close_btn" href="#" role="button" unselectable="on" style="-moz-user-select: none;">
-			<span class="ui-icon ui-icon-closethick" unselectable="on" style="-moz-user-select: none;">close</span>
-		</a>
-   		
-    	<form valign="top" align="center" id="category_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
-          method="<?php echo $this->escape($this->form->getMethod()) ?>"
-          enctype="multipart/form-data">
-	        <table align="center" class="category_table" id="select_action">
-	                <?php echo $this->form->cname; ?>
-	             	<?php echo $this->form->status; ?>
-	                <?php echo $this->form->parent_id; ?>
-	             	<?php echo $this->form->category_id; ?>
-	                <tr id="editWindow_buttons" class="category_table_static">
-	                    <td><?php echo $this->form->submit; ?></td>
-	                </tr>
-	        </table>
-		 </form>
-	 </div>
-	 </div> 
+<?php
+$this->Css = $this->Css . <<<EOF
+     <link type="text/css" href="/styles/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+EOF;
+$this->Scripts = $this->Scripts . <<<EOF
+    <script type="text/javascript" src="/scripts/jquery.ztree-2.6.min.js"></script>
+EOF;
+?>
+<div class="wiki category pl20">
+    <div>
+        <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
+              method="<?php echo $this->escape($this->form->getMethod()) ?>"
+              enctype="multipart/form-data">
+            <table>
+                <tbody>
+                    <tr>
+                        <td valign="top"><?php echo $this->form->cname; ?></td>
+                        <td valign="top" style="padding-top: 8px;">Add To</td>
+                        <td valign="top"><?php echo $this->form->category; ?></td>
+                        <td valign="top" style="text-align: right;"><?php echo $this->form->submit; ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="category-content">
+        <ul id="tree" class="tree"></ul>
+    </div>
 </div>
 
+<script type="text/javascript">
+    var setting = {
+        isSimpleData: true, //数据是否采用简单 Array 格式，默认false  
+        treeNodeKey: "id", //在isSimpleData格式下，当前节点id属性  
+        treeNodeParentKey: "parent_id", //在isSimpleData格式下，当前节点的父节点id属性  
+        showLine: true, //是否显示节点间的连线  
+        checkable: false, //每个节点上是否显示 CheckBox  
+        //keepParent: true,
+        dragCopy: false,
+        dragMove: true,
+        editable: true,
+        edit_renameBtn: true,
+        edit_removeBtn: true,
+        showIcon: false,
+        callback: {
+            remove: removeNode,
+            beforeRemove: checkRemove,
+            rename: renameNode,
+            drop: moveNode,
+            click: selected
+        }
+    };
+
+    var treeNodes = [
+        {"id": 1, "pId": 0, "name": "test1"},
+        {"id": 11, "pId": 1, "name": "test11"},
+        {"id": 12, "pId": 1, "name": "test12"},
+        {"id": 111, "pId": 11, "name": "test111"},
+    ];
+
+    function removeNode(event, treeId, treeNode) {
+        var url = '/wiki/category/delete';
+        var data = {id: treeNode.id};
+        $.post(url, data, function(data) {
+
+        }, 'json');
+    }
+
+    function checkRemove(treeId, treeNode) {
+        if (treeNode.nodes != null) {
+            alert('You can not delete a category which it has child category.');
+            return false;
+        }
+        ;
+    }
+
+    function renameNode(event, treeId, treeNode) {
+        var url = '/wiki/category/rename';
+        var data = {id: treeNode.id, newName: treeNode.name};
+        $.post(url, data, function(data) {
+
+        }, 'json');
+    }
+    function moveNode(event, treeId, treeNode, targetNode, moveType) {
+        var url = '/wiki/category/move';
+        var data = {};
+        data['id'] = treeNode.id;
+        if (moveType == 'inner') {
+            data['newParentId'] = targetNode.id;
+        } else {
+            data['newParentId'] = targetNode.parent_id;
+        }
+        $.post(url, data, function(data) {
+
+        }, 'json');
+    }
+    function selected(event, treeId, treeNode) {
+        $('#<?php echo $this->form->category->getId();?>').val(treeNode.id);
+    }
+
+    $(function() {
+        var url = '/wiki/category/categories-json';
+        $.getJSON(url, function(data) {
+            zTree = $("#tree").zTree(setting, data);
+            zTree.expandAll(true);
+        });
+    });
+
+</script>
