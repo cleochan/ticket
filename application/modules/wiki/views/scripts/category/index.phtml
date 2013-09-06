@@ -29,6 +29,7 @@ EOF;
 </div>
 
 <script type="text/javascript">
+    var zTree = {};
     var setting = {
         isSimpleData: true, //数据是否采用简单 Array 格式，默认false  
         treeNodeKey: "id", //在isSimpleData格式下，当前节点id属性  
@@ -57,21 +58,28 @@ EOF;
         {"id": 12, "pId": 1, "name": "test12"},
         {"id": 111, "pId": 11, "name": "test111"},
     ];
-
+    
+    function isEmptyObject(object){
+        for(var n in object){
+            return false;
+        }
+        return true;
+    }
+    
     function removeNode(event, treeId, treeNode) {
         var url = '/wiki/category/delete';
         var data = {id: treeNode.id};
         $.post(url, data, function(data) {
-
         }, 'json');
     }
 
     function checkRemove(treeId, treeNode) {
-        if (treeNode.nodes != null) {
+        console.log(typeof(treeNode.nodes)+':'+treeNode.nodes+' '+isEmptyObject(treeNode.nodes));
+        if (treeNode.nodes != null && isEmptyObject(treeNode.nodes) == false) {
             alert('You can not delete a category which it has child category.');
             return false;
         }
-        ;
+        
     }
 
     function renameNode(event, treeId, treeNode) {
@@ -97,7 +105,6 @@ EOF;
     function selected(event, treeId, treeNode) {
         $('#<?php echo $this->form->category->getId();?>').val(treeNode.id);
     }
-
     $(function() {
         var url = '/wiki/category/categories-json';
         $.getJSON(url, function(data) {
