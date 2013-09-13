@@ -16,6 +16,12 @@ class Wiki_CategoryController extends Zend_Controller_Action
      * @var Wiki_Model_DbTable_Category 
      */
     private $_categories;
+    
+    /**
+     *
+     * @var Wiki_Model_DbTable_Topic
+     */
+    private $_topicModel;
 
     public function init()
     {
@@ -23,6 +29,7 @@ class Wiki_CategoryController extends Zend_Controller_Action
         $this->_db = Zend_Registry::get('db');
         $this->_contributors = new Wiki_Model_Contributor();
         $this->_categories = new Wiki_Model_DbTable_Category();
+        $this->_topicModel = new Wiki_Model_DbTable_Topics();
         $this->_form = new Wiki_Form_Category();
     }
 
@@ -87,11 +94,17 @@ class Wiki_CategoryController extends Zend_Controller_Action
     public function deleteAction()
     {
         $id = $this->_request->getPost('id');
-        if ($this->_categories->hasNoChildren($id)) {
+        if ($this->_categories->hasNoChildren($id) && $this->_topicModel->hasNoTopics($id)) {
             $this->_categories->delete($id);
             $this->_helper->json(array('success' => TRUE));
         }
         $this->_helper->json(array('success' => FALSE));
+    }
+    
+    public function checkDeleteAction()
+    {
+        $id = $this->_request->getPost('id');
+        $this->_helper->json(array('hasNoTopics' => $this->_topicModel->hasNoTopics($id)));
     }
 
 }

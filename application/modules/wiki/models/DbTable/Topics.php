@@ -28,5 +28,14 @@ class Wiki_Model_DbTable_Topics extends Wiki_Model_DbTable_Abstract
     public function GetTotal() {
         return $this->_db->fetchOne('SELECT count(*) FROM '.$this->_name);
     }
+
+    public function hasNoTopics($categoryId)
+    {
+        $row = $this->select()->from($this->_name,array('id'))->where('cid=?',array($categoryId))->query()->fetch();
+        if($row==NULL || (is_array($row) && count($row) <= 0)){
+            return TRUE;
+        }
+        return FALSE;
+    }
 }
 
