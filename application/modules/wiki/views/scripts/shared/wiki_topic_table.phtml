@@ -1,6 +1,7 @@
 <div class="wiki">
-    <?php if (isset($this->message)): ?>
-        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+    <?php $message = Custom_Message::getMessage(); ?>
+    <?php if (isset($message)): ?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $message ?></div>
     <?php endif; ?>
     <?php echo $this->table ?>
     <div class="index tb-style">

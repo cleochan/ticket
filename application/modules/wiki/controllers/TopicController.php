@@ -71,7 +71,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
     public function indexAction() {
         $this->view->title = "Wiki";
-        $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
         $order = $this->_request->get('orderBy');
         $sort = $this->_request->get('sortOrder');
@@ -94,10 +93,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
         /* Category paths */
         foreach ($this->view->data as $key => $value) {
             $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
-        }
-        /* For message */
-        if ($suc == 1) {
-            $this->view->message = 'The topic is deleted successfully';
         }
         /* For sort,toggle ASC and DESC when click */
         if ($sort == NULL || $sort === 'DESC') {
@@ -152,12 +147,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
         }
         $this->view->form = $form;
         $tid = $this->_request->get('id');
-        $suc = $this->_request->get('msg');
-        if ($suc == 1) {
-            $this->view->message = 'The topic is created as you see :)';
-        }elseif($suc == 2){
-            $this->view->message = 'The data was saved';
-        }
         $data = $this->_detailModel->getDetail($tid);
         $data['tid'] = $tid;
         $this->view->categoryPath = $this->_categories->getCategoryPath($data['cid'],$data['cname'],$data['parent_id']);
@@ -214,7 +203,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
         $this->_cache->clean('all', array('topic_list_cache'));
-        $this->_redirect('/wiki/topic/index/msg/1');
+        Custom_Message::setMessage('The topic is deleted successfully', '/wiki/topic/index');
+        $this->_redirect('/wiki/topic/index');
     }
 
     public function editAction() {
@@ -263,7 +253,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $this->_contentsModel->CreateContent($tid, $uid, $content, $preversion_id,TRUE);
                     $this->_contributorModel->UpdateRecord($tid,$uid);
                     $this->_cache->clean('all', array('topic_list_cache'));
-                    $this->_redirect('/wiki/topic/detail/id/'.$tid.'/msg/2');
+                    Custom_Message::setMessage('The data was saved','/wiki/topic/detail');
+                    $this->_redirect('/wiki/topic/detail/id/'.$tid);
                 } else {
                     die('insert error');
                 }
@@ -296,7 +287,8 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $this->_contentsModel->CreateContent($insertId, $uid, $content, NULL, TRUE);
                     $this->_contributorModel->UpdateRecord($insertId,$uid);
                     $this->_cache->clean('all', array('topic_list_cache'));
-                    $this->_redirect('/wiki/topic/detail/id/'.$insertId.'/msg/1');
+                    Custom_Message::setMessage('The topic is created as you see :)','/wiki/topic/detail');
+                    $this->_redirect('/wiki/topic/detail/id/'.$insertId);
                 } else {
                     die('insert error');
                 }
@@ -307,7 +299,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
     function searchedAction() {
         $this->view->title = "Wiki";
         $filter = new Zend_Filter_Alnum();
-        $suc = $this->_request->get('msg');
         $page = $this->_request->get('page');
         $order = $this->_request->get('orderBy');
         $sort = $this->_request->get('sortOrder');
@@ -344,10 +335,6 @@ class Wiki_TopicController extends Zend_Controller_Action {
 	        foreach ($this->view->data as $key => $value) {
 	            $this->view->data[$key]['category_path'] = $this->_categories->getCategoryPath($value['cid'], $value['cname'], $value['parent_id']);
 	        }
-        }
-        /* For message */
-        if ($suc == 1) {
-            $this->view->message = 'The topic is deleted successfully';
         }
         /* For sort,toggle ASC and DESC when click */
         if ($sort == NULL || $sort === 'DESC') {

@@ -196,6 +196,28 @@ class Requests extends Zend_Db_Table
             
             return $row['category'];
         }
+
+    public function changeStatus($id, $status,$level_mgt)
+    {
+        if($status==1||$status==2||$status==3){
+            if($level_mgt == 2){
+                $db = $this->getAdapter();
+                $where = $db->quoteInto('id = ?', $id);
+                if($status==2||$status==3){
+                    $session = Zend_Auth::getInstance();
+                    $id = $session->getIdentity()->id;
+                    $username = $session->getIdentity()->username;
+                    $userId =  "{$id}@{$username}";
+                    $date = date('Y-m-d H:i:s');
+                    $result = $this->update(array('status'=>$status,'closed_date'=>  date('Y-m-d H:i:s'),'closed_by'=>$userId),$where);
+                }  else {
+                    $result = $this->update(array('status'=>$status),$where);
+                    }
+                return $result > 0;
+            }
+        }
+        return FALSE;
+    }
 }
 
 

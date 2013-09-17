@@ -219,10 +219,30 @@ function dump_ticket(rid)
 			</tr>		
 			<tr class="row-<?php echo (2-$n%2); $n++;?>">
 				<td class="category">Status</td>
-				<td>
+				<td style="position:relative;">
 					<?php if($this->ticket_auth):?>	
 						<?php echo $this->form->status;?>
-					<?php else:?>
+					<?php elseif($_SESSION["Zend_Auth"]["storage"]->level_mgt == 2 ):?>
+                                                <?php echo $this->form->status;?>
+                                                <script type='text/javascript'>
+                                                    $(function(){
+                                                        $('#<?php echo $this->form->status->getId()?>').change(function(){
+                                                            var self = this;
+                                                            var url = '/requests/change-status';
+                                                            var status = $(this).val();
+                                                            var data = {'id':'<?php echo $this->form->id->getValue();?>','status':status};
+                                                            $.post(url,data,function(data){
+                                                                if(data==true){
+                                                                    $(self).next('span').remove();
+                                                                    $('<span>Status was saved</span>').css({'color':'#F00','position':'absolute','top':'8px','left':$(self).width()+20}).hide().insertAfter($(self)).stop(true,true).fadeIn('200',function(){
+                                                                        $(this).delay('1000').fadeOut('1500');
+                                                                    });
+                                                                }
+                                                            },'json');
+                                                        });
+                                                    });
+                                                </script>
+                                        <?php else:?>
 						<?php echo $this->ticket['status'];?>
 					<?php endif;?>
 				</td>

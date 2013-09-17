@@ -14,10 +14,11 @@ $this->Scripts = $this->Scripts.<<<EOF
 EOF;
 
 ?>
-<?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id ?>
+<?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id;?>
 <div class='wiki limitWidth'>
-    <?php if (isset($this->message)): ?>
-        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $this->message ?></div>
+    <?php $message = Custom_Message::getMessage(); ?>
+    <?php if (isset($message)): ?>
+        <div class="message ui-widget ui-widget-content ui-corner-all"><?php echo $message ?></div>
     <?php endif; ?>
     <?php if($this->data['title']!=NULL&&strlen($this->data['title'])>0):?>
      <div class="navigation">
