@@ -111,7 +111,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
 		
     }
     public function preDispatch() {
-        if ('call-file' != $this->getRequest()->getActionName()) {
+/*        if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
             $users = new Users();
             if (!$auth->hasIdentity() || !$users->IsValid()) {
@@ -120,7 +120,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
                     $_SESSION['ckfinder'] = TRUE;
                 }
             }
-        }
+        }*/
         //get system title
         $get_title = new Params();
         $this->view->system_title = $get_title->GetVal("system_title");
@@ -266,6 +266,18 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function createAction() {
+    	
+		if ('call-file' != $this->getRequest()->getActionName()) {
+            $auth = Zend_Auth::getInstance();
+            $users = new Users();
+            if (!$auth->hasIdentity() || !$users->IsValid()) {
+                $this->_redirect('/login/logout?url=' . $_SERVER["REQUEST_URI"]);
+                if (!isset($_SESSION['ckfinder'])) {
+                    $_SESSION['ckfinder'] = TRUE;
+                }
+            }
+        }
+		
         $form = new Wiki_Form_Create();
         $this->view->form = $form;
         $options = $this->_categories->getSelectOptions(0);

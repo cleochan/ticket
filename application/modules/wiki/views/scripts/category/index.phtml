@@ -1,31 +1,37 @@
-<?php
-$this->Css = $this->Css . <<<EOF
-     <link type="text/css" href="/styles/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-EOF;
-$this->Scripts = $this->Scripts . <<<EOF
-    <script type="text/javascript" src="/scripts/jquery.ztree-2.6.min.js"></script>
-EOF;
-?>
-<div class="wiki category pl20">
-    <div>
-        <form id="topic_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
-              method="<?php echo $this->escape($this->form->getMethod()) ?>"
-              enctype="multipart/form-data">
-            <table>
-                <tbody>
-                    <tr>
-                        <td valign="top"><?php echo $this->form->cname; ?></td>
-                        <td valign="top" style="padding-top: 8px;">Add To</td>
-                        <td valign="top"><?php echo $this->form->category; ?></td>
-                        <td valign="top" style="text-align: right;"><?php echo $this->form->submit; ?></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </div>
-    <div class="category-content">
-        <ul id="tree" class="tree"></ul>
-    </div>
+<script type="text/javascript" src="/scripts/category_modify.js"></script>
+<br /><br />
+<div id="view-content" class='wiki'>
+	<div class='content'>
+		<div id="category_list">
+					<h4><a id="add_category_link">Add a New Category >></a></h4>
+					<?php if($this->categories):?>
+						<?php echo $this->categories; ?>
+					<?php endif;?>	
+		</div>
+	</div>
+	
+	
+   <div id="edit_window" class="editWindow ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="0">
+   	<div id="dialog-modal-43" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px;">
+		<a class="ui-dialog-titlebar-close ui-corner-all" id="close_btn" href="#" role="button" unselectable="on" style="-moz-user-select: none;">
+			<span class="ui-icon ui-icon-closethick" unselectable="on" style="-moz-user-select: none;">close</span>
+		</a>
+   		
+    	<form valign="top" align="center" id="category_form" action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>"
+          enctype="multipart/form-data">
+	        <table align="center" class="category_table" id="select_action">
+	                <?php echo $this->form->cname; ?>
+	             	<?php echo $this->form->status; ?>
+	                <?php echo $this->form->parent_id; ?>
+	             	<?php echo $this->form->category_id; ?>
+	                <tr id="editWindow_buttons" class="category_table_static">
+	                    <td><?php echo $this->form->submit; ?></td>
+	                </tr>
+	        </table>
+		 </form>
+	 </div>
+	 </div> 
 </div>
 
 <script type="text/javascript">

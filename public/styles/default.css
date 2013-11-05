@@ -557,7 +557,7 @@ html body div#view-content.wiki div#deleteMessage {
     border: 1px solid #D8D8D8;
 	position: fixed;
 	min-width: 35%;
-	height: 195px;
+	height: 220px;
 	left: 32%;
 	top: 40%;
 	z-index: 100;
@@ -665,8 +665,12 @@ right: 0px;
 	min-width: 32%;
 }
 
+.wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content{
+	height: 220px;
+}
+
 .wiki div#edit_window.editWindow div#dialog-modal-43.ui-dialog-content form#category_form{
-	height: 199px;
+	height: 220px;
 	width: 659px;
 }
 

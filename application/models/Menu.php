@@ -298,7 +298,7 @@ class Menu {
         $str14_on = "<a href='/wiki/topic/index'><strong>Wiki</strong></a>";
 
         $menu = array();
-
+	if(isset($_SESSION["Zend_Auth"])){
         switch ($_SESSION["Zend_Auth"]["storage"]->level_mgt) {
             case 1: //requests/tickets -- for other departments
                 if (in_array($ctl, array("index", "tasks"))) {
@@ -624,6 +624,7 @@ class Menu {
                     $menu[] = $str14_on;
                 }
                 break;
+     	   }
         }
 
         if (!empty($menu)) {
@@ -637,47 +638,66 @@ class Menu {
 
     public function GetWikiMenu($param) {
 		$str = "";
+		
+		if(!isset($_SESSION["Zend_Auth"])){
+			$logged_in = false;
+		}else{
+			$logged_in = true;
+		}
+		
         switch ($param) {
             case "index":
                 $str .= " <a href='/wiki/topic/index/'><strong>All Topics</strong></a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
                 $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "category":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/category/'><strong>Category</strong></a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
                 $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "contributor":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
+                if($logged_in)
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'><strong>Contributor</strong></a>";
                 $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "searched":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
+                if($logged_in)
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
                 $str .= " | <a href='/wiki/topic/searched/'><strong>Searched</strong></a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
             case "create":
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
                 $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'><strong>Create Topic</strong></a>";
                 break;
             default:
                 $str .= " <a href='/wiki/topic/index/'>All Topics</a>";
+                if($logged_in)
                 $str .= " | <a href='/wiki/category/'>Category</a>";
                 $str .= " | <a href='/wiki/contributor/index/'>Contributor</a>";
                 $str .= " | <a href='/wiki/topic/searched/'>Searched</a>";
+				if($logged_in)
                 $str .= " | <a href='/wiki/topic/create/'>Create Topic</a>";
                 break;
         }

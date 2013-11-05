@@ -54,57 +54,44 @@ class Wiki_CategoryController extends Zend_Controller_Action
         $this->view->menu = $this->_menu->GetWikiMenu("category");
         $this->view->layout()->setLayout('wiki_layout');
     }
-    
-    public function indexAction()
-    {
-        $form = new Wiki_Form_Category;
-        $this->view->form = $form;
-        $form->category->addMultiOptions($this->_categories->getSelectOptions(0,'Root'));
-        $form->cname->setAttrib('placeholder','Name Of New Category');
-        if($this->_request->isPost()){
-            if($form->isValidPartial($this->_getAllParams())){
-                $this->_categories->create($form->category->getValue(), $form->cname->getValue(), 1);
-                $this->_redirect('/wiki/category',array('method'=>'get'));
+
+    function indexAction() {
+        $params = $this->_request->getParams();
+        $this->view->title = "Category";
+
+        $this->view->categories = $categories = $this->_categories->getCategories();
+        $this->view->form = $this->_form;
+		$this->view->error_messages = "";
+	//	$this->view->form->addError('Error: Cannot delete Category with children');
+        if ($this->_request->isPost()) {
+            if ($this->_form->isValidPartial($_POST)) {
+                if (isset($_POST['select_action_menu'])) {
+                    switch ($_POST['select_action_menu']) {
+                        case "add":
+                            $this->_categories->create($this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                            $this->_redirect('/wiki/category');
+                            break;
+                        case "edit":
+                            $this->_categories->edit($this->_request->getPost('category_id'), $this->_request->getPost('parent_id'), $this->_request->getPost('cname'), $this->_request->getPost('status'));
+                            $this->_redirect('/wiki/category');
+                            break;
+                        case "delete":
+							if($this->_categories->hasNoChildren($this->_request->getPost('category_id'))){
+								$this->_categories->delete($this->_request->getPost('category_id'));
+		                        $this->_redirect('/wiki/category');
+							}else{
+								$this->view->error_messages .= "Cannot delete category with children.";
+							}
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
+			if(isset($this->_cache)){
+				$this->_cache->clean('all', array('topic_list_cache'));
+			}
         }
-    }
-
-    public function categoriesJsonAction()
-    {
-        $data = $this->_categories->getAllInArray();
-        $this->_helper->json($data);
-    }
-
-    public function renameAction($param)
-    {
-        $id = $this->_request->getPost('id');
-        $newName = $this->_request->getPost('newName');
-        $this->_categories->rename($id, $newName);
-        $this->_helper->json(array('success' => TRUE));
-    }
-
-    public function moveAction()
-    {
-        $id = $this->_request->getPost('id');
-        $newParentId = $this->_request->getPost('newParentId');
-        $this->_categories->changeParentId($id, $newParentId);
-        $this->_helper->json(array('success' => TRUE));
-    }
-
-    public function deleteAction()
-    {
-        $id = $this->_request->getPost('id');
-        if ($this->_categories->hasNoChildren($id) && $this->_topicModel->hasNoTopics($id)) {
-            $this->_categories->delete($id);
-            $this->_helper->json(array('success' => TRUE));
-        }
-        $this->_helper->json(array('success' => FALSE));
-    }
-    
-    public function checkDeleteAction()
-    {
-        $id = $this->_request->getPost('id');
-        $this->_helper->json(array('hasNoTopics' => $this->_topicModel->hasNoTopics($id)));
     }
 
 }

@@ -20,7 +20,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
     }
 
     public function preDispatch() {
-        if ('call-file' != $this->getRequest()->getActionName()) {
+/*        if ('call-file' != $this->getRequest()->getActionName()) {
             $auth = Zend_Auth::getInstance();
             $users = new Users();
             if (!$auth->hasIdentity() || !$users->IsValid()) {
@@ -29,7 +29,7 @@ class Wiki_ContributorController extends Zend_Controller_Action {
                     $_SESSION['ckfinder'] = TRUE;
                 }
             }
-        }
+        }*/
         //get system title
         $get_title = new Params();
         $this->view->system_title = $get_title->GetVal("system_title");
@@ -60,10 +60,10 @@ class Wiki_ContributorController extends Zend_Controller_Action {
 		$flag = "";
 		if(isset($params['contributions'])){
 			$flag = "topics";
-			$contributor_array = $this->_contributors->getContributionsByID($params['user'],
-																			$this->getRequest()->getParam('page'),    
-			       															$this->getRequest()->getParam('sortby'),
-            																$this->getRequest()->getParam('sortorder'));																										
+            $contributor_array = $this->_contributors->getAllContributedTopicsByID($params['user'], 
+            																	   $this->getRequest()->getParam('page'), 
+            																	   $this->getRequest()->getParam('sortby'),
+            																	   $this->getRequest()->getParam('sortorder'));
 			$table_headers = $this->_contributors->getTableHeaders($flag);
 			$count = $this->_contributors->GetTotalTopicsById($params['user']);
 		}elseif (isset($params['user'])){

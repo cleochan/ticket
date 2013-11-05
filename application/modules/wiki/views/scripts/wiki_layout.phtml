@@ -50,7 +50,11 @@
 <table class="hide no-print">
 	<tbody>
 		<tr>
+			<?php if(isset($_SESSION["Zend_Auth"])): ?>
 			<td class="login-info-left"><strong>Hi <?=$_SESSION["Zend_Auth"]["storage"]->realname?></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$this->top_menu?> | | <a href="/login/logout">Logout</a></td>
+			<?php else: ?>
+			<td class="login-info-left"><a href="/login/">Login</a></td>
+			<?php endif; ?>
 		</tr>
 	</tbody>
 </table>
