@@ -639,7 +639,7 @@ class Menu {
     public function GetWikiMenu($param) {
 		$str = "";
 		
-		if(!isset($_SESSION["Zend_Auth"])){
+		if(!isset($_SESSION["Zend_Auth"]["storage"])){
 			$logged_in = false;
 		}else{
 			$logged_in = true;

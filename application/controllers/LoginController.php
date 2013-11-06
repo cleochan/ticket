@@ -24,7 +24,9 @@ class LoginController extends Zend_Controller_Action
     {
 		$this->view->title = "Login"; // title of this page
 		$params = $this->_request->getParams();
-		$this->view->url = $params['url'];
+		if(isset($this->view->url)){
+			$this->view->url = $params['url'];
+		}
 		if ($this->_request->isPost()) {
             Zend_Loader::loadClass('Zend_Filter_StripTags');
 			$f = new Zend_Filter_StripTags();
