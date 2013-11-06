@@ -14,7 +14,9 @@ $this->Scripts = $this->Scripts.<<<EOF
 EOF;
 
 ?>
-<?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id;?>
+<?php if(isset(Zend_Auth::getInstance()->getStorage()->read()->id)): ?>
+	<?php $uid = Zend_Auth::getInstance()->getStorage()->read()->id;?>
+<?php endif; ?>
 <div class='wiki limitWidth'>
     <?php $message = Custom_Message::getMessage(); ?>
     <?php if (isset($message)): ?>
@@ -29,7 +31,9 @@ EOF;
             <div class="fr">
                 [ <a  href="<?php echo $this->ActionUrl('edit',array('id'=>$this->data['tid'])); ?>">Edit</a> ]
                 [ <a  href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid'])); ?>">History</a> ]
+                <?php if(isset($this->data['creator_uid']) && isset($this->data['tid']) &&(isset($uid))): ?>
                 <?php if ($this->data['creator_uid'] === $uid): ?>[ <a id="delete" class="delete" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete</a> ]<?php endif; ?>
+            	<?php endif; ?>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
@@ -52,7 +56,9 @@ EOF;
                     <tr>
                         <td><a class="button-style" href="<?php echo $this->ActionUrl('edit',array('id'=>$this->data['tid'])); ?>">Edit this topic</a></td>
                         <td><a class="button-style" href="<?php echo $this->ActionUrl('history',array('id'=>$this->data['tid'])); ?>">Browse History</a></td>
+                 	<?php if(isset($this->data['creator_uid']) && isset($this->data['tid']) &&(isset($uid))): ?>
                         <td><?php if ($this->data['creator_uid'] === $uid): ?><a id="delete" class="button-style btn-red delete" href="<?php echo $this->ActionUrl('delete',array('id'=>$this->data['tid']),'topic'); ?>">Delete this topic</a><?php endif; ?></td>
+                	<?php endif; ?>
                 <script type="text/javascript">
                     $('.delete').click(function() {
                         if (confirm("Are you sure to delete this topic?")) {

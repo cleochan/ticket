@@ -131,10 +131,24 @@ class Wiki_TopicController extends Zend_Controller_Action {
 		$this->view->layout()->setLayout('wiki_layout'); 
     }
 
+	private function _checkLogin(){
+		if ('call-file' != $this->getRequest()->getActionName()) {
+            $auth = Zend_Auth::getInstance();
+            $users = new Users();
+            if (!$auth->hasIdentity() || !$users->IsValid()) {
+                $this->_redirect('/login/logout?url=' . $_SERVER["REQUEST_URI"]);
+                if (!isset($_SESSION['ckfinder'])) {
+                    $_SESSION['ckfinder'] = TRUE;
+                }
+            }
+        }
+	}
+
     public function detailAction() {
         $form = new Wiki_Form_Comment();
         $commentModel = new Wiki_Model_DbTable_Comments();
         if($this->_request->isPost()){
+        	$this->_checkLogin();
             if($form->isValidPartial($_POST)){
                 $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
                 $tid = $this->_request->getParam('id');
@@ -163,6 +177,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
         $this->view->comments = $commentModel->GetComments($tid,$page,$rowCount);
     }
     public function historyAction() {
+    	$this->_checkLogin();
         $tid = $this->_request->get('id');
         $order = $this->_request->get('orderBy');
         $sort= $this->_request->get('sortOrder');
@@ -176,6 +191,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function revertAction() {
+    	$this->_checkLogin();
         $tid = $this->_request->get('id');
         $vid = $this->_request->get('version');
         $version_id = $this->_request->get('version_id');
@@ -190,6 +206,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function setDefaultAction() {
+    	$this->_checkLogin();
         $tid = $this->_request->get('id');
         $vid = $this->_request->get('version');
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
@@ -199,6 +216,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function deleteAction() {
+    	$this->_checkLogin();
         $tid = $this->_request->get('id');
         $uid = Zend_Auth::getInstance()->getStorage()->read()->id;
         $this->_detailModel->deleteTopic($uid, $tid);
@@ -208,6 +226,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function editAction() {
+    	$this->_checkLogin();
         $form = new Wiki_Form_Create();
         $this->view->title = "Wiki";
         $tid = $this->_request->get('id');
@@ -266,17 +285,7 @@ class Wiki_TopicController extends Zend_Controller_Action {
     }
 
     public function createAction() {
-    	
-		if ('call-file' != $this->getRequest()->getActionName()) {
-            $auth = Zend_Auth::getInstance();
-            $users = new Users();
-            if (!$auth->hasIdentity() || !$users->IsValid()) {
-                $this->_redirect('/login/logout?url=' . $_SERVER["REQUEST_URI"]);
-                if (!isset($_SESSION['ckfinder'])) {
-                    $_SESSION['ckfinder'] = TRUE;
-                }
-            }
-        }
+    	$this->_checkLogin();
 		
         $form = new Wiki_Form_Create();
         $this->view->form = $form;

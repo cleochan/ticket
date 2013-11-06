@@ -298,7 +298,7 @@ class Menu {
         $str14_on = "<a href='/wiki/topic/index'><strong>Wiki</strong></a>";
 
         $menu = array();
-	if(isset($_SESSION["Zend_Auth"])){
+	if(isset($_SESSION["Zend_Auth"]["storage"])){
         switch ($_SESSION["Zend_Auth"]["storage"]->level_mgt) {
             case 1: //requests/tickets -- for other departments
                 if (in_array($ctl, array("index", "tasks"))) {
