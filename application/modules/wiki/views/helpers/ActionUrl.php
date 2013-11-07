@@ -21,7 +21,7 @@ class Wiki_View_Helper_ActionUrl extends Zend_View_Helper_Url {
         $controllerName != NULL ? $urlOptions['controller'] = $controllerName : $urlOptions['controller'] = $request->getControllerName();
         $actionName != NULL ? $urlOptions['action'] =$actionName: $urlOptions['action'] = $request->getActionName(); 
         if ($params != NULL) $urlOptions = array_merge($urlOptions, $params);
-        return $this->url($urlOptions, NULL, TRUE);
+        return $this->url($urlOptions, 'default', TRUE);
     }
 
 }
