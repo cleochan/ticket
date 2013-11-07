@@ -281,7 +281,12 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract
 
     public function create($parent_id, $cname, $status)
     {
-        $this->__parent_id = $parent_id;
+        if($parent_id == NULL){
+            $this->__parent_id = 0;
+        }  else {
+            $this->__parent_id = $parent_id;
+        }
+        
         $this->__cname = $cname;
         $this->__status = $status;
         parent::create();
