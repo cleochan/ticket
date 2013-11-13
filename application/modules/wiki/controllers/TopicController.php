@@ -79,9 +79,14 @@ class Wiki_TopicController extends Zend_Controller_Action {
 
         /* For paging */
         $rowCount = 20;
-        $cids = $this->_categories->getChildrenIds($cid);
-        if ($cid != NULL)
+		
+        if ($cid != NULL){
+        	$cids = $this->_categories->getChildrenIds($cid);
             $cids[] = $cid;
+        }else{
+        	$cids = $this->_categories->getChildrenIds('*');
+        }
+		
         $count = $this->_detailModel->getCount($cids, $keyword);
         $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Null($count));
         $paginator->setItemCountPerPage($rowCount);

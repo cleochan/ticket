@@ -81,6 +81,9 @@ class Wiki_Model_DbTable_Category extends Wiki_Model_DbTable_Abstract
         if (!isset($data)) {
             $data = $this->fetchAll()->toArray();
         }
+		if($parentID == '*'){
+			return $this->fetchAll()->toArray();
+		}
         $result = $this->getChildenById($data, $parentId);
         if ($result != NULL && count($result) > 0) {
             foreach ($result as $row) {
